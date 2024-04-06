@@ -1,5 +1,0 @@
-btw, the reason why i havae abouts and todo txts around here is bc if i nest folders instantly then vsc 
-shows foldername/foldername2 and then nothing instead of foldername and then under it another folder which is ugly and i have to add soemthing else
-oh im publishing to github i should write a description
-um this is where i do my competitive programming grind stuff
-i will try to organize it better
