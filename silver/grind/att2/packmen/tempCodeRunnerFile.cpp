@@ -1,0 +1,2 @@
+
+        if (isAst[lastA]) { return

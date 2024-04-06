@@ -1,0 +1,35 @@
+def min_days_to_satisfy_request(N, heights, growth_rates, t_values):
+    sorted_plants = sorted(range(N), key=lambda i: (-heights[i], growth_rates[i]))
+    days_needed = [0] * N
+    count_taller = [0] * N
+    answer = 0
+
+    for i in range(N):
+        idx = sorted_plants[i]
+        answer = max(answer, days_needed[idx] + count_taller[idx])
+        if i < N - 1:
+            next_idx = sorted_plants[i + 1]
+            diff_height = heights[idx] - heights[next_idx]
+            days_needed[next_idx] = max(
+                days_needed[next_idx], days_needed[idx] + diff_height
+            )
+            count_taller[next_idx] += 1
+
+    if all(answer == t_values[i] for i in range(N)):
+        return answer
+    else:
+        return -1
+
+def main():
+    T = int(input())
+    for _ in range(T):
+        N = int(input())
+        heights = list(map(int, input().split()))
+        growth_rates = list(map(int, input().split()))
+        t_values = list(map(int, input().split()))
+
+        result = min_days_to_satisfy_request(N, heights, growth_rates, t_values)
+        print(result)
+
+if __name__ == "__main__":
+    main()

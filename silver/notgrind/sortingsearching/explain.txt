@@ -1,0 +1,1 @@
+comparators and coordinate compression - probably a few times
