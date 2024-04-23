@@ -1,21 +1,27 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-const int sz = 5;
+const int sz = 8;
 vector<vector<bool>> block(sz, vector<bool>(sz, false));
 vector<array<int, 2>> placed;
 vector<bool> row(sz);
-vector<bool> col(sz);
-vector<bool> slash(sz);
-vector<bool> bslash(sz);
+vector<bool> slash(sz * 2 - 1);
+vector<bool> lslash(sz * 2 - 1);
 int total = 0;  //int trust
-long long blocked = 0;
 void run(int x) {
     if (x == sz) { total++; return; }
-    //very bad job
-    //just argue on occupied things
     for (int i = 0; i < sz; i++) {
-        if (row[i] || col[i]) { continue; }
+        if (row[i]) { continue; }
+        if (slash[i + x]) { continue; }
+        if (lslash[x - i + sz - 1]) { continue; }
+        if (block[i][x]) { continue; }
+        row[i] = true;
+        slash[i + x] = true;
+        lslash[x - i + sz - 1] = true;
+        run(x+1);
+        row[i] = false;
+        slash[i + x] = false;
+        lslash[x - i + sz - 1] = false;
         
     }
 }
@@ -33,6 +39,5 @@ int main() {
     //consider instead the chessboard and each 64 squares
     //what if we 
     run(0);
-    cout << blocked << "\n";
     cout << total << "\n";
 }

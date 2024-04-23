@@ -8,29 +8,29 @@ vector<int> euler;
 vector<int> newi;
 
 vector<int> seg;
-vector<multiset<int>> path;
-multiset<int> cur;
-void dfs(int v, int from) {
+vector<vector<int>> flavors;  //when flavors occur
+vector<int> depth;
+void dfs(int v, int from, int d) {
     //binary search stuff
-    cur.insert(vals[v]);
-    path[v] = cur;  //this is literally overpowered, O(1) storage wtf
+    flavors[vals[v]].push_back(euler.size());
+    depth[v] = d;
     //euler stuff
     newi[v] = euler.size();
     euler.push_back(v);
     for (int x : graph[v]) {
         if (x != from) {
-            dfs(x, v);
+            dfs(x, v, d+1);
+            flavors[vals[v]].push_back(euler.size());
             euler.push_back(v);
         }
     }
-    cur.erase(cur.find(vals[v]));
 }
 
 int segn;
 int comp(int a, int b) {  //2 node indexes
     if (a == -1) { return b; }
     if (b == -1) { return a; }
-    if (path[a].size() < path[b].size()) { return a; }
+    if (depth[a] < depth[b]) { return a; }
     return b;
 }
 void init() {
@@ -49,31 +49,16 @@ int lca(int l, int r) {
     }
     return m;
 }
-bool chk(int i, int j, int v) {
-    int len = path[j].size() - 1;
-    auto it = path[i].begin();
-    advance(it, len);
-    return find(it, path[i].end(), v) != path[i].end();
+bool chk(int i, int j, int v) {  //see if there is any occurrence from l to r in occurrences[v]
+    
 }
 bool query(int l, int r, int v) {
     //find lca of l, r in node form
+    //now find closest occurrence of lca to l, and closest to r
+    //we can do this easily by saying l...l+(depth[l] - depth[lca]) for l
+    //to bs in
     int ca = lca(newi[l], newi[r]+1);
-    // cout << "left" << " " << l << "\n";
-    // for (int x : path[l]) {
-    //     cout << x << " ";
-    // }
-    // cout << "\n";
-    // cout << "right" << " " << r << "\n";
-    // for (int x : path[r]) {
-    //     cout << x << " ";
-    // }
-    // cout << "\n";
-    // cout << "ancestor" << " " << ca << "\n";
-    // for (int x : path[ca]) {
-    //     cout << x << " ";
-    // }
-    // cout << "\n";
-    if (chk(l, ca, v) || chk(r, ca, v)) {
+    if (chk(l, l + depth[l] - depth[ca] + 1, v) || chk(r, r + depth[r] + depth[ca] + 1, v)) {
         return true;
     }
     return false;
@@ -86,7 +71,8 @@ int main() {
     int N, M; cin >> N >> M;
     graph.resize(N);
     vals.resize(N);
-    path.resize(N);
+    depth.resize(N);
+    flavors.resize(N+1);
     newi.resize(N);
     for (int i = 0; i < N; i++) {
         cin >> vals[i];
@@ -96,7 +82,7 @@ int main() {
         graph[a].push_back(b);
         graph[b].push_back(a);
     }
-    dfs(0, -1);
+    dfs(0, -1, 0);
     segn = euler.size();
     seg.resize(2 * segn, -1);
     init();
