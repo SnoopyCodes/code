@@ -7,9 +7,6 @@ vector<ll> val;
 vector<ll> seg;
 vector<int> beg;
 vector<int> stop;
-//euler tour idea:
-//use a vis variable to check what we start and end at
-//then set up segtree?
 int vis = 0;
 void dfs(int i, int from) {
     beg[i] = vis++;
@@ -18,10 +15,6 @@ void dfs(int i, int from) {
         dfs(x, i);
     }
     stop[i] = vis;
-}
-//now segtree somehow
-void init() {
-    for (int i = N-1; i > 0; i--) { seg[i] = seg[i << 1] + seg[i << 1 | 1]; }
 }
 void update(int pos, int val) {
     seg[pos + N] = val;
@@ -39,7 +32,6 @@ ll query(int l, int r) {
 }
 int main() {
     ios_base::sync_with_stdio(false); cin.tie(nullptr);
-    // freopen("in.txt", "r", stdin);
     int Q; cin >> N >> Q;
     tree.resize(N);
     val.resize(N);
@@ -57,7 +49,6 @@ int main() {
     }
     dfs(0, -1);
     for (int i = 0; i < N; i++) { update(beg[i], val[i]); }
-    init();
     for (int q  = 0; q < Q; q++) {
         int t; cin >> t;
         if (t == 2) {
