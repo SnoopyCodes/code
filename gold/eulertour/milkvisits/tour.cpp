@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-//i need to fix
 using namespace std;
 vector<vector<int>> graph;
 vector<int> vals;
@@ -30,8 +29,7 @@ int segn;
 int comp(int a, int b) {  //2 node indexes
     if (a == -1) { return b; }
     if (b == -1) { return a; }
-    if (depth[a] < depth[b]) { return a; }
-    return b;
+    return depth[a] < depth[b] ? a : b;
 }
 void init() {
     for (int i = 0; i < segn; i++) {
@@ -49,23 +47,38 @@ int lca(int l, int r) {
     }
     return m;
 }
-bool chk(int i, int j, int v) {  //see if there is any occurrence from l to r in occurrences[v]
-    
+bool chk(int i, int j, int v) { //inclusive
+    //find the closest occurrence <= j, then check if > i
+    int s = 0, e = flavors[v].size();
+    cout << "chk" << "\n";
+    cout << i << " " << j << " " << v << "\n";
+    for (int x : flavors[v]) {
+        cout << x << " ";
+    }
+    cout << "\n";
+    while (s + 1 < e) {
+        int m = (s + e) / 2;
+        if (flavors[v][m] <= j) { s = m; }
+        else { e = m; }
+    }
+    if (flavors[v].size() == 0 || flavors[v][s] > j || flavors[v][s] < i) { return false; }
+    return true;
 }
-bool query(int l, int r, int v) {
+int query(int l, int r, int v) {
     //find lca of l, r in node form
     //now find closest occurrence of lca to l, and closest to r
     //we can do this easily by saying l...l+(depth[l] - depth[lca]) for l
-    //to bs in
     int ca = lca(newi[l], newi[r]+1);
-    if (chk(l, l + depth[l] - depth[ca] + 1, v) || chk(r, r + depth[r] + depth[ca] + 1, v)) {
+    cout << ca << "\n";
+    if (chk(newi[l] - depth[l] + depth[ca], newi[l], v) 
+    || chk(newi[r] - depth[r] + depth[ca], newi[r], v)) {
         return true;
     }
     return false;
 }
 int main() {
     ios_base::sync_with_stdio(false); cin.tie(nullptr);
-    freopen("in.txt", "r", stdin);
+    // freopen("in.txt", "r", stdin);
     // freopen("milkvisits.in", "r", stdin);
     // freopen("milkvisits.out", "w", stdout);
     int N, M; cin >> N >> M;
@@ -84,7 +97,7 @@ int main() {
     }
     dfs(0, -1, 0);
     segn = euler.size();
-    seg.resize(2 * segn, -1);
+    seg.resize(2 * segn + 1, -1);
     init();
     
     // for (int i = 0; i < segn; i++) {
@@ -96,9 +109,10 @@ int main() {
     // }
     // cout << "\n";
     for (int q = 0; q < M; q++) {
-        int a, b, c; cin >> a >> b >> c;
+        int a, b, c = 0; cin >> a >> b >> c;
         a--; b--;
-        if (b < a) { swap(a, b); }
+        if (newi[b] < newi[a]) { swap(a, b); }
+        if (q == 1)
         cout << query(a, b, c);
     }
 }
