@@ -16,7 +16,6 @@ int main() {
     int N, M; cin >> N >> M;
     numbers.resize(N);
     vector<int> old(N);
-    vector<bool> links(N+1);  //link i, i-1
     for (int i = 0; i < N; i++) {
         int a; 
         cin >> a;
@@ -25,7 +24,7 @@ int main() {
         old[i] = a;
     }
     for (int i = 1; i < numbers.size(); i++) {
-        if (numbers[i-1] < numbers[i]) { N--; links[i] = true; }
+        if (numbers[i-1] < numbers[i]) { N--; }
     }
     for (int q = 0; q < M; q++) {
         int a, b; cin >> a >> b;
