@@ -1,7 +1,6 @@
 #include <bits/stdc++.h>
 #define ll long long
 using namespace std;
-vector<ll> sums;
 vector<int> v;
 int N, K;
 int valid(ll g) {
@@ -15,9 +14,7 @@ int valid(ll g) {
             cur += v[i];
         }
     }
-    if (sects > K) { return 0; }
-    if (sects < K) { return -1; }
-    return 1;
+    return sects <= K;
 }
 int main() {
     ios_base::sync_with_stdio(false); cin.tie(nullptr);
@@ -36,8 +33,7 @@ int main() {
     ll s = 0, e = 2e14 / K;  //surely this works
     while (s + 1 < e) {
         ll m = (s + e) / 2;
-        int v = valid(m);
-        if (v == 1 || v == -1) { e = m; }
+        if (valid(m)) { e = m; }
         else { s = m; }
         //so done with this
     }
