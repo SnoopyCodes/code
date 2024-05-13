@@ -16,10 +16,6 @@ int main() {
     int end = 0;
     int base = 1;
     //base cases: 0th is 0
-    for (int i = 1; i <= N; i++) {
-        if (arr[i] == 0) { continue; }
-        if (i - base < abs(arr[i] - arr[base]) && arr[base] != 0) { cout << 0; return 0; }
-    }
     if (arr[1] == 0)
     for (int i = 1; i <= M; i++) { dp[1][i] = 1; }
     //if our base is 0 then we can definitely set

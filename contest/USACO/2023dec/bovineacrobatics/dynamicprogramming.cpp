@@ -2,27 +2,13 @@
 #define ll long long
 using namespace std;
 int N, M, K;
-vector<map<int, int>> dp;  //stores the tower size and how many towers it has, and then the next highest, then the next, and so on
-map<int, int> m;
-void see(int x) {  //bs for next towers, then add your own on to it
-    int s = x, e = N;
-    while (e > s - 1) {
-        int mid = (s + e) / 2;
-        if (m[mid] >= K + m[x]) { e = mid+1; }
-        else { s = mid; }
-        //hope s works
-    }
-    if (m[s] < K + m[x]) { //notsob this is the easiest part
-        dp[x][1] = m[x];
-    }   else {  //add to the highest tower, and take the remainders into a second
-        map<int, int> thing = dp[s];
-        auto &it = (thing.rbegin());
-        while (m[x] != 0) {
-            
-        }
-    }
-}
-
+//okay, attempt to fix
+//while M is greater than 0
+//you just run it through
+//if forming a tower takes like N though then ur cooked
+//though we need to cut based on the smallest amount of things
+//okay that much is done
+//
 int main() {
     ios_base::sync_with_stdio(false); cin.tie(nullptr);
     //first take a graph as an exapmle
@@ -30,6 +16,7 @@ int main() {
     //what is optimal? this is greedy
     //stick as many cows on the first as possible, then next, and so on
     cin >> N >> M >> K;
+    map<int, int> m;
     for (int i = 0; i < N; i++) {
         int a, b;
         cin >> a >> b;
@@ -37,13 +24,25 @@ int main() {
         m[a] = b;
     }
     ll total = 0;  //might overflow?
-    for (int i = N - 1; i >= 0; i--) {
-        see(i);
+    while (M != 0 && m.size() != 0) {  //M
+        pair<int, int> p = *m.begin();
+        unordered_set<int> tower;
+        int minfreq = p.second;
+        tower.insert(p.first);
+        while (m.lower_bound(p.first + K) != m.end()) {  //up to N
+            p = *(m.lower_bound(p.first + K));
+            tower.insert(p.first);
+            minfreq = min(minfreq, p.second);
+        }
+        if (minfreq > M) { total += M * tower.size(); M = 0; break; }
+        total += minfreq * tower.size();
+        M -= minfreq;
+        while (!tower.empty()) {
+            int a = *tower.begin();
+            tower.erase(tower.begin());
+            m[a] = m[a] - minfreq;
+            if (m[a] == 0) { m.erase(a); }
+        }
     }
-
-    for (auto &x : dp[0]) {
-        
-    }
-    
-    
+    cout << total << "\n";
 }

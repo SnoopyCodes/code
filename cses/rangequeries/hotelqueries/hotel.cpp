@@ -2,7 +2,6 @@
 //come back later
 using namespace std;
 int N;
-int loga = 1;
 vector<int> seg;
 void init() {
     for (int i = N - 1; i > 0; i--) {
@@ -23,22 +22,21 @@ int query(int amt) {
     for (pos = 1; pos < N; pos = pos * 2 + add) {
         add = 0;
         if (seg[pos << 1] < amt) { add = 1; }
-        // cout << pos << "\n";
-        // cout << seg[pos << 1] << " " << seg[pos << 1 | 1] << "\n";
     }
-    // cout << pos << "\n";
     update(pos, seg[pos] - amt);
-    return pos + 1 - (pos < loga ? - N + loga : loga);
+    return pos + 1 - N;
 }
 int main() {
     ios_base::sync_with_stdio(false); cin.tie(nullptr);
     int M; cin >> N >> M;
+    int bm = 1;
+    while (bm < N) { bm <<= 1; }
+    swap(bm, N);
     seg.resize(2 * N);
-    for (int i = 0; i < N; i++) {
+    for (int i = 0; i < bm; i++) {
         cin >> seg[i + N];
     }
     init();
-    while (loga < N) { loga *= 2; }
     for (int i = 0; i < M; i++) {
         int q; cin >> q;
         cout << query(q);
