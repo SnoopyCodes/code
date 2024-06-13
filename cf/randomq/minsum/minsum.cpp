@@ -41,6 +41,9 @@ void solve() {
     //wait k 0 to 10
     //lmao just greedy?
     //i pray
+    //jesus christ how tf
+    //this looks dp
+    //it is dp i remember accidentally peeking at the edi:p
 }
 int main() {
     ios_base::sync_with_stdio(false); cin.tie(nullptr);
