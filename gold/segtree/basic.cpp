@@ -3,7 +3,7 @@
 //orz
 using namespace std;
 int N;
-//basic version, no lazy propagation yet
+//basic version, no lazy propagation
 vector<int> segtree;
 //understand all bit operations in here!
 //elements in N...2 * N-1
