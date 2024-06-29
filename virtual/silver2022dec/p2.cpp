@@ -10,7 +10,10 @@ void solve() {
     }
     //we can iterate through 5 * 10^6 once at least
     //so fj wins 
-    //then nhoj needs to force it to not get to 
+    //run sieve
+    //so sieve
+    //isnt this basically dp?
+    //okay help the other thing idk what it is
 }
 int main() {
     ios_base::sync_with_stdio(false); cin.tie(nullptr);
