@@ -31,7 +31,6 @@ void unite(int u, int v, int d) {
 }
 int main() {
     ios_base::sync_with_stdio(false); cin.tie(nullptr);
-    freopen("in.txt", "r", stdin);
     //we may utilize dsu on this for sure
     //but are we really to add queries to each cc
     //and then check each cc?
@@ -43,11 +42,9 @@ int main() {
     //honestly i bet this passes anyways like it should not but it probably will
     //actually i dont believe it
     //lmao
-    //i think we can store for arrays whether or not we have a query in it
-    //then we can check the query?
-    //uhhh 
-    //bruh
-    //
+    //dsu is simply too weak
+    //ok so euler tour
+    //for every dsu we need to build
     int N, M, Q; cin >> N >> M >> Q;
     vector<array<int, 2>> edges(M);
     queries.resize(N);
