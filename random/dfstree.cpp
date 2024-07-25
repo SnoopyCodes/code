@@ -29,15 +29,18 @@ int dfs(int v, int from) {  // return number of edges going over v
     bool is_art = trav > 1;
     is_art |= from != -1 && overs == down && trav > 0;
     if (is_art) {
-        cout << overs << " " << down << "\n";
         art_point.push_back(v);
         // you are an art point if
+        // you connect different ccs in:
         // case 1: children to parent
-        // you did at least one traversal (not a leaf node) &
-        // you have no crosses OVER THIS POINT, and are not the root
+        // you did at least one traversal (not a leaf node)
+        // & you have no crosses OVER THIS POINT
+        // overs == down: we ignore up because up then belongs to the
+        // upper cc, regardless of if its a bridge or not
+        // & are not the root
         // this is bc if you are the root you will have no crosses
         // but you dont connect any parent above you
-        // case 2
+        // case 2: child to child
         // you did more than 1 traversal
         // this means your children arent connected without you
         // so you are
