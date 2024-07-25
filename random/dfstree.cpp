@@ -4,7 +4,6 @@ using namespace std;
 
 vector<vector<int>> graph;
 vector<bool> visited;
-vector<int> crossed;
 vector<int> in_time;
 vector<int> art_point;
 vector<array<int, 2>> bridges;
@@ -26,18 +25,30 @@ int dfs(int v, int from) {  // return number of edges going over v
         if (res == 0) { bridges.push_back({v, adj}); }
         overs += res;
     }
-    crossed[v] = up + overs - down;
-    if (trav > 1 || !crossed[v] && graph[v].size() > 1) {
+    int crossed = up + overs - down;
+    bool is_art = trav > 1;
+    is_art |= from != -1 && overs == down && trav > 0;
+    if (is_art) {
+        cout << overs << " " << down << "\n";
         art_point.push_back(v);
+        // you are an art point if
+        // case 1: children to parent
+        // you did at least one traversal (not a leaf node) &
+        // you have no crosses OVER THIS POINT, and are not the root
+        // this is bc if you are the root you will have no crosses
+        // but you dont connect any parent above you
+        // case 2
+        // you did more than 1 traversal
+        // this means your children arent connected without you
+        // so you are
     }
-    return crossed[v];
+    return crossed;
 }
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
     int N, M; cin >> N >> M;
     graph.resize(N);
     visited.resize(N);
-    crossed.resize(N);
     in_time.resize(N);
     for (int i = 0; i < M; i++) {
         int a, b; cin >> a >> b; a--; b--;
