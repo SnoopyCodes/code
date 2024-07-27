@@ -1,6 +1,18 @@
 #include <bits/stdc++.h>
 
 using namespace std;
+
+/*
+the most important part is that you can get number of colors on a path from an ancestor
+to a child by using a vector of int pairs for each color (changes)
+each int pair stores the euler time it changes, and the number of values
+its important to note that at euler time out, we decrement the color number
+this means that at all times the last entry in changes maintains the number of 
+colors from the root to the current node
+lca from: https://codeforces.com/blog/SnoopyCodes :>
+no sparse tables used
+*/
+
 vector<int> colors;
 vector<vector<array<int, 2>>> changes;  //changes in each color at time what, val what
 vector<vector<int>> farms;
@@ -11,9 +23,7 @@ int euler = 0;
 void dfs(int v, int from, int d) {
     int col = colors[v];
     depth[v] = d;
-    int p = 0;
-    if (changes[col].size() > 0) { p = changes[col][changes[col].size() - 1][1]; }
-    changes[col].push_back({euler, p + 1});
+    changes[col].push_back({euler, (*changes[col].rbegin())[1] + 1});
     start[v] = euler;
     euler++;
     par[v] = from;
@@ -21,7 +31,7 @@ void dfs(int v, int from, int d) {
         if (adj == from) { continue; }
         dfs(adj, v, d + 1);
     }
-    changes[col].push_back({euler, changes[col][changes[col].size() - 1][1] - 1});
+    changes[col].push_back({euler, (*changes[col].rbegin())[1] - 1});
 }
 int N;
 vector<int> seg;
@@ -37,7 +47,7 @@ void init() {
         seg[i] = comp(seg[2 * i], seg[2 * i + 1]);
     }
 }
-int query(int l, int r) {  //[)
+int query(int l, int r) {
     int ans = seg[l + N];
     for (l += N, r += N; l < r; l /= 2, r /= 2) {
         if (l & 1) { ans = comp(ans, seg[l++]); }
@@ -46,7 +56,7 @@ int query(int l, int r) {  //[)
     return ans;
 }
 int bs(int t, int c) {  //largest value <= start[t]
-    int s = 0, e = changes[c].size();  //help
+    int s = 0, e = changes[c].size();
     while (s + 1 < e) {
         int m = (s + e) / 2;
         if (changes[c][m][0] <= t) {
@@ -55,20 +65,19 @@ int bs(int t, int c) {  //largest value <= start[t]
             e = m;
         }
     }
-    if (changes[c].size() == 0 || changes[c][s][0] > t) { return 0; }
     return changes[c][s][1];
 }
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
-    // freopen("milkvisits.in", "r", stdin);
-    // freopen("milkvisits.out", "w", stdout);
+    freopen("milkvisits.in", "r", stdin);
+    freopen("milkvisits.out", "w", stdout);
     int M; cin >> N >> M;
     colors.resize(N);
     farms.resize(N);
     start.resize(N);
     par.resize(N);
     depth.resize(N);
-    changes.resize(N);
+    changes.resize(N, vector<array<int, 2>>(1, {-1, 0}));
     for (int i = 0; i < N; i++) {
         cin >> colors[i]; colors[i]--;
     }
