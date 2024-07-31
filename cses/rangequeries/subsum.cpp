@@ -26,8 +26,8 @@ void modify(int p, int val) {
     }
 }
 ll query(int l, int r) {
-    array<ll, 4> ansl;
-    array<ll, 4> ansr;
+    array<ll, 4> ansl{};
+    array<ll, 4> ansr{};
     for (l += N, r += N; l < r; l /= 2, r /= 2) {
         if (l & 1) { ansl = comb(ansl, seg[l++]); }
         if (r & 1) { ansr = comb(seg[--r], ansr); }
@@ -48,10 +48,6 @@ int main() {
     for (int i = N - 1; i > 0; i--) {
         seg[i] = comb(seg[2 * i], seg[2 * i + 1]);
     }
-    for (int i = 0; i < N; i++) {
-        cout << seg[i][0] << " ";
-    }
-    cout << "\n";
     for (int q = 0; q < Q; q++) {
         int p, val; cin >> p >> val;
         modify(p-1, val);
