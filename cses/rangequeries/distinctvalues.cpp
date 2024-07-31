@@ -22,20 +22,11 @@ int main() {
     int Q; cin >> N >> Q;
     seg.resize(2 * N);
     vector<int> nextocc(N, -1);
-    //hrm
-    //sort queries by left endpoint
-    //learning how to offline query lets go
-    //so sort by left endpoint
-    //do a sum segtree based on if its appeared before
-    //when we move left endpoint
     map<int, int> m;  //value, last occurrence
     for (int i = 0; i < N; i++) {
         int k; cin >> k;
-        if (m.count(k)) {
-            nextocc[m[k]] = i;
-        }   else {
-            seg[i + N] = 1;
-        }
+        if (m.count(k)) { nextocc[m[k]] = i; }
+        else { seg[i + N] = 1; }
         m[k] = i;
     }
     for (int i = N - 1; i > 0; i--) {
