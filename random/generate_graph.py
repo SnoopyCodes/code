@@ -27,8 +27,8 @@ def generate_random_connected_graph(N, M):
     return edges
 
 # Example usage
-N = 30  # Number of nodes
-M = 30  # Number of edges
+N = 4  # Number of nodes
+M = 5  # Number of edges
 # okay what do we learn from this
 # you can use sets in python
 # random.choice
