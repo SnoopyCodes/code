@@ -6,20 +6,16 @@ using ll = long long;
 vector<ll> v;
 vector<ll> upadd;
 vector<ll> upset;
-vector<ll> sums;
-int s_N;
-int blocki(int i) { return i / s_N; }
-void apply(int block) {
-	if (upset[block]) {
-		for (int i = block * s_N; i < s_N * (block + 1); i++) {
-			v[i] = upset[block];
-		}
-		upset[block] = 0;
-	}	else if (upadd[block]) {
-		for (int i = block * s_N; i < s_N * (block + 1); i++) {
-			v[i] += upadd[block];
-		}
-		upadd[block] = 0;
+vector<ll> sum;
+const int sz = 256;
+int blocki(int i) { return i / sz; }
+void apply(int b) {
+	if (upset[b]) {
+		for (int i = b * sz; i < sz * (b + 1); i++) { v[i] = upset[b]; }
+		upset[b] = 0;
+	}	else if (upadd[b]) {
+		for (int i = b * sz; i < sz * (b + 1); i++) { v[i] += upadd[b]; }
+		upadd[b] = 0;
 	}
 }
 ll query(int l, int r) {
@@ -30,11 +26,11 @@ ll query(int l, int r) {
 	apply(rb);
 
 	ll ans = 0;
-	while (l < s_N * (lb + 1) && l <= r) { ans += v[l]; l++; }
-	while (r >= s_N * rb && r >= l) { ans += v[r]; r--; }
+	while (l < sz * (lb + 1) && l <= r) { ans += v[l]; l++; }
+	while (r >= sz * rb && r >= l) { ans += v[r]; r--; }
 
 	lb++;
-	while (lb < rb) { ans += sums[lb]; lb++; }
+	while (lb < rb) { ans += sum[lb]; lb++; }
 
 	return ans;
 }
@@ -45,14 +41,14 @@ void modadd(int l, int r, int val) {
 	apply(lb);
 	apply(rb);
 
-	while (l < s_N * (lb + 1) && l <= r) { v[l] += val; l++; sums[lb] += val; }
-	while (r >= s_N * rb && r >= l) { v[r] += val; r--; sums[rb] += val; }
+	while (l < sz * (lb + 1) && l <= r) { v[l] += val; l++; sum[lb] += val; }
+	while (r >= sz * rb && r >= l) { v[r] += val; r--; sum[rb] += val; }
 
 	lb++;
 	while (lb < rb) {
 		if (upset[lb]) { upset[lb] += val; }
 		else { upadd[lb] += val; }
-		sums[lb] += s_N * val;
+		sum[lb] += sz * val;
 		lb++;
 	}
 }
@@ -63,13 +59,13 @@ void modset(int l, int r, int val) {
 	apply(lb);
 	apply(rb);
 
-	while (l < s_N * (lb + 1) && l <= r) { sums[lb] += val - v[l]; v[l] = val; l++; }
-	while (r >= s_N * rb && r >= l) { sums[rb] += val - v[r]; v[r] = val; r--; }
+	while (l < sz * (lb + 1) && l <= r) { sum[lb] += val - v[l]; v[l] = val; l++; }
+	while (r >= sz * rb && r >= l) { sum[rb] += val - v[r]; v[r] = val; r--; }
 	lb++;
 	while (lb < rb) {
 		if (upadd[lb]) { upadd[lb] = 0; }
 		upset[lb] = val;
-		sums[lb] = val * s_N;
+		sum[lb] = val * sz;
 		lb++;
 	}
 }
@@ -77,15 +73,12 @@ int main() {
     cin.tie(0) -> sync_with_stdio(0);
 	int N, Q; cin >> N >> Q;
 	v.resize(N);
-	s_N = 0;
-	while (s_N * s_N < N) { s_N++; }
-    s_N = 256; //testing if cache whtatever iframe told me is true
-	sums.resize(N / s_N + 1);
-	upset.resize(N / s_N + 1);
-	upadd.resize(N / s_N + 1);
+	sum.resize(N / sz + 1);
+	upset.resize(N / sz + 1);
+	upadd.resize(N / sz + 1);
 	for (int i = 0; i < N; i++) {
 		cin >> v[i];
-		sums[blocki(i)] += v[i];
+		sum[blocki(i)] += v[i];
 	}
 	for (int q = 0; q < Q; q++) {
 		int t; cin >> t;
