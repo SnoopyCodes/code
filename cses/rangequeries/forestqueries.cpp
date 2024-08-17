@@ -1,13 +1,12 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-using ll = long long;
+
 template <typename T>
 struct SegTree {
-    int SN;
-    int DN; //not death note
+    int SN, DN;
     vector<T> data;
-    T def() const { return T(); }
+    T def() const { return 0; }
     T comb(T t1, T t2) const { return t1 + t2; }
     void build(const vector<T>& v) {
         SN = v.size();
@@ -33,24 +32,52 @@ struct SegTree {
         return comb(ansl, ansr);
     }
 };
+int N;
+vector<SegTree<int>> base;
+SegTree<int>& merge(int s1, int s2) {
+    int SN = base[s1].SN;
+    vector<int> arr(SN);
+    for (int i = 0; i < SN; i++) {
+        arr[i] = base[s1].data[i + SN] + base[s2].data[i + SN];
+    }
+    SegTree<int> st; st.build(arr);
+    return st;
+}
+void alter(int y, int x, int val) {
+    base[y + N].alter(x, val);
+    for (y = (y + N) / 2; y > 0; y /= 2) {
+        base[y + N].alter(x, val);
+    }
+}
+int query(int y1, int x1, int y2, int x2) {
+    
+}
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
-    int N, Q; cin >> N >> Q;
-    vector<array<ll, 2>> v(N);
+    int Q; cin >> N >> Q;
+    vector<vector<int>> initial(N, vector<int>(N));
     for (int i = 0; i < N; i++) {
-        cin >> v[i][0];
-        v[i][1] = max(v[i][0], 0LL);
+        string s; cin >> s;
+        for (int j = 0; j < N; j++) {
+            if (s[j] == '*') {
+                initial[i][j] = true;
+            }
+        }
     }
-    SegTree<array<ll, 2>> seg;
-    seg.build(v);
+    base.resize(2 * N);
+    for (int i = 0; i < N; i++) {
+        base[i + N].build(initial[i]);
+    }
+    for (int i = N - 1; i > 0; i--) {
+        base[i] = merge(2 * i, 2 * i + 1);
+    }
     for (int q = 0; q < Q; q++) {
         int t; cin >> t;
         if (t == 1) {
-            int p, val; cin >> p >> val; p--;
-            seg.alter(p, {val, max(val, 0)});
+
         }   else {
-            int l, r; cin >> l >> r; l--;
-            cout << seg.query(l, r)[1] << "\n";
+
         }
     }
+    
 }
