@@ -10,8 +10,6 @@ struct Segtree{
         seg.resize(2 * N);
         for (int i = 0; i < N; i++) {
             seg[i + N] = v[i];
-            if (i + N == 9) {
-            }
         }
         for (int i = N - 1; i > 0; i--) {
             seg[i] = min(seg[i * 2], seg[i * 2 + 1]);
