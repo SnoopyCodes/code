@@ -20,7 +20,6 @@ int main() {
     //kay wait never mind
     //welp help
     //iterate through all numbers and add a tally of 
-    //uh
     //this is hard
     //ok then complementary counting
     //someone help wtf
