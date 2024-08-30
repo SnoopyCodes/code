@@ -16,5 +16,17 @@ int main() {
     //count everything added up
     //count the intersections?
     //ok then do the compatible ones
-    //
+    int N; cin >> N;
+    vector<array<int, 5>> faves(N);
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < 5; j++) {
+            cin >> faves[i][j];
+        }
+        sort(faves.begin(), faves.end());
+    }
+    map<vector<int>, int> m;  //count the number of these of size 3
+    for (int i = 0; i < N; i++) {
+        
+    }
+
 }
