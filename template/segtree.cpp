@@ -4,11 +4,10 @@ using namespace std;
 using ll = long long;
 template <typename T>
 struct SegTree {
-    int SN;
-    int DN; //not death note
+    int SN, DN;
     vector<T> data;
-    T def() const { return T(); }
-    T comb(T t1, T t2) const { return t1 + t2; }
+    virtual T def() const { return T(); }
+    virtual T comb(T t1, T t2) const { return t1 + t2; }
     void build(const vector<T>& v) {
         SN = v.size();
         DN = v.size();
@@ -36,21 +35,20 @@ struct SegTree {
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
     int N, Q; cin >> N >> Q;
-    vector<array<ll, 2>> v(N);
+    vector<int> v(N);
     for (int i = 0; i < N; i++) {
-        cin >> v[i][0];
-        v[i][1] = max(v[i][0], 0LL);
+        cin >> v[i];
     }
-    SegTree<array<ll, 2>> seg;
+    SegTree<int> seg;
     seg.build(v);
     for (int q = 0; q < Q; q++) {
         int t; cin >> t;
         if (t == 1) {
             int p, val; cin >> p >> val; p--;
-            seg.alter(p, {val, max(val, 0)});
+            seg.alter(p, val);
         }   else {
             int l, r; cin >> l >> r; l--;
-            cout << seg.query(l, r)[1] << "\n";
+            cout << seg.query(l, r) << "\n";
         }
     }
 }
