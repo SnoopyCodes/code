@@ -4,19 +4,19 @@ using namespace std;
 
 vector<vector<int>> graph;
 vector<bool> visited;
-vector<int> in_time;
+vector<int> back;
 vector<int> art_point;
 vector<array<int, 2>> bridges;
 int euler = 0;
 int dfs(int v, int from) {  // return number of edges going over v
     visited[v] = true;
-    in_time[v] = euler;
+    back[v] = euler;
     euler++;
     int up = 0, down = 0, overs = 0, trav = 0;
     for (int adj : graph[v]) {
         if (adj == from) { continue; }
         if (visited[adj]) {
-            if (in_time[adj] > v) { down++; }
+            if (back[adj] > v) { down++; }
             else { up++; }
             continue;
         }
@@ -52,7 +52,7 @@ int main() {
     int N, M; cin >> N >> M;
     graph.resize(N);
     visited.resize(N);
-    in_time.resize(N);
+    back.resize(N);
     for (int i = 0; i < M; i++) {
         int a, b; cin >> a >> b; a--; b--;
         graph[a].push_back(b);

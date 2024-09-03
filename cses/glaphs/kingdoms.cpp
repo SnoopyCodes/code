@@ -4,27 +4,28 @@ using namespace std;
  
 vector<vector<int>> graph;
 vector<int> in_time;
-vector<int> low_euler;
+vector<int> back;
 vector<int> in_kingdom;
+vector<vector<int>> kingdoms;
+stack<int> path;
 int euler = 0;
 int kings = 0;
-vector<vector<int>> kingdoms;
-stack<int> st;
+
 void dfs(int v) {
     in_time[v] = euler;
-    low_euler[v] = euler;
+    back[v] = euler;
     euler++;
-    st.push(v);
+    path.push(v);
     for (int adj : graph[v]) {
         if (in_time[adj] == -1) { dfs(adj); }
-        if (in_kingdom[adj] == -1) { low_euler[v] = min(low_euler[v], low_euler[adj]); }
+        if (in_kingdom[adj] == -1) { back[v] = min(back[v], back[adj]); }
     }
-    if (low_euler[v] == in_time[v]) {
+    if (back[v] == in_time[v]) {
         kingdoms.push_back({});
         int u = -1;
         while (u != v) {
-            u = st.top();
-            st.pop();
+            u = path.top();
+            path.pop();
             kingdoms[kings].push_back(u);
             in_kingdom[u] = kings;
         }
@@ -37,7 +38,7 @@ int main() {
     graph.resize(N);
     in_time.resize(N, -1);
     in_kingdom.resize(N, -1);
-    low_euler.resize(N);
+    back.resize(N);
     for (int i = 0; i < M; i++) {
         int a, b; cin >> a >> b; a--; b--;
         graph[a].push_back(b);
