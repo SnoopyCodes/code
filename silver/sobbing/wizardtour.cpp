@@ -12,5 +12,5 @@ int main() {
     //somehow
     //yikes
     //ok wait it would be suboptimal to remove from stuff with more than indegree 1
-    //
+    //ok so the answer is edges over two for some reason
 }
