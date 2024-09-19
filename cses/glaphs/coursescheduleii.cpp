@@ -1,52 +1,37 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-struct course {
-    int i; // priority
-    vector<int> prereqs;
-    int advanced = -1; //how many total prereqs
-};
-bool comp(course c1, course c2) {
-    if (c1.advanced == c2.advanced) { return c1.i < c2.i; }
-    return c1.advanced < c2.advanced;
-}
-vector<course> courses;
-int dfs(int v) {
-    if (courses[v].advanced != -1) { return courses[v].advanced + 1; }
-    int need = 0;
-    for (int pre : courses[v].prereqs) {
-        need += dfs(pre);
-    }
-    courses[v].advanced = need;
-    return need+1;
-}
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
     int N, M; cin >> N >> M;
-    courses.resize(N);
+    vector<vector<int>> prereqs(N);
+    vector<int> out(N);
     for (int i = 0; i < M; i++) {
         int a, b; cin >> a >> b; a--; b--;
-        courses[b].prereqs.push_back(a);
+        prereqs[b].push_back(a);
+        out[a]++;
     }
-    //wait we need to put 0's tree first
-    //if we come across a new tree
-    //we can ignore stuff we've already covered
-    //erm
-    //
+    //sob
+    //wait this was like toposort on radj and then reverse
+    //we are essentially assigning the "index" starting from N - 1 to 0 decreasing
+    //bruh this seems instinctively correct
+    priority_queue<int> pq;
     for (int i = 0; i < N; i++) {
-        courses[i].i = i;
-        if (courses[i].advanced == -1) {
-            dfs(i);
+        if (!out[i]) { pq.push(i); }
+    }
+
+    vector<int> ans;
+    while (!pq.empty()) {
+        int u = pq.top();
+        pq.pop();
+        ans.push_back(u);
+        for (int v : prereqs[u]) {
+            out[v]--;
+            if (out[v] == 0) { pq.push(v); }
         }
     }
-    sort(courses.begin(), courses.end(), comp);
+    reverse(ans.begin(), ans.end());
     for (int i = 0; i < N; i++) {
-        cout << courses[i].advanced << "\n";
+        cout << ans[i] + 1 << " \n"[i == N - 1];
     }
-    for (int i = 0; i < N; i++) {
-        cout << courses[i].i+1 << " \n"[i == N - 1];
-    }
-    //the idea is that we will make a reverse adjacency list
-    //for every single i, we compute the prerequisite number
-    //
 }
