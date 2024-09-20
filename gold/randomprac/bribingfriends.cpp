@@ -1,55 +1,63 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-struct 朋友 {
+struct py {
     int p, c, x;
 };
-vector<朋友> pyq;
-bool comp(朋友 py1, 朋友 py2) {
+vector<py> pyq;
+bool cmp(py py1, py py2) {
     return py1.x < py2.x;
 }
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
     int N, A, B; cin >> N >> A >> B;
     pyq.resize(N);
-    //
-    // the cost of one friend
-    // Ci - Xi * x
     for (int i = 0; i < N; i++) {
         cin >> pyq[i].p >> pyq[i].c >> pyq[i].x;
     }
-    // at this point just go for n^3 wtf
-    // or n^4
-    // this is quite challenging
-    // we can set up like a 3d matrix
-    // [f][m][c]: friend we are on, money, cones;
-    // then the value given is the popularity thus far
-    // murderous, isn't it?
-    // wait n^4 is the 8-10 subtask isnt it
-    // goddamn it
-    // if we sort by mooney cost though..
-    // ice cream?
-    // wait we should try sorting by ice cream cost
-    // yes
-    // we may only choose one cow to give ice cream to
-    // wait we have like
-    // an optimal selection right
-    // afterwards we can select some friend to bribe a bit more
-    // if we consider B to be 0
-    // 
-    sort(pyq.begin(), pyq.end(), comp);
-    // [friend][money spent] = max popularity? i think
-    // 
-    vector<vector<int>> gx(N + 1, vector<int>(A + B + 1, -1));
+    sort(pyq.begin(), pyq.end(), cmp);
+    vector<vector<int>> pop(N + 1, vector<int>(A + B + 2, -1));
+    //okay so dp[i][j] where j <= A means
+    //the amount of moonie we have spent
+    //at this point we cannot spend anymore ice cream cones
+    //so we should consider whether to buy it or not
+    pop[0][A + 1] = 0;
+    // cout << "\n";
     for (int i = 0; i < N; i++) {
-        //first try spending all here
-        int cost = pyq[i].c - min(B / pyq[i].x, pyq[i].c);
-        // now we move onwards
-        // oh wait we must consider that where it is not yet spent
-        // 
-        for (int j = 0; j <= A; j++) {
-            if (gx[i][j] == -1) { continue; }
-            gx[i+1][j] = max(gx[i+1][j], gx[i][j]);
+        for (int j = 0; j < A + 1; j++) {
+            if (i != 0) { pop[i][j] = max(pop[i-1][j], pop[i][j]); }
+            if (pop[i][j] == -1) { continue; }
+
+            if (j + pyq[i].c <= A)
+            pop[i + 1][j + pyq[i].c] = max(pop[i + 1][j + pyq[i].c], pop[i][j] + pyq[i].p);
+        }
+        for (int j = A + 1; j < A + B + 2; j++) {
+            if (i != 0) { pop[i][j] = max(pop[i-1][j], pop[i][j]); }
+            if (pop[i][j] == -1) { continue; }
+
+            int amt = B - (j - A - 1);
+            //we should eat the maximum amount possible of ice cream cones
+            if (amt < pyq[i].c * pyq[i].x) {  //we can't buy it all
+                int buy = amt / pyq[i].x;
+                if (pyq[i].c - buy <= A)
+                pop[i + 1][pyq[i].c - buy] = max(pop[i + 1][buy], pop[i][j] + pyq[i].p);
+            }   else {  //we can buy it all, hoorays!
+                int spent = pyq[i].c * pyq[i].x;
+                if (j + spent < A + B + 2)
+                pop[i + 1][j + spent] = max(pop[i + 1][j + spent], pop[i][j] + pyq[i].p);
+            }
         }
     }
+    // for (int i = 0; i < N + 1; i++) {
+    //     for (int j = 0; j < A + B + 2; j++) {
+    //         cout << pop[i][j] << " ";
+    //     }
+    //     cout << "\n";
+    // }
+    int ans = 0;
+    for (int i = 0; i < A + B + 2; i++) {
+        pop[N][i] = max(pop[N-1][i], pop[N][i]);
+        ans = max(ans, pop[N][i]);
+    }
+    cout << ans << endl;
 }
