@@ -45,6 +45,11 @@ int main() {
     for (int q = 0; q < Q; q++) {
         int i, g; cin >> i >> g; i--;
         h[i] += g;
-        //now what
+        //okay so 
+        //we will be considering left to right views
+        //consider an index before
+        //if slope[0,i) != i
+        //okay wait if it is afterwards, then good stuff
+        //
     }
 }
