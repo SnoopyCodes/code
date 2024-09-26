@@ -38,10 +38,6 @@ int main() {
     }
     shortest_u = sp_standard(U);
     shortest_v = sp_standard(V);
-    // for (int i = 0; i < N; i++) {
-    //     cout << i << " " << shortest_u[i] << " " << shortest_v[i] << "\n";
-    // }
-    // cout <<"\n";
     ll ans = shortest_u[V];
 
     auto sp_modded = [&] (int start, int end) {
@@ -63,14 +59,12 @@ int main() {
         while (!pq.empty()) {
             ll d = -pq.top()[0];
             int u = pq.top()[1];
-            // cout << u << endl;
-            // cout << d << endl;
             pq.pop();
             if (dists[u] != d) { continue; }
             for (auto const&[v, c] : stations[u]) {
-                // cout << v << " " << c << "\n";
                 if (dists[v] < d + c) { continue; }
                 //i honestly dont understand this very well
+                //yeah i am just bad
                 if (min(dp[u][0], shortest_u[v]) + min(dp[u][1], shortest_v[v]) < dp[v][0] + dp[v][1]) {
                     dp[v][0] = min(shortest_u[v], dp[u][0]);
                     dp[v][1] = min(shortest_v[v], dp[u][1]);
@@ -82,16 +76,11 @@ int main() {
                     pq.push({-dists[v], v});
                 }
             }
-            // cout << "\n";
         }
         
-        // for (int i = 0; i < N; i++) {
-        //     cout << dp[i][0] << " " << dp[i][1] << "\n";
-        // }
         return dp[end][0] + dp[end][1];
     };
     ans = min(ans, sp_modded(S, T));
-    // cout << "\n";
     ans = min(ans, sp_modded(T, S));
     cout << ans << "\n";
 }
