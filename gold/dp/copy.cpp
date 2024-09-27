@@ -16,7 +16,7 @@ int dfs(int u, int from, int k) {  //path length through this node
     int take = 0;
 
     for (auto p : m) {
-        if (p.first == k || p.second == 0) { continue; }
+        if (p.second == 0) { continue; }
         if (!take && p.second == 1) { take = p.first; }
         else { return -1; }
     }
