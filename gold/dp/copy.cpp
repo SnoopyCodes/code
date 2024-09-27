@@ -21,14 +21,6 @@ int dfs(int u, int from, int k) {  //path length through this node
         else { return -1; }
     }
     return take;
-    //this should not tle i think
-    //we should probably just use multiset actually nvm
-    //we need to pair up nodes so that they add to k
-    //LMFAO THIS RUNS IN TIME
-    //dp[u] = path through this node + 1
-    //
-
-
 }
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
