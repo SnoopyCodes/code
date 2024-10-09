@@ -4,14 +4,9 @@ using namespace std;
 long long count(long long g) {
     long long strip = 0, mult = 1, ans = 0;
     while (g > 0) {
-        //100, 10, 1
-        //10 times units digit
-        //then it just counts 10?
-        //
         int dig = g % 10;
         g /= 10;
         ans += g * mult;
-        //now check strip
         if (dig == 1) {
             ans += strip + 1;
         }   else if (dig > 1) {

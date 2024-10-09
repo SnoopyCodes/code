@@ -16,6 +16,12 @@ void dfs(int u, int par) {
     //hold up
     //what
     //def not
+    //the nice part about dfs is how it splits into child and parent
+    //therefore we should try more
+    //wait i honestly bet this amortizes somehow
+    //dont look at edi trust
+    //uhh i dont understand edi LMAO
+    //
 }
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
