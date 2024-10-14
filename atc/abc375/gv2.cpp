@@ -12,6 +12,7 @@ int main() {
         cities[u].push_back({v, d, i});
         cities[v].push_back({u, d, i});
     }
+
     vector<ll> dist_beg(N, 1e18);
     dist_beg[0] = 0;
     priority_queue<array<ll, 2>> pq;
@@ -31,6 +32,7 @@ int main() {
             }
         }
     }
+
     pq.push({0, N - 1});
     vector<bool> visited(N);
     while (!pq.empty()) {
@@ -47,6 +49,7 @@ int main() {
             }
         }
     }
+
     vector<bool> ans(M);
     set<int> s;
     for (int i = 0; i < order.size(); i++) {
@@ -56,6 +59,7 @@ int main() {
             s.insert(v);
         }
     }
+    
     for (int i = 0; i < M; i++) {
         if (ans[i]) { cout << "Yes" << "\n"; }
         else { cout << "No" << "\n"; }
