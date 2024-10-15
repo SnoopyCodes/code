@@ -4,38 +4,42 @@ using namespace std;
 void solve() {
     int N, C, K; cin >> N >> C >> K;
     string s; cin >> s;
-    vector<int> v(N);
-    vector<vector<int>> dists(C, vector<int>(C, -1));
-    for (int i = 0; i < N; i++) {
-        v[i] = s[i] - 'A';
+    //so we need to select a set k such that all characters are within
+    //distance k of each other
+    //can we not brute force 2^18 * 324?
+    //262144 * 300
+    //75e6 should pass
+    vector<int> freq(C);
+    for (int i = 0; i < K; i++) {
+        freq[s[i] - 65]++;
     }
-    vector<int> last_seen(C, -1);
-    //we need to calculate for each character the furthest dist away another appears
-    //  2 * 2e5 + 2 * 2e5 already
-    // wtf is this
-    // i dont understand
-    // so we want the largest number that we can remove and still be valid
-    // lets just try our brainless sol
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < C; j++) {
-            if (last_seen[j] == -1 || j == v[i]) { continue; }
-            dists[v[i]][j] = max(dists[v[i]][j], i - last_seen[j]);
-            dists[j][v[i]] = dists[v[i]][j];
+    vector<bool> bad(1 << C);
+    auto make_mask = [&]() {
+        int res = 0;
+        for (int b = 0; b < C; b++) {
+            res |= (freq[b] > 0) << b;
         }
-        last_seen[v[i]] = i;
+        bad[(1 << C) - 1 ^ res] = true;
+    };
+    make_mask();
+    for (int i = K; i < N; i++) {
+        freq[s[i - K] - 65]--;
+        freq[s[i] - 65]++;
+        make_mask();
     }
-    //
-    //what we do now is nothing
-
-    for (int mask = 0; mask < 1 << C; mask++) {
-        
+    //why is this line necessary?
+    bad[(1 << C) - 1 - (1 << (s.back() - 'A'))] = true;
+    int ans = C;
+    for (int mask = (1 << C) - 1; mask > -1; mask--) {
+        if (!bad[mask]) { ans = min(ans, __builtin_popcount(mask)); }
+        for (int b = 0; b < C; b++) {
+            if (mask & 1 << b == 0) { continue; }
+            bad[mask ^ 1 << b] = bad[mask ^ 1 << b] | bad[mask];
+        }
     }
+    cout << ans << "\n";
 }
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
-    //quite an interesting bitmask dp problem
-    //the idea is that we need to iterate over all subsets
-    //and find the smallest one that has a max dist from any other element
-    //of at most k
     int T; cin >> T; while(T) { T--; solve(); }
 }
