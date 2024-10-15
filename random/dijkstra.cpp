@@ -18,10 +18,10 @@ int main() {
     while (!s.empty()) {
         auto [d, u] = *s.begin();  //dont like
         s.erase(s.begin());
-        for (auto const&[v, len] : cities[u]) {
-            if (d + len < dists[v]) {
+        for (auto const&[v, vd] : cities[u]) {
+            if (d + vd < dists[v]) {
                 s.erase({dists[v], v});
-                dists[v] = d + len;
+                dists[v] = d + vd;
                 s.insert({dists[v], v});
             }
         }

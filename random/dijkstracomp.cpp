@@ -5,7 +5,6 @@ using ll = long long;
 
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
-    //with set
     int N, M; cin >> N >> M;
     vector<vector<array<int, 2>>> cities(N);
     for (int i = 0; i < M; i++) {
@@ -14,9 +13,10 @@ int main() {
     }
     vector<ll> dists(N, 1e18);
     dists[0] = 0;
-    set<int, function<bool(int, int)>> s([&](int a, int b) {
-        return (dists[a] != dists[b] ? dists[a] < dists[b] : a < b);
-    });
+    auto cmp = [&](const int& u, const int& v) {
+        return (dists[u] != dists[v] ? dists[u] < dists[v] : u < v);
+    };
+    set<int, decltype(cmp)> s(cmp);
     s.insert(0);
     while (!s.empty()) {
         auto u = *s.begin();

@@ -19,7 +19,6 @@ void dfs(int u, int par) {
     in_time[u] = euler++;
     path.push(u);
     for (int v : graph[u]) {
-        //tricky part
         if (in_time[v] == -1) { dfs(v, u); }
         if (in_comp[v] == -1) { back[u] = min(back[u], back[v]); }
     }
