@@ -19,7 +19,7 @@ int main() {
     set<int, decltype(cmp)> s(cmp);
     s.insert(0);
     while (!s.empty()) {
-        auto u = *s.begin();
+        int u = *s.begin();
         s.erase(s.begin());
         for (auto const&[v, len] : cities[u]) {
             if (dists[u] + len < dists[v]) {
