@@ -20,7 +20,6 @@ int main() {
                 if (idx >= c) {
                     int ok = k - c * w;
                     int oidx = (ok - j) / w;
-                    //
                     if (!dq.empty() && dq.front() == value[ok] - oidx * v) { dq.pop_front(); }
                 }
                 if (dq.empty()) { continue; }
