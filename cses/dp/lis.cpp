@@ -12,12 +12,8 @@ int main() {
     set<int> s;
     for (int i = 0; i < N; i++) {
         if (s.count(arr[i])) { continue; }
-        if (s.upper_bound(arr[i]) == s.end()) {
-            s.insert(arr[i]);
-        }   else {
-            s.erase(s.upper_bound(arr[i]));
-            s.insert(arr[i]);
-        }
+        if (s.upper_bound(arr[i]) != s.end()) { s.erase(s.upper_bound(arr[i])); }
+        s.insert(arr[i]);
     }
     cout << s.size();
 }
