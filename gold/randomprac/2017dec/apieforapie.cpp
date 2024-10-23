@@ -6,7 +6,6 @@ int main() {
     cin.tie(0) -> sync_with_stdio(0);
     freopen("piepie.in", "r", stdin);
     freopen("piepie.out", "w", stdout);
-    //:skull: here we go again
     int N, D; cin >> N >> D;
     vector<array<int, 2>> pies(2 * N);
     vector<int> dist(2 * N, -1);
