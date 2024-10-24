@@ -1,0 +1,6 @@
+boneseg might be the most commonly used-- requires modification for anything other than sum, pretty simple
+morebaseseg is struct based and only requires changing comb(), still fat af
+segtree is incomplete- it can deal with non commutative ops, but can't do walks yet
+compseg is also incomplete- provides operations for different merging
+in anything, make sure comb() and def are ok for usage
+i now have segtree walk working- needs comparison operators or smth

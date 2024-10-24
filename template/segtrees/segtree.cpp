@@ -6,9 +6,9 @@ template <typename T>
 struct SegTree {
     int SN, DN;
     vector<T> data;
-    virtual T def() const { return T(); }
-    virtual T comb(T t1, T t2) const { return t1 + t2; }
-    void build(const vector<T>& v) {
+    virtual T def() { return 0; }
+    virtual T comb(T t1, T t2) const { return max(t1, t2); }
+    void init(const vector<T>& v) {
         SN = v.size();
         DN = v.size();
         SN = 1 << (1 + __lg(SN - 1));
@@ -31,6 +31,17 @@ struct SegTree {
         }
         return comb(ansl, ansr);
     }
+    int walk(T x) {
+        if (x > data[1]) { return -1; }
+        bool add = 0;
+        int p = 1;
+        while (p < SN) {
+            add = data[2 * p] < x;
+            p = 2 * p + add;
+            add = 0;
+        }
+        return p - SN;
+    }
 };
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
@@ -40,15 +51,14 @@ int main() {
         cin >> v[i];
     }
     SegTree<int> seg;
-    seg.build(v);
+    seg.init(v);
     for (int q = 0; q < Q; q++) {
-        int t; cin >> t;
-        if (t == 1) {
-            int p, val; cin >> p >> val; p--;
-            seg.alter(p, val);
-        }   else {
-            int l, r; cin >> l >> r; l--;
-            cout << seg.query(l, r) << "\n";
+        int need; cin >> need;
+        int res = seg.walk(need);
+        cout << res + 1 << " ";
+        if (res != -1) {
+            seg.alter(res, seg.data[res + seg.SN] - need);
         }
     }
+    cout << "\n";
 }
