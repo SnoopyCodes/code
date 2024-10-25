@@ -15,12 +15,12 @@ struct DSU {
         return root[u];
     }
     bool merge(int u, int v) {
-        u = find(u);
-        v = find(v);
-        if (u == v) { return false; }
-        if (sizes[u] < sizes[v]) { swap(u, v); }
-        sizes[u] += sizes[v];
-        root[v] = u;
+        int ru = find(u);
+        int rv = find(v);
+        if (ru == rv) { return false; }
+        if (sizes[ru] < sizes[rv]) { swap(ru, rv); }
+        sizes[ru] += sizes[rv];
+        root[rv] = ru;
     }
 };
 int main() {
