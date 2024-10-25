@@ -6,8 +6,11 @@ template <typename T>
 struct SegTree {
     int SN, DN;
     vector<T> data;
-    virtual T def() { return 0; }
-    virtual T comb(T t1, T t2) const { return max(t1, t2); }
+    virtual T def() const { return 0; }
+    
+    virtual T comb(T t1, T t2) const {
+        return t1 + t2;
+    }
     void init(const vector<T>& v) {
         SN = v.size();
         DN = v.size();
@@ -50,15 +53,4 @@ int main() {
     for (int i = 0; i < N; i++) {
         cin >> v[i];
     }
-    SegTree<int> seg;
-    seg.init(v);
-    for (int q = 0; q < Q; q++) {
-        int need; cin >> need;
-        int res = seg.walk(need);
-        cout << res + 1 << " ";
-        if (res != -1) {
-            seg.alter(res, seg.data[res + seg.SN] - need);
-        }
-    }
-    cout << "\n";
 }

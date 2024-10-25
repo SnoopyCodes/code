@@ -1,6 +1,8 @@
-boneseg might be the most commonly used-- requires modification for anything other than sum, pretty simple
-morebaseseg is struct based and only requires changing comb(), still fat af
-segtree is incomplete- it can deal with non commutative ops, but can't do walks yet
-compseg is also incomplete- provides operations for different merging
-in anything, make sure comb() and def are ok for usage
-i now have segtree walk working- needs comparison operators or smth
+in all but boneseg, make sure comb() and def are ok for usage
+i now have segtree walk working- needs comparison operators or smth, needs testing
+overriding is possible! example usage given- pizzeria queries
+
+more specific use cases:
+boneseg is to be used if there is only one segtree needed, and the type is integer/long long
+baseseg is if more than one segtree is needed, and supports any node type
+segtree is to be used if non commutative ops are used and/or walks
