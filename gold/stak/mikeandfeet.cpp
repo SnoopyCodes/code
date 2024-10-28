@@ -9,49 +9,38 @@ int main() {
     for (int i = 0; i < N; i++) {
         cin >> v[i];
     }
-    vector<int> strength(N + 1); //with size i
-    //so uh
-    //thinking
-    //is hard
-    //uhhhh so
-    //if we maintain the stack
-    vector<array<int, 2>> st;
-    //if we maintain the stack
-    //we can find the longest a certain value can extend!
-    for (int i = 0; i < N; i++) {
-        while (!st.empty() && st.back()[0] >= v[i]) {
-            st.pop_back();
+    //what if we were to find for each bear, the strength if it is the minimum?
+    auto sweep = [&]() {
+        vector<int> res(N);
+        //mono stack
+        stack<array<int, 2>> st; st.push({0, -1});
+        for (int i = 0; i < N; i++) {
+            while (v[i] <= st.top()[0]) { st.pop(); }
+            res[i] = st.top()[1];
+            st.push({v[i], i});
         }
-        int far;
-        if (st.empty()) { far = -1; }
-        else {
-            far = st.back()[1];
-        }
-        strength[i - far] = max(strength[i - far], v[i]);
-        st.push_back({v[i], i});
-    }
+        return res;
+    };
+    vector<int> left = sweep();
     reverse(v.begin(), v.end());
-    st.clear();
+    vector<int> right = sweep();
+    reverse(right.begin(), right.end());
+    //these represent, therefore, untouchable bounds
     for (int i = 0; i < N; i++) {
-        while (!st.empty() && st.back()[0] >= v[i]) {
-            st.pop_back();
-        }
-        int far;
-        if (st.empty()) { far = -1; }
-        else {
-            far = st.back()[1];
-        }
-        strength[i - far] = max(strength[i - far], v[i]);
-        st.push_back({v[i], i});
+        right[i] = N - right[i] - 1;
     }
-
-    strength[N] = *min_element(v.begin(), v.end());
-    int prev = 0;
+    vector<int> ans(N + 1);
+    reverse(v.begin(), v.end());
+    for (int i = 0; i < N; i++) {
+        int idx = right[i] - left[i] - 1;
+        ans[idx] = max(ans[idx], v[i]);
+    }
+    int best = 0;
     for (int i = N; i > 0; i--) {
-        strength[i] = max(strength[i], prev);
-        prev = strength[i];
+        ans[i] = max(best, ans[i]);
+        best = max(best, ans[i]);
     }
     for (int i = 1; i < N + 1; i++) {
-        cout << strength[i] << " \n"[i == N];
+        cout << ans[i] << " \n"[i == N];
     }
 }
