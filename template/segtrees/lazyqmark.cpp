@@ -23,7 +23,7 @@ void calc(int p, int len) {
     else { seg[p] = (ll) make[p] * len; }
     seg[p] += add[p] * len;
 }
-void apply(int p, int val, int len, int t) {  //t = 0 is make
+void apply(int p, int val, int len, int t) {
     if (t == 0) {
         seg[p] = (ll) val * len;
         if (p < SN) { make[p] = val; add[p] = 0; }
