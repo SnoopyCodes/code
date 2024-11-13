@@ -1,13 +1,13 @@
 #include <bits/stdc++.h>
-
+ 
 using namespace std;
 using ll = long long;
-
+ 
 vector<ll> seg;
-vector<int> make;
+vector<ll> make;
 vector<ll> add;
 int SN, H;
-
+ 
 void init(vector<int>& v) {
     SN = v.size();
     H = 32 - __builtin_clz(SN);
@@ -17,22 +17,22 @@ void init(vector<int>& v) {
     for (int i = 0; i < SN; i++) { seg[i + SN] = v[i]; }
     for (int i = SN - 1; i > 0; i--) { seg[i] = seg[2 * i] + seg[2 * i + 1]; }
 }
-
+ 
 void calc(int p, int len) {
     if (make[p] == 0) { seg[p] = seg[2 * p] + seg[2 * p + 1]; }
-    else { seg[p] = (ll) make[p] * len; }
+    else { seg[p] = make[p] * len; }
     seg[p] += add[p] * len;
 }
-void apply(int p, int val, int len, int t) {
+void apply(int p, ll val, int len, int t) {  //t = 0 is make
     if (t == 0) {
-        seg[p] = (ll) val * len;
+        seg[p] = val * len;
         if (p < SN) { make[p] = val; add[p] = 0; }
     }   else {
-        seg[p] += (ll) val * len;
+        seg[p] += val * len;
         if (p < SN) { add[p] += val; }
     }
 }
-
+ 
 void climb(int p) {
     int len = 2;
     for (p = (p + SN) / 2; p >= 1; len *= 2, p /= 2) {
@@ -55,7 +55,7 @@ void drop(int p) {
         }
     }
 }
-
+ 
 void alter(int l, int r, int val, int t) {
     drop(l);
     drop(r - 1);
@@ -77,7 +77,7 @@ ll query(int l, int r) {
     }
     return res;
 }
-
+ 
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
     int N, Q; cin >> N >> Q;
@@ -100,4 +100,3 @@ int main() {
             cout << query(l, r) << "\n";
         }
     }
-}
