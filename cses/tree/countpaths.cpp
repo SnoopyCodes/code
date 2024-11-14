@@ -1,90 +1,73 @@
 #include <bits/stdc++.h>
 
 using namespace std;
+
 vector<vector<int>> tree;
-int euler;
-vector<int> order;
+
 vector<int> depth;
-vector<int> beg;
-vector<int> stop;
-vector<int> par;
-void dfs(int v, int from, int d) {
-    order.push_back(v);
-    depth[v] = d;
-    beg[v] = euler;
-    par[v] = from;
-    euler++;
-    for (int u : tree[v]) {
-        if (u == from) { continue; }
-        dfs(u, v, d+1);
+vector<vector<int>> jumps;
+vector<int> sub;
+vector<int> add;
+
+void dfs(int u, int p, int d) {
+    depth[u] = d;
+    jumps[0][u] = p;
+    for (int v : tree[u]) {
+        dfs(v, u, d + 1);
     }
-    stop[v] = euler;
 }
-template<typename T>
-struct SegTree {
-    int SN;
-    int DN;
-    vector<T> data;
-    virtual T def() const { return 0; }
-    virtual T comb(T t1, T t2) const { return t1 + t2; }
-    void build(const vector<T>& v) {
-        SN = v.size();
-        DN = v.size();
-        SN = 1 << (1 + __lg(SN - 1));
-        data.resize(2 * SN);
-        for (int i = 0; i < DN; i++) { data[i + SN] = v[i]; }
-        for (int i = SN - 1; i > 0; i--) { data[i] = comb(data[2 * i], data[2 * i + 1]); }
-    }
-    void alter(int i, T dat) {
-        data[i + SN] = dat;
-        for (i = (i + SN) / 2; i > 0; i /= 2) {
-            data[i] = comb(data[2 * i], data[2 * i + 1]);
-        }
-    }
-    T query(int l, int r) {
-        T ansl = def();
-        T ansr = def();
-        for (l += SN, r += SN; l < r; l /= 2, r /= 2) {
-            if (l & 1) { ansl = comb(ansl, data[l++]); }
-            if (r & 1) { ansr = comb(data[--r], ansr); }
-        }
-        return comb(ansl, ansr);
-    }
-};
-struct LCAC : public SegTree<int> {
-    int deff;
-    int def() const override { return deff; }
-    void setdef(int x) { deff = x; }
-    int comb(int t1, int t2) const override { return depth[t1] < depth[t2] ? t1 : t2; }
-};
+
+vector<int> ans;
+
+void answer(int u, int p, int amt) {
+    amt += add[u];
+}
+
+
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
     int N, M; cin >> N >> M;
-    tree.resize(N);
-    depth.resize(N);
-    beg.resize(N);
-    stop.resize(N);
-    par.resize(N);
-    for (int i = 0; i < N - 1; i++) {
-        int a, b; cin >> a >> b; a--; b--;
-        tree[a].push_back(b);
-        tree[b].push_back(a);
+    tree.resize(N), depth.resize(N);
+    ans.resize(N);
+    for (int i = 0; i < N; i++) {
+        int u, v; cin >> u >> v; u--; v--;
+        tree[u].push_back(v);
+        tree[v].push_back(u);
     }
+    int maxj = __lg(N - 1) + 1;
+    jumps.resize(maxj, vector<int>(N, -1));
     dfs(0, -1, 0);
-    int lowest = 0;
-    for (int i = 1; i < N; i++) {
-        lowest = depth[i] > depth[lowest] ? i : lowest;
+    for (int i = 1; i < maxj; i++) {
+        for (int j = 0; j < N; j++) {
+            if (jumps[i][j] != -1) {
+                jumps[i][j] = jumps[i-1][jumps[i-1][j]];
+            }
+        }
     }
-    LCAC lcac;
-    lcac.build(order);
-    lcac.setdef(lowest);
     for (int i = 0; i < M; i++) {
-        int a, b; cin >> a >> b; a--; b--;
-        if (beg[a] > beg[b]) { swap(a, b); }
-        //find lca
+        int u, v; cin >> u >> v; u--; v--;
+        int ou = u, ov = v;
+        if (depth[u] < depth[v]) { swap(u, v); swap(ou, ov); }
+        int equalize = depth[v] - depth[u];
+        for (int i = 0; i < maxj; i++) {
+            if (equalize & 1 << i) { u = jumps[i][u]; }
+        }
+        if (u != v) {
+            for (int i = maxj - 1; i > -1; i--) {
+                if (jumps[i][u] != jumps[i][v]) { u = jumps[i][u]; v = jumps[i][v]; }
+            }
+        }
         int lca;
-        if (a == b) { lca = a; }
-        else { lca = par[lcac.query(beg[a] + 1, beg[b] + 1)]; }
-        //now wtf do we do
+        if (ou == ov) {
+            //we should not have done allat
+            lca = u;
+            add[lca]++;
+            sub[lca]++;
+        }   else if (u == v) {
+            lca = ov;
+            add[lca]++;
+            
+        }
     }
+
 }

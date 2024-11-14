@@ -100,19 +100,50 @@ struct AVLTree {
     }
 
     //must have nonempty to use
-    node* min(node* n) {
+    node* min(node *n) {
         if (n->l == nullptr) { return n; }
         return min(n->l);
     }
-    node* max(node* n) {
+    node* max(node *n) {
         if (n->r == nullptr) { return n; }
         return max(n->r);
     }
 
+    void del_leaf(node *n) {
+        if (n->p == nullptr) { n = nullptr; }
+        else if (n->is_lc()) { n->p->l = nullptr; }
+        else { n->p->r = nullptr; }
+    }
+
+    void del(int val) {
+        node *rem = _find(val, root);
+        if (rem == nullptr) { return; }
+        node *replace = nullptr;
+        node *par = rem->p;
+        if (rem->l != nullptr) {
+            replace = max(rem->l);
+        }   else if (rem->r != nullptr) {
+            replace = min(rem->r);
+        }
+        if (replace != nullptr) {
+            rem->val = val;
+            if (rem->is_lc()) { rem->p->sl(rem->l); }
+            else { rem->p->sr(rem->r); }
+        }   else {
+            del_leaf(rem);
+        }
+        if (par != nullptr) {
+            balance(par);
+        }
+    }
     
 };
 
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
-    
+    AVLTree bruh;
+    cout <<"hey"<<endl;
+    bruh.add(2);
+    cout << "goodbye"<<endl;
+    cout << (bruh.min(bruh.root)->val) << "\n";
 }
