@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-#define ll long long
+
 using namespace std;
 
 int main() {
@@ -9,26 +9,18 @@ int main() {
     for (int i = 0; i < N; i++) {
         cin >> v[i];
     }
-    int most = 1e6;
-    vector<bool> sieve(most+1);
-    for (int p = 2; p < most + 1; p++) {
-
+    int most = 1e6+1;
+    vector<bool> sieve(most);
+    for (int p = 2; p < most; p++) {
+        if (sieve[p]) { continue; }
+        for (int i = 2 * p; i < most; i += p) {
+            sieve[i] = false;
+        }
     }
-    //soooo
-    //we can iterate through all the primes
-    //and then say 
-    //kay wait never mind
-    //welp help
-    //iterate through all numbers and add a tally of 
-    //this is hard
-    //ok then complementary counting
-    //someone help wtf
-    //we need to be able to see if something's been previously banned from another thing
-    //imagine we form an adjacency list of random crap
-    //sobbing crying dying bruh
-    //but it should run in time?
-    //if we just look at primes maybe?
-    //this is very clearly not gonna work
-    //maybe i just go play piano
-    //maybe maybe mark 
+    //yeah we can sieve this
+    //but now what
+    //we can say for some primes that these numbers are divided by it
+    //and then?
+    //then what
+    // 
 }

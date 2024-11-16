@@ -9,9 +9,8 @@ vector<int> hits;
 vector<array<int, 2>> bridges;
 int euler = 0;
 int dfs(int v, int from) {  // return number of edges going over v
-    in[v] = euler;
-    euler++;
-    int up = 0, down = 0, overs = 0, own = 0;
+    in[v] = euler++;
+    int up = 0, down = 0, own = 0;
     for (int adj : graph[v]) {
         if (adj == from) { continue; }
         if (in[adj] != -1) {
@@ -23,9 +22,9 @@ int dfs(int v, int from) {  // return number of edges going over v
         int res = dfs(adj, v);
         own += hits[v] == res;
         if (res == 0) { bridges.push_back({v, adj}); }
-        overs += res;
+        up += res;
     }
-    int crossed = up + overs - down;
+    int crossed = up - down;
     bool is_art = own - (from == -1);
     if (is_art) { art_point.push_back(v); }
     return crossed;
@@ -43,10 +42,10 @@ int main() {
     }
     dfs(0, -1);
 
-    // cout << bridges.size() << "\n";
-    // for (auto p : bridges) {
-    //     cout << p[0]+1 << " " << p[1]+1 << "\n";
-    // }
+    cout << bridges.size() << "\n";
+    for (auto p : bridges) {
+        cout << p[0]+1 << " " << p[1]+1 << "\n";
+    }
     cout << art_point.size() << "\n";
     for (int x : art_point) {
         cout << x+1 << " ";

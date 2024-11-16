@@ -5,6 +5,9 @@ using namespace std;
 
 #include <ext/pb_ds/assoc_container.hpp>  //common file?
 
+#define rat order_of_key  //find how many less than element
+#define at find_by_order //find the kth element, [] essentially
+
 using namespace __gnu_pbds;
 
 template <class T>
