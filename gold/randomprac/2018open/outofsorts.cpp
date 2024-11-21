@@ -14,26 +14,29 @@ using iset = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node
 
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
-    // freopen("sort.in", "r", stdin);
-    // freopen("sort.out", "w", stdout);
+    freopen("sort.in", "r", stdin);
+    freopen("sort.out", "w", stdout);
     int N; cin >> N;
     //conducts stable sorting
-    set<array<int, 2>> sorter;
-    vector<int> end(N);
-    vector<int> A(N);
+    //take the entire array: what is to be noticed is that bubble corrects one left imbalance
+    //and right imbalance
+    //wait ok incredible use iset
+    vector<array<int, 2>> A(N);
     for (int i = 0; i < N; i++) {
-        cin >> A[i];
-        sorter.insert({A[i], i});
+        cin >> A[i][0]; A[i][1] = i;
     }
-    int cnt = 0;
-    for (auto x : sorter) {
-        A[x[1]] = cnt;  //exact ordering!
-        end[x[1]] = cnt++;
+    sort(A.begin(), A.end());
+    iset<int> is;
+    int ans = 1;
+    //insert each element
+
+    for (int i = 0; i < N - 1; i++) {
+        is.insert(A[i][1]);
+        ans = max(ans, i - (int) is.rat(i + 1) + 1);
     }
-    //A[i] now has distinct elements, end has inverse permutation
-    //for anything in sorted order already we need not sweep at all
-    //how do we tell if something will become sorted without our sweeping?
-    //i have no idea
+    cout << ans << "\n";
+
+    //now what
     //
 
 }

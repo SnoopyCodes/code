@@ -17,7 +17,7 @@ void init(vector<int>& v) {
     for (int i = 0; i < SN; i++) { seg[i + SN] = v[i]; }
     for (int i = SN - 1; i > 0; i--) { seg[i] = seg[2 * i] + seg[2 * i + 1]; }
 }
- 
+
 void calc(int p, int len) {
     if (make[p] == 0) { seg[p] = seg[2 * p] + seg[2 * p + 1]; }
     else { seg[p] = make[p] * len; }

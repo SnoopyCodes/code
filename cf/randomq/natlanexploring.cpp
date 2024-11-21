@@ -24,7 +24,7 @@ int main() {
     const int MOD = 998244353;
     vector<int> ways(N);
     ways[0] = 1;
-    map<int, int> m;
+    vector<int> m(1e6 + 1);
     for (int i = 0; i < N; i++) {
         vector<int> primes;
         int e = pretty[i];

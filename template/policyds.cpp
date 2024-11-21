@@ -1,14 +1,21 @@
 #include <bits/stdc++.h>
 #define rat order_of_key  //find how many less than element
 #define at find_by_order //find the kth element, [] essentially
+#define gset gp_hash_table
+#define gmap gp_hash_table
 using namespace std;
 
-#include <ext/pb_ds/assoc_container.hpp>  //common file?
+//common file, required in all policy ds
+#include <ext/pb_ds/assoc_container.hpp>  
 
 #define rat order_of_key  //find how many less than element
 #define at find_by_order //find the kth element, [] essentially
 
+//required in all policy ds
 using namespace __gnu_pbds;
+
+gmap<int, int> table;
+gset<int, null_type> hash_set;
 
 template <class T>
 using iset = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
