@@ -1,15 +1,13 @@
 #include <bits/stdc++.h>
+using namespace std;
+
+//common file, required in all policy ds
+#include <ext/pb_ds/assoc_container.hpp>
+
 #define rat order_of_key  //find how many less than element
 #define at find_by_order //find the kth element, [] essentially
 #define gset gp_hash_table
 #define gmap gp_hash_table
-using namespace std;
-
-//common file, required in all policy ds
-#include <ext/pb_ds/assoc_container.hpp>  
-
-#define rat order_of_key  //find how many less than element
-#define at find_by_order //find the kth element, [] essentially
 
 //required in all policy ds
 using namespace __gnu_pbds;
