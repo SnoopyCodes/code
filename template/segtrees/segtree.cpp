@@ -7,9 +7,7 @@ struct SegTree {
     int SN, DN;
     vector<T> data;
     virtual T def() const { return 0; }
-    virtual T comb(T t1, T t2) const {
-        return t1 + t2;
-    }
+    virtual T comb(T t1, T t2) const { return t1 + t2; }
     void init(const vector<T>& v) {
         SN = v.size();
         DN = v.size();
