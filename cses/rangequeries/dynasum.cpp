@@ -1,52 +1,54 @@
 #include <bits/stdc++.h>
-
+ 
 using namespace std;
-
+using ll = long long;
+ 
 struct node {
     int l, r;
-    int val = 1e9;
+    ll sum = 0;
     node *lc = nullptr, *rc = nullptr;
     node(int lb, int rb) { l = lb, r = rb; }
-
+ 
     void extend() {
         if (!lc && l + 1 < r) {
             int m = (l + r) / 2;
             lc = new node(l, m);
-            rc = new node(m, r);
+            rc = new node(m, r);        
         }
     }
-    void alter(int k, int x) {
+    void add(int k, ll x) {
         extend();
-        val = min(val, x);
+        sum += x;
         if (lc) {
-            if (k < lc->r) { lc->alter(k, x); }
-            else { rc->alter(k, x); }
+            if (k < lc->r) { lc->add(k, x); }
+            else { rc -> add(k, x); }
         }
     }
-    int query(int ql, int qr) {
-        if (ql <= l && r <= qr) { return val; }
-        if (max(l, ql) >= min(r, qr)) { return 1e9; }
+
+    
+    ll query(int ql, int qr) {
+        if (ql <= l && r <= qr) { return sum; }
+        if (max(l, ql) >= min(r, qr)) { return 0; }
         extend();
-        return min(lc->query(ql, qr), rc->query(ql, qr));
+        return lc->query(ql, qr) + rc->query(ql, qr);
     }
 };
-
+ 
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
     int N, Q; cin >> N >> Q;
-    node *seg = new node(0, N);
+    node *root = new node(0, N);
     for (int i = 0; i < N; i++) {
         int x; cin >> x;
-        seg->alter(i, x);
+        root->add(i, x);
     }
-    for (int q = 0; q < Q; q++) {
+    for (int i = 0; i < Q; i++) {
         int t; cin >> t;
         if (t & 1) {
             int k, x; cin >> k >> x; k--;
-            seg->alter(k, x - seg->query(k, k + 1));
+            root->add(k, x - root->query(k, k + 1));
         }   else {
             int l, r; cin >> l >> r; l--;
-            cout << seg->query(l, r) << "\n";
+            cout << root->query(l, r) << "\n";
         }
     }
-}
