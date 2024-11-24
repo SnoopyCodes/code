@@ -1,1 +1,2 @@
 I actually like the look of sparse segtree!
+use bonesparse for anything that is non struct and non walk

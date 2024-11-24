@@ -1,42 +1,42 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-template<typename T>
+template<typename V>
 struct node {
-    T def = 0, data = def;
+    V def = 0, val = def;
+    V comb(V v1, V v2) { return max(v1, v2); }
     long long l, r;
     node *lc = nullptr, *rc = nullptr;
-    node(int lb, int rb) { l = lb, r = rb; }
-    T comb(T t1, T t2) { return max(t1, t2); }
+    node(long long lb, long long rb) { l = lb, r = rb; }
     void extend() {
         if (!lc && l + 1 < r) {
-            int m = (l + r) / 2;
+            long long m = (l + r) / 2;
             lc = new node(l, m);
             rc = new node(m, r);
         }
     }
-    void upd(long long p, T v) {
+    void upd(long long p, V v) {
         extend();
         if (lc) {
             if (p < lc->r) { lc->upd(p, v); }
             else { rc->upd(p, v); }
-            data = comb(lc->data, rc->data);
+            val = comb(lc->val, rc->val);
         }   else {
-            data = v;
+            val = v;
         }
     }
-    T query(long long ql, long long qr) {
-        if (ql <= l && r <= qr) { return data; }
+    V query(long long ql, long long qr) {
+        if (ql <= l && r <= qr) { return val; }
         if (l >= qr || r <= ql) { return def; }
         extend();
         return comb(lc->query(ql, qr), rc->query(ql, qr));
     }
-    long long walk(T val) {
-        if (val > data) { return l - 1; }
+    long long walk(V v) {
+        if (v > val) { return l - 1; }
         if (l + 1 == r) { return l; }
         extend();
-        if (lc->data >= val) { return lc->walk(val); }
-        return rc->walk(val);
+        if (lc->val >= v) { return lc->walk(v); }
+        return rc->walk(v);
     }
 };
 
