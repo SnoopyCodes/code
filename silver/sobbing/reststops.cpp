@@ -24,8 +24,8 @@ int main() {
 
     for (int i = 0; i < N; i++) {
         if (!stop[i]) { continue; }
-        ll t = stopped + yum[i][0] * bspeed;  //time it takes to get here
-        ll catchup = yum[i][0] * fspeed - t;
+        ll t = stopped + yum[i][0] * (ll) bspeed;  //time it takes to get here
+        ll catchup = (ll) yum[i][0] * fspeed - t;
         yum_score += catchup * yum[i][1];
         stopped += catchup;
     }
