@@ -15,22 +15,38 @@ int main() {
     for (int i = 0; i < N; i++) {  //place at
         for (int j = i; j < N; j++) {  //go to
             if (j != i) { range[i][j] = range[i][j-1]; }
-            if (j - i == brokes[j]) { range[i][j]++; }
+            if (j - i != brokes[j]) { range[i][j]++; }
         }
     }
-
-    cout << N - range[0][N - 1] << "\n";
-
     //breakouts at i, j
-    vector<vector<int>> best(N+1, vector<int>(N, -1));
+    vector<vector<int>> best(N + 1, vector<int>(N, 101));
     //go forwards
-    best[0][0] = range[0][0];
-    for (int i = 1; i < N; i++) {
-        //update all that end with this i think
-        //
+    //ok
+    //so, what?
+    //waht does dp[i][j] mean?
+    //it means that there are j breakouts in the first i, other than the first one, and min tamperings to make this fit
+    best[0][0] = 101;
+    for (int i = 1; i <= N; i++) {
+        best[i][0] = range[0][i-1];
+    }
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < i; j++) {
+            //find minimum tamperings such that there are j breakouts other than the first
 
-        for (int j = 0; j < N; j++) {
-
+            //suppose that the ith log was tampered with
+            best[i+1][j] = min(best[i+1][j], best[i][j] + 1);
+            //suppose that it was tampered with and there was breakout here
+            if (brokes[i] != 0) {
+                best[i+1][j+1] = min(best[i+1][j+1], best[i][j] + 1);
+            }
+            //suppose it wasnt tampered with
+            //then we have it is from 
+            if (brokes[i] < i) {
+                best[i+1][j+1] = min(best[i+1][j+1], best[i-brokes[i]][j] + range[i - brokes[i]][i]);
+            }
         }
+    }
+    for (int i = 0; i < N; i++) {
+        cout << best[N][i] << "\n";
     }
 }

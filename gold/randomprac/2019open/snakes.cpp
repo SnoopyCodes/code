@@ -16,6 +16,7 @@ int main() {
     //only things over this size are valid
     //time complexity issue
     //uhhhhhh im very bad at this wtrf
+    //minwaste[i][j] is minimum wasted from 0...i with j changes
     vector<int> snakes(N);
     for (int i = 0; i < N; i++) {
         cin >> snakes[i];
@@ -28,8 +29,8 @@ int main() {
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < K; j++) {
             int best = 1e9;
+            //suppose that we use size k snakes
             for (int k = 0; k < N; k++) {
-                if (snakes[k] < snakes[i]) { continue; }
                 
             }
         }
