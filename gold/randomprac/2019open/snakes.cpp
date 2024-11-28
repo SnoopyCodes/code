@@ -17,6 +17,9 @@ int main() {
     //time complexity issue
     //uhhhhhh im very bad at this wtrf
     //minwaste[i][j] is minimum wasted from 0...i with j changes
+    //transitions?
+    //select a valid size for the next one
+    //try using the same size (no change?)
     vector<int> snakes(N);
     for (int i = 0; i < N; i++) {
         cin >> snakes[i];
