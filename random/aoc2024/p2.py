@@ -1,5 +1,5 @@
 import os
-os.chdir("C:\\Users\\benja\\VSC\\code\\pythongrind\\aoc2024")
+os.chdir("C:\\Users\\benja\\VSC\\code\\random\\aoc2024")
 with open("in.txt", "r") as file:
     lines = file.readlines()
 L = []
