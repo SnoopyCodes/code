@@ -33,6 +33,7 @@ struct MinTree:SegTree<int> {
     int def() const override { return (int) 1e9; }
     int comb(int i, int j) const override { return min(i, j); }
 };
+//example override
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
     int N, Q; cin >> N >> Q;

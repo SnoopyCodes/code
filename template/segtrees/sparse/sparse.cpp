@@ -56,3 +56,6 @@ int main() {
     }
     cout << "\n";
 }
+//includes all main functionality-- i like it better than iterative for this
+//comparison: without init() function of iter then iter is 33 lines vs 38 for sparse
+//but init() is tricky with iter when walking on segtree

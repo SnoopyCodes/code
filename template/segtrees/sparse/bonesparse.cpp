@@ -16,11 +16,11 @@ struct node {
 			rc = new node(m, r);
 		}
 	}
-	void add(int p, int v) {
+	void upd(int p, int v) {
 		extend();
 		if (lc) {
-			if (p < lc->r) { lc->add(p, v); }
-			else { rc->add(p, v); }
+			if (p < lc->r) { lc->upd(p, v); }
+			else { rc->upd(p, v); }
             val = min(lc->val, rc->val);
 		}	else {
 			val = v;

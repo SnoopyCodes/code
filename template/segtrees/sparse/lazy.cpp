@@ -65,7 +65,9 @@ struct node {
         return rc->walk(v);
     }
 };
- 
+
+//change defu, defv, apply, walk, comb to needs
+
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
     int N, Q; cin >> N >> Q;
