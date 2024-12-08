@@ -27,7 +27,7 @@ struct node {
     }
     V query(long long ql, long long qr) {
         if (ql <= l && r <= qr) { return val; }
-        if (l >= qr || r <= ql) { return def; }
+        if (qr <= l || r <= ql) { return def; }
         extend();
         return comb(lc->query(ql, qr), rc->query(ql, qr));
     }

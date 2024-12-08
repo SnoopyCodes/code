@@ -9,33 +9,31 @@ int main() {
     int N, K; cin >> N >> K;
     //ok doesnt look too bad
     //let dp[i][j][k] be min waste from 0...i with j used and certain size
-    //hold on cause 1e6
-    //then let it be that index that contains teh maximum
-    //push dp
-    //no ll issue
-    //only things over this size are valid
-    //time complexity issue
-    //uhhhhhh im very bad at this wtrf
-    //minwaste[i][j] is minimum wasted from 0...i with j changes
-    //transitions?
-    //select a valid size for the next one
-    //try using the same size (no change?)
+    //dp[i][j][k] = min(dp[i][j][k-1] + )
+
     vector<int> snakes(N);
     for (int i = 0; i < N; i++) {
         cin >> snakes[i];
     }
-    vector<vector<int>> minwaste(N + 1, vector<int>(K + 1, 1e9));
-    vector<int> before(N);  //cost from directly before
-    for (int i = 0; i < N; i++) {
+    vector<vector<int>> minwaste(N, vector<int>(K + 1, 1e9));
+    vector<vector<int>> prev(N, vector<int>(K, 1e9));
+    //so try push dp i guess
+    for (int i = 0; i <= K; i++) {
         minwaste[0][i] = 0;
+        if (i != K) { prev[i][0] = 0; }
     }
     for (int i = 0; i < N; i++) {
-        for (int j = 0; j < K; j++) {
-            int best = 1e9;
-            //suppose that we use size k snakes
-            for (int k = 0; k < N; k++) {
-                
+        for (int j = 0; j < N; j++) {  //size used
+            if (snakes[i] > snakes[j]) {
+                for (int k = 0; k < K; k++) {
+                    prev[j][k] = 1e9;
+                }
+                continue;
             }
+            //we can use this size
+            //find ones to transition to here
+            //we can use previously at size j, or before at size i
+            
         }
     }
     int ans = 1e9;

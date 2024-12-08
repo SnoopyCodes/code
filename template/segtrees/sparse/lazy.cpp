@@ -14,7 +14,7 @@ template<typename V, typename U>
 struct node {
     long long l, r;
     node *lc = nullptr, *rc = nullptr;
-    V val = defv;  //- is set, + is add, assume we did this to our value already
+    V val = defv;
     U lz = defu;
     node(long long lb, long long rb) { l = lb; r = rb; }
     V comb(V v1, V v2) { return v1 + v2; }
