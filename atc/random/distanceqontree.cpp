@@ -34,6 +34,8 @@ void dfs(int u, int p) {
 
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
+    freopen("hack.txt", "r", stdin);
+    freopen("out.txt", "w", stdout);
     int N; cin >> N;
     tree.rsz(N), par.rsz(N), jdist.rsz(N), jump.rsz(N), depth.rsz(N), pard.rsz(N), cov.rsz(N);
     vector<array<int, 3>> edges;
