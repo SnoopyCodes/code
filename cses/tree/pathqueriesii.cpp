@@ -1,9 +1,9 @@
 #include <bits/stdc++.h>
-
+#define rsz resize
 using namespace std;
 
 vector<vector<int>> tree;
-
+vector<int> depth, parent, sz;
 
 
 int main() {
