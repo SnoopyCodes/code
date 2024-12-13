@@ -3,44 +3,43 @@
 using namespace std;
 
 int main() {
+    cin.tie(0) -> sync_with_stdio(0);
     freopen("berries.in", "r", stdin);
     freopen("berries.out", "w", stdout);
-    cin.tie(0) -> sync_with_stdio(0);
     int N, K; cin >> N >> K;
-    vector<int> trees(N);
+    //so
+    //for this patch what do we do
+    //so uh the key is to find the maximum berries in a basket
+    //and work from there
+    //is this function monotonic?
+    //ehh not really we should iterate through everything
+    //then just fill everything and sort and ??? this is not that bad
+    //i guess once you know the solution...
+    //but often its just about finding the right way to look at the problem i guess
+    //consider multiple perspectives!
+    vector<int> berries(N);
     for (int i = 0; i < N; i++) {
-        cin >> trees[i];
+        cin >> berries[i];
     }
-    //this is like quite trivial or something
-    sort(trees.begin(), trees.end());
-    //just set a capacity limit on the number of berries we will ever collect
-    //okay what if there is like more than that on one tree
-    //uhhhhhhhh
-    //wait uhh
-    //we should try to fill up all of elsies baskets first
-    //and then give the rest to bessie
-    reverse(trees.begin(), trees.end());
     int ans = 0;
-    for (int i = 1; i < 1001; i++) {  //number of berries per basket for elsie
-        vector<int> tmp = trees;
-        int cnt = 0;
-        int baskets = 0;
-        for (int j = 0; j < N; j++) {
-            if (baskets == K / 2 || tmp[j] < i) { break; }
-            while (baskets < K / 2 && tmp[j] >= i) { tmp[j] -= i; baskets++; }
+    for (int maxb = 1; maxb <= 1000; maxb++) {
+        vector<int> remain(K);  //pad with empty elements
+        int num = 0;
+        for (int i = 0; i < N; i++) {
+            num += berries[i] / maxb;
+            remain.push_back(berries[i] % maxb);
         }
-        if (baskets < K / 2) { break; }  //doesn't work anymore
-        sort(tmp.begin(), tmp.end());
-        reverse(tmp.begin(), tmp.end());
-        baskets = 0;
-        for (int j = 0; j < N; j++) {
-            if (baskets == K / 2) { break; }
-            //bruh
-            cnt += tmp[j];
-            baskets++;
+        int res = 0;
+        
+        for (int i = 0; i < num && i < K; i++) {
+            remain.push_back(maxb);
         }
-        //i know now how to do it i will just not do it
-        ans = max(cnt, ans);
+        sort(remain.begin(), remain.end());
+        reverse(remain.begin(), remain.end());
+        for (int i = K / 2; i < K; i++) {
+            res += remain[i];
+        }
+        ans = max(res, ans);
     }
     cout << ans << "\n";
 }
