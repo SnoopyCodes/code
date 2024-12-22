@@ -2,6 +2,8 @@
 
 using namespace std;
 
+//does not work and im too lazy to make it work
+
 struct node {
     int val;
     int h = 1;
