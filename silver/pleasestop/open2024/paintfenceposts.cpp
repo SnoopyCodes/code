@@ -20,7 +20,6 @@ int main() {
     }
     sort(xp.begin(), xp.end());
     sort(yp.begin(), yp.end());
-    vector<bool> visited(N);
     vector<int> order;
     for (int i = 0; i < N; i++) {
         mp[xp[i][2]][0] = i;
@@ -36,80 +35,24 @@ int main() {
     // cout << "\n";
     //oh everything is perpendicular
     //sort by x, sort by y
-    //start at leftmost btotom most and you have to go right and down as much as you can
-    //we HAVE to go DOWN
+    //fuck it we toposort
+    //we require filling to, order, pos, dist
+
+    //we can go up or go right, let's go right >:(
     long dist = 0;
-    int ind = 0;
     int now = xp[0][2];
-    bool dir = false;
-    int cov = 0;
-    int last;
-    //i understand it now
-    //we need to continuously check the ones around and see if they have only one neighbor
-    //after removal of this one
-    auto count = [&](bool d, int x) {
-        int cnt = 0;
-        vector<array<int, 3>> &uh = !d ? xp : yp;
-        if (mp[x][d] + 1 < N && uh[mp[x][d]][0] == uh[mp[x][d]+1][0] && !visited[uh[mp[x][d]+1][2]]) { cnt++; }
-        if (mp[x][d] > 0 && uh[mp[x][d]][0] == uh[mp[x][d]-1][0] && !visited[uh[mp[x][d]-1][2]]) { cnt++; }
-        return cnt;
-    };
-    while (true) {
-        cov++;
-        pos[now] = ind;
+    vector<bool> visited(N);
+    for (int i = 0; i < N; i++) {
         order.push_back(now);
         visited[now] = true;
-        to[ind] = dist;
-        if (cov == N) { break; }
-        vector<array<int, 3>> &use = dir ? xp : yp;  //we want the same of
-        int curi = mp[now][dir ? 0 : 1];
-        //now we must do stuff
-        //just consider the x go right case
-        //if possible, increase
-        // cout << curi << "\n";
-        int nxt;
-        if (curi > 0 && count(dir, use[curi-1][2]) == (cov == N - 1 ? 0 : 1) && use[curi-1][0] == use[curi][0]) { nxt = curi - 1; }
-        else { nxt = curi + 1; }
-        dist += abs(use[nxt][1] - use[curi][1]);
+        to[i] = dist;
+        pos[now] = i;
+        vector<array<int, 3>> &use = !(i % 2) ? yp : xp;
+        int ind = mp[now][!(i % 2)];
+        int nxt = ind + (ind % 2 ? -1 : 1);
+        dist += abs(use[ind][1] - use[nxt][1]);
         now = use[nxt][2];
-        last = now;
-        ind++;
-        dir = !dir;
     }
-    bool chk = true;
-    for (int i = 0; i < N; i++) {
-        if (!visited[i]) { chk = false; }
-    }
-    if (!chk) {
-        cov = 0;
-        dist = 0;
-        dir = true;
-        now = xp[0][2];
-        ind = 0;
-        while (true) {
-            cov++;
-            pos[now] = ind;
-            order.push_back(now);
-            visited[now] = true;
-            to[ind] = dist;
-            if (cov == N) { break; }
-            vector<array<int, 3>> &use = dir ? xp : yp;
-            int curi = mp[now][dir ? 0 : 1];
-            int nxt;
-            if (curi > 0 && count(dir, use[curi-1][2]) == (cov == N - 1 ? 0 : 1) && use[curi-1][0] == use[curi][0]) { nxt = curi - 1; }
-            else { nxt = curi + 1; }
-            dist += abs(use[nxt][1] - use[curi][1]);
-            now = use[nxt][2];
-            last = now;
-            ind++;
-            dir = !dir;
-        }
-    }
-    for (int i = 0; i < N; i++) {
-        assert(visited[i]);
-    }
-    now = xp[0][2];
-    dist += abs(xp[mp[now][0]][0] - xp[mp[last][0]][0] + abs(yp[mp[now][1]][0] - yp[mp[last][1]][0]));
     //ok that is done
     //thus we have formed a loop and all the different things, as well as an order
     //now we want to find for any point what two points is it in between?
@@ -124,7 +67,7 @@ int main() {
         int s = 0, e = N;
         while (s + 1 < e) {
             int m = (s + e) / 2;
-            if (use[m][0] <= x && use[m][1] <= y) { s = m; }
+            if (use[m][0] < x || (use[m][0] == x && use[m][1] <= y)) { s = m; }
             else { e = m; }
         }
         // cout << s << endl;
@@ -138,9 +81,9 @@ int main() {
         //oh this is the loop glitch again
         int poss = pos[use[s][2]], pos1 = pos[use[s+1][2]];
         if (poss > pos1) { swap(poss, pos1); }
-        if (poss == 0 && pos1 == N - 1) { return N - 1; }  //forwards
-        else if (pos1 - poss != 1) { return -1; }
-        return min(pos[use[s][2]], pos[use[s+1][2]]);
+        if (poss == 0 && pos1 == N - 1) { return N - 1; }  //go forwards
+        if (pos1 - poss != 1) { return -1; }
+        return poss;
     };
     // cout << "\n";
     vector<int> diff(2 * N + 1);

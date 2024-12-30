@@ -5,7 +5,7 @@ using namespace std;
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 long uld(long a, long b) { return uniform_int_distribution<long>(a, b)(rng); }
 
-const int MOD = 1e9 + 7;
+const int MOD = 7;
 
 long exp(long x, int p) {
 	long res = 1;
@@ -21,6 +21,7 @@ long inv(long x) {
     return exp(x, MOD - 2);
 }
 
+const int MAXV = 1e6;
 vector<long> fac;
 
 long choose(int n, int r) {
@@ -28,10 +29,14 @@ long choose(int n, int r) {
 }
 
 int main() {
-    
+	fac.resize(MAXV + 1);
+	fac[0] = 1;
+    for (int i = 1; i <= MAXV; i++) {
+		fac[i] = fac[i-1] * i % MOD;
+	}
 }
-
-
+//i don't like mod int classes, nor do i like spamming integers
+//use only one of long or int depending on use case
 
 //declare a mod before using
 //filong up fac
