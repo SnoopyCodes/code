@@ -1,7 +1,6 @@
 #include <bits/stdc++.h>
- 
+#define long int64_t
 using namespace std;
-using ll = long long;
 
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
@@ -11,21 +10,20 @@ int main() {
         int u, v, d; cin >> u >> v >> d; u--; v--;
         cities[u].push_back({v, d});
     }
-    vector<ll> dists(N, 1e18);
+    vector<long> dists(N, 1e18);
+    vector<bool> visited(N);
     dists[0] = 0;
-    auto cmp = [&](int u, int v) {
-        return (dists[u] != dists[v] ? dists[u] < dists[v] : u < v);
-    };
-    set<int, decltype(cmp)> s(cmp);
-    s.insert(0);
-    while (!s.empty()) {
-        int u = *s.begin();
-        s.erase(s.begin());
+    priority_queue<array<long, 2>> pq;
+    pq.push({0,0});
+    while (!pq.empty()) {
+        auto [d, u] = pq.top();  //dont like
+        d = -d;  //dont like
+        pq.pop();
+        if (d != dists[u]) { continue; }
         for (auto const&[v, len] : cities[u]) {
             if (dists[u] + len < dists[v]) {
-                s.erase(v);
                 dists[v] = dists[u] + len;
-                s.insert(v);
+                pq.push({-dists[v], v});
             }
         }
     }

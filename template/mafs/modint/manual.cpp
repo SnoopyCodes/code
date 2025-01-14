@@ -7,7 +7,7 @@ const int MOD = 1e9 + 7;
 #define add(x, y) (((x) % MOD + (y) % MOD) % MOD + MOD) % MOD
 #define sub(x, y) add((x), -(y))
 #define mul(x, y) ((long(x) % MOD * (y) % MOD) % MOD + MOD) % MOD
-#define div(x, y) (x) * inv(y) % MOD
+#define div(x, y) long(x) * inv(y) % MOD
 
 long exp(long x, int p) {
 	long res = 1;
@@ -27,7 +27,7 @@ const int MAXV = 1e6;
 vector<long> fac;
 
 long choose(int n, int r) {
-    return mul(mul(fac[n], inv(fac[r])), inv(fac[n - r]));
+    return div(div(fac[n], fac[r]), fac[n - r]);
 }
 
 

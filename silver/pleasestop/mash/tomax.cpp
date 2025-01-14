@@ -4,10 +4,6 @@ using namespace std;
 
 void solve() {
     int N, K; cin >> N >> K;
-    //binary search on max
-    //then in order to perform the operation
-    //wait let's just binary search on it and see if we can make it work
-    //we want to force it to 
     vector<int> A(N);
     int ans = 0;
     for (int i = 0; i < N; i++) {
@@ -23,7 +19,6 @@ void solve() {
         //we want to attain a sequence starting from some value
         //x, x + 1, x + 2, etc. for as long as possible
         //x, x + 1, x + 2, ... for as long as possible
-        //but do we?
         //start from some index and try to find the max we can increase it to?
         //how do we check if this is possible?
         //we can do this by letting some index be the "max" value
@@ -44,7 +39,6 @@ void solve() {
                 rem -= max(0, m- (i - j) - A[j]);
                 if (rem < 0) { break; }
             }
-            // if (m == 5 && rem >= 0) { cout << i << " " << rem << endl; }
             if (rem >= 0) { valid = true; break; }
         }
         if (valid) { s = m; }

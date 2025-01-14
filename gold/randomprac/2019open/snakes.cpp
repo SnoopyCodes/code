@@ -1,41 +1,42 @@
 #include <bits/stdc++.h>
-
+#define vec vector
 using namespace std;
 
 int main() {
-    cin.tie(0) -> sync_with_stdio(0);
-    //freopen("snakes.in", "r", stdin);
-    //freopen("snakes.out", "w", stdout);
-    int N, K; cin >> N >> K;
-    //ok doesnt look too bad
-    //let dp[i][j][k] be min waste from 0...i with j used and certain size
-    //dp[i][j][k] = min(dp[i][j][k-1] + )
-
-    vector<int> snakes(N);
-    for (int i = 0; i < N; i++) {
-        cin >> snakes[i];
-    }
-    vector<vector<int>> minwaste(N, vector<int>(K + 1, 1e9));
-    vector<vector<int>> prev(N, vector<int>(K, 1e9));
-    //so try push dp i guess
-    for (int i = 0; i <= K; i++) {
-        minwaste[0][i] = 0;
-        if (i != K) { prev[i][0] = 0; }
-    }
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {  //size used
-            if (snakes[i] > snakes[j]) {
-                for (int k = 0; k < K; k++) {
-                    prev[j][k] = 1e9;
-                }
-                continue;
-            }
-            //we can use this size
-            //find ones to transition to here
-            //we can use previously at size j, or before at size i
-            
-        }
-    }
-    int ans = 1e9;
-    cout << ans << "\n";
+	freopen("snakes.in", "r", stdin);
+	freopen("snakes.out", "w", stdout);
+	int N, K; cin >> N >> K;
+	vec<int> snake(N);
+	for (int i = 0; i < N; i++) {
+		cin >> snake[i];
+	}
+	vec<vec<vec<int>>> dp(N, vec<vec<int>>(K + 1, vec<int> (N, 1e9)));
+	for (int i = 0; i < N; i++) {
+		if (snake[i] < snake[0]) { continue; }
+		dp[0][0][i] = snake[i] - snake[0];
+	}
+	for (int i = 1; i < N; i++) {
+		for (int j = 0; j <= K; j++) {
+			int minprev = 1e9;
+			if (j > 0) {
+				for (int k = 0; k < N; k++) {
+					minprev = min(dp[i-1][j-1][k], minprev);
+				}
+			}
+			for (int k = 0; k < N; k++) {
+				if (snake[k] < snake[i]) { continue; }
+				dp[i][j][k] = dp[i-1][j][k] + snake[k] - snake[i];
+				if (j > 0) {
+					dp[i][j][k] = min(dp[i][j][k], minprev + snake[k] - snake[i]);
+				}
+			}
+		}
+	}
+	int ans = 1e9;
+	for (int i = 1; i < K + 1; i++) {
+		for (int j = 0; j < N; j++) {
+			ans = min(ans, dp[N-1][i][j]);
+		}
+	}
+	cout << ans << "\n";
 }

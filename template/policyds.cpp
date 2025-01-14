@@ -5,7 +5,7 @@ using namespace std;
 #include <ext/pb_ds/assoc_container.hpp>
 
 #define rat order_of_key  //find how many less than element
-#define at find_by_order //find the kth element, [] essentially
+#define at find_by_order //iterator to the kth element, [] essentially
 #define gset gp_hash_table
 #define gmap gp_hash_table
 
@@ -20,6 +20,10 @@ using iset = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node
 
 template<class K, class V>
 using imap = tree<K, V, less<K>, rb_tree_tag, tree_order_statistics_node_update>;
+
+template<class T>
+using imset = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
+//use s.erase(s.upper_bound(value)) to remove one occurrence
 
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
