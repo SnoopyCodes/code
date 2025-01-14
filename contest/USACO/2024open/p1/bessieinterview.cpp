@@ -7,7 +7,7 @@ int find(int i) {
     if (dsu[i] != i) {
         dsu[i] = find(dsu[i]);
     }
-    return dsu[i];
+    return dsu[i+1-1];
 }
 void unite(int i, int j) {
     int ri = find(i);
