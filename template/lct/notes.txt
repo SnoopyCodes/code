@@ -1,6 +1,6 @@
 path parent basically means that inside a splay tree (preferred path) it is on the root of the splay tree, but is actually attached from the leftmost node
 
-note that splay trees are only representing preferred paths
+note that splay trees are ONLY representing preferred paths
 access(u):
 	splay u
 	# remove u's preferred child
@@ -20,7 +20,7 @@ access(u):
 # we loop because splaying u should give it the auxcon of v, one upwards, which doesn't have preferred path to u/v, by definition of having auxcon
 # number of loops = number of preferred child changes
 # awesome
-# u will become the overall root of the tree!
+# u will become the overall root of the aux tree!
 
 
 say we have path -1 0 1 2 3 4 and subtree rooted at 0

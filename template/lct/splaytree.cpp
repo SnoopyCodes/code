@@ -16,9 +16,10 @@ struct node {
         c[x] = n;
         if (n) { n->p = this; }
     }
+    //assumes p exists
     void rot() {
         bool x = side();
-        node* o = p;  //original parent
+        node* o = p;
         if (o->p) { o->p->attach(this, o->side()); }
         else { p = nullptr; }
         o->attach(c[!x], x);
@@ -26,32 +27,37 @@ struct node {
     }
     void splay() {
         while (p) {
-            if (side() == p->side()) { p->rot(); }
-            else { rot(); }
-            rot();
+            if (!p->p) { rot(); }
+            else if (side() == p->side()) { p->rot(); rot(); }
+            else { rot(); rot(); }
         }
     }
 };
 
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
-    node *a = new node(1), *b = new node(2), *c = new node(3), *d = new node(4), *e = new node(5);
-    d->attach(a, 1);
-    a->attach(b, 0);
-    a->attach(c, 1);
-    b->attach(e, 1);
-    b->rot();
-    cout << "\n";
-    if (b->c[0]) {
-        cout << b ->c[0] -> key << "\n";
-        cout << "left acquired" << endl;
-    }
-    if (b->c[1]) {
-        cout << b->c[1]->key << endl;
-        cout << b->c[1]->c[0]->key << endl;
-        cout << b->c[1]->c[1]->key << endl;
-    }
-    if (b->p) {
-        cout << b->p->key << "\n";
-    }
+    // node *a = new node(1), *b = new node(2), *c = new node(3), *d = new node(4), *e = new node(5);
+    // d->attach(a, 1);
+    // a->attach(b, 0);
+    // a->attach(c, 1);
+    // b->attach(e, 1);
+    // b->rot();
+    // cout << "\n";
+    // if (b->c[0]) {
+    //     cout << b ->c[0] -> key << "\n";
+    //     cout << "left acquired" << endl;
+    // }
+    // if (b->c[1]) {
+    //     cout << b->c[1]->key << endl;
+    //     cout << b->c[1]->c[0]->key << endl;
+    //     cout << b->c[1]->c[1]->key << endl;
+    // }
+    // if (b->p) {
+    //     cout << b->p->key << "\n";
+    // }
+
+    node* n = new node(1); node* u = new node(2);
+    n->attach(u, 1);
+    u->splay();
+    cout << "hello" << endl; 
 }
