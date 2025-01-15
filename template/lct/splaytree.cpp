@@ -7,7 +7,7 @@ using namespace std;
 //this doesn't actually implement bst ops, mainly to be used with lct
 struct node {
     array<node*, 2> c{};
-    node* p;
+    node* p = nullptr;
     int key = 0;
     node(int k) { key = k; }
     
@@ -32,32 +32,100 @@ struct node {
             else { rot(); rot(); }
         }
     }
+
+    void detach() {  //from parent
+        p->c[side()] = nullptr;
+        p = nullptr;
+    }
+
+    //tree ops, just set
+    node* find(int k) {
+        if (key == k) { splay(); return this; }
+        else if (key < k) {
+            if (c[0]) { return c[0]->find(k); }
+            splay();
+            return nullptr;
+        }
+        if (c[1]) { return c[1]->find(k); }
+        splay();
+        return nullptr;
+    }
+    node* findmin() {
+        if (c[0]) { return c[0]->findmin(); }
+        splay();
+        return this;
+    }
+    node* findmax() {
+        if (c[1]) { return c[1]->findmax(); }
+        splay();
+        return this;
+    }
+    void join(node *v) {  //to right side
+        findmax();
+        attach(v, 1);
+    }
+    void print() {
+        if (c[0]) { c[0]->print(); }
+        cout << key << " ";
+        if (c[1]) { c[1]->print(); }
+    }
+};
+struct splaytree {
+    node *root = nullptr;
+    node* split(int k) {
+        root->find(k);
+        if (root->key > k) {
+            auto x = root;
+            root = nullptr;
+            return x;
+        }
+        if (k == 7) { cout << root->key << endl; }
+        node *r = root->c[1];
+        if (r) { r->detach(); }
+        return r;
+    }
+    void insert(int k) {
+        if (!root) { root = new node(k); }
+        else {
+            auto r = split(k);
+            node *l = new node(k);
+
+            l->attach(r, 1);
+            l->attach(root, 0);
+            root = l;
+        }
+    }
+    int get(int k) {
+        //find the first element <= it
+        root->find(k);
+        node *x;
+        if (root->key == k) { x = root; }
+        else if (!root->c[0]) { return -1; }
+        x = root->c[0];
+        int val = x->key;
+        //delete x
+        auto r = split(k);
+        auto p = x; x = x->c[0];
+        x->detach();
+        x->join(r);
+        return val;
+    }
 };
 
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
-    // node *a = new node(1), *b = new node(2), *c = new node(3), *d = new node(4), *e = new node(5);
-    // d->attach(a, 1);
-    // a->attach(b, 0);
-    // a->attach(c, 1);
-    // b->attach(e, 1);
-    // b->rot();
-    // cout << "\n";
-    // if (b->c[0]) {
-    //     cout << b ->c[0] -> key << "\n";
-    //     cout << "left acquired" << endl;
+    int N, M; cin >> N >> M;
+    splaytree t;
+    for (int i = 0; i < N; i++) {
+        int x; cin >> x;
+        t.insert(x);
+        t.root->print();
+        cout << endl;
+    }
+    t.root->print();
+    // for (int i = 0; i < M; i++) {
+    //     cout << endl;
+    //     int x; cin >> x;
+    //     cout << t.get(x) << "\n";
     // }
-    // if (b->c[1]) {
-    //     cout << b->c[1]->key << endl;
-    //     cout << b->c[1]->c[0]->key << endl;
-    //     cout << b->c[1]->c[1]->key << endl;
-    // }
-    // if (b->p) {
-    //     cout << b->p->key << "\n";
-    // }
-
-    node* n = new node(1); node* u = new node(2);
-    n->attach(u, 1);
-    u->splay();
-    cout << "hello" << endl; 
 }
