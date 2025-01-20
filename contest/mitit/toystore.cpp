@@ -2,57 +2,46 @@
 
 using namespace std;
 
+vector<bool> visited, in_path;
+vector<array<int, 3>> ans;
+vector<int> trav;
+
+int dfs(int u) {
+    visited[u] = true;
+    in_path[u] = true;
+
+    if (visited[trav[u]]) {
+        in_path[u] = false;
+        if (!in_path[trav[u]] || trav[u] == trav[trav[u]]) { return -1; }
+        ans.push_back({1, trav[u] + 1, u + 1});
+        swap(trav[trav[u]], trav[u]);
+        return u;
+    }
+    int v = dfs(trav[u]);
+    in_path[u] = false;
+    if (v == -1 || u == v) { return -1; }
+    swap(trav[u], trav[v]);
+    ans.push_back({1, u + 1, v + 1});
+    return v;
+}
+
 int main() {
-    // freopen("in.txt", "r", stdin);
     int N; cin >> N;
-    vector<int> next(N);
+    trav.resize(N);
     for (int i = 0; i < N; i++) {
         int x; cin >> x; x--;
-        next[i] = x;
+        trav[i] = x;
     }
-    //if there is no cycle (end == end) the problem is pretty trivial
-    //if there is a cycle, find the cycle and then force
-    //make radj lists
-    //first iterate through all non cycles
-    //and solve those individually
-    //wait force the cycles to become non cycles
-    vector<bool> visited(N);
-    vector<array<int, 3>> ans;
-    vector<bool> in_path(N);
+    visited.resize(N);
+    in_path.resize(N);
     for (int i = 0; i < N; i++) {
-        if (visited[i]) { continue; }
-        int u = i;
-        stack<int> path;
-        while (!visited[u]) {
-            visited[u] = true;
-            path.push(u);
-            in_path[u] = true;
-            u = next[u];
-        }
-        bool out = false;
-        if (u == next[u] || !in_path[u]) { out = true; }
-        while (!path.empty()) {
-            int v = path.top();
-            in_path[v] = false;
-            path.pop();
-        }
-        if (out) { continue; }
-        //there is a cycle here, force cycle to be normal using type 2 oips
-        int v = next[u];
-        while (next[v] != u) {
-            ans.push_back({1, v + 1, next[v] + 1});
-            int w = next[v];
-            next[v] = next[w];
-            next[w] = w;
-        }
-        swap(next[v], next[u]);
-        ans.push_back({1, v + 1 , u + 1});
+        if (!visited[i] && i != trav[i]) { dfs(i); ans.pop_back(); }
     }
     //essentially toposort now
     vector<int> in(N);
     vector<vector<int>> radj(N);
     for (int i = 0; i < N; i++) {
-        if (next[i] != i) { in[i]++; radj[next[i]].push_back(i); }
+        if (trav[i] != i) { in[i]++; radj[trav[i]].push_back(i); }
     }
     queue<int> q;
     for (int i = 0; i < N; i++) {
