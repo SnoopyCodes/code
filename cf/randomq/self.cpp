@@ -14,7 +14,7 @@ int main() {
         G[u].pb({v, w});
         G[v].pb({u, w});
     }
-    //O(NM) per query
+    //O((N + M) log max W) per query
     while (Q--) {
         int U, V, K; cin >> U >> V >> K; U--; V--;
         int s = 0, e = 1e9 + 1;
