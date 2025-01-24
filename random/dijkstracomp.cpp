@@ -14,9 +14,9 @@ int main() {
     vector<ll> dists(N, 1e18);
     dists[0] = 0;
     auto cmp = [&](int u, int v) {
-        return (dists[u] != dists[v] ? dists[u] < dists[v] : u < v);
+        return dists[u] < dists[v];
     };
-    set<int, decltype(cmp)> s(cmp);
+    multiset<int, decltype(cmp)> s(cmp);
     s.insert(0);
     while (!s.empty()) {
         int u = *s.begin();

@@ -7,13 +7,13 @@ int N, S, T;
 vec<vec<array<int, 2>>> rails;
 vec<long> cost, ucost, vcost;
 
-bool cmp (int u, int v) {
-    return cost[u] != cost[v] ? cost[u] < cost[v] : u < v;
-};
 
 void dijkstra(int source) {
     cost.clear(); cost.resize(N, 1e18);
 	cost[source] = 0;
+	auto cmp = [&](int u, int v) {
+		return cost[u] != cost[v] ? cost[u] < cost[v] : u < v;
+	};
     set<int, decltype(cmp)> s(cmp);
 	s.insert(source);
 	while (!s.empty()) {
@@ -38,6 +38,9 @@ long dpdijkstra(bool change) {
     }
 	cost.clear(); cost.resize(N, 1e18);
 	cost[S] = 0;
+		auto cmp = [&](int u, int v) {
+		return cost[u] != cost[v] ? cost[u] < cost[v] : u < v;
+	};
     set<int, decltype(cmp)> s(cmp);
 	s.insert(S);
 	while (!s.empty()) {
