@@ -49,3 +49,4 @@ int main() {
         cout << in_scc[i] + 1 << " \n"[i == N - 1];
     }
 }
+//single use

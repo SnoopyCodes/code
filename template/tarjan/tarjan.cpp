@@ -2,6 +2,9 @@
 
 using namespace std;
 
+//back[] is important- it stores the earliest node reachable by this in euler tour ideas
+//afterwards, the in_cc is reversed to obtain topo order, and everything is formed from there
+
 struct tarjan {
     int N, NCC = 0, euler = 0;
     vector<vector<int>> G, cc, adj;

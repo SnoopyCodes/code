@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 
 using namespace std;
+
 struct DSU {
     int N;
     vector<int> root, sizes;
@@ -24,16 +25,33 @@ struct DSU {
         return true;
     }
 };
+
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
     int N, Q; cin >> N >> Q;
+    //benchmark dsu time!
     DSU cc; cc.init(N);
-    for (int i = 0; i < Q; i++) {
+    const int MOD = 998244353;
+    vector<int> pre(Q);
+    pre[0] = 1;
+    for (int i = 1; i < Q; i++) {
+        pre[i] = 2 * pre[i-1] % MOD;
+    }
+    int ans = 0;
+    //i had to google translate to figure out the weird output lol
+    vector<bool> answers;
+    while (Q--) {
         int t, u, v; cin >> t >> u >> v;
-        if (t) {
-            cout << (cc.find(u) == cc.find(v)) << "\n";
-        }   else {
+        if (t == 0) {
             cc.merge(u, v);
+        }   else {
+            answers.push_back(cc.find(u) == cc.find(v));
         }
     }
+    int j = 0;
+    for (int i = answers.size() - 1; i > -1; i--) {
+        ans = (ans + pre[j++] * answers[i]) % MOD;
+    }
+    cout << ans << "\n";
+
 }

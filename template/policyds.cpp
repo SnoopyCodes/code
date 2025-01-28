@@ -2,6 +2,10 @@
 using namespace std;
 
 //common file, required in all policy ds
+
+//rat- how many less than element
+//at- iterator to kth element
+//__gnu_pds- required probably
 #include <ext/pb_ds/assoc_container.hpp>
 
 #define rat order_of_key  //find how many less than element
@@ -12,8 +16,6 @@ using namespace std;
 //required in all policy ds
 using namespace __gnu_pbds;
 
-gmap<int, int> table;
-gset<int, null_type> hash_set;
 
 template <class T>
 using iset = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
@@ -24,6 +26,9 @@ using imap = tree<K, V, less<K>, rb_tree_tag, tree_order_statistics_node_update>
 template<class T>
 using imset = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
 //use s.erase(s.upper_bound(value)) to remove one occurrence
+
+gmap<int, int> table;
+gset<int, null_type> hash_set;
 
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
