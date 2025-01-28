@@ -13,6 +13,7 @@ int main() {
     //N <= 500
     //sum of A <= 1e5
     //500 * 1e5 somehow
+    //wait we need to sum like
     for (int i = 0; i < N; i++) {
         
     }
