@@ -3,11 +3,11 @@
 using namespace std;
 struct DSU {
     int N;
-    vector<int> root, sizes;
+    vector<int> root, size;
     void init(int _N) {
         int N = _N;
         root.resize(N);
-        sizes.resize(N, 1);
+        size.resize(N, 1);
         for (int i = 0; i < N; i++) { root[i] = i; }
     }
     int find(int u) {
@@ -18,8 +18,8 @@ struct DSU {
         int ru = find(u);
         int rv = find(v);
         if (ru == rv) { return false; }
-        if (sizes[ru] < sizes[rv]) { swap(ru, rv); }
-        sizes[ru] += sizes[rv];
+        if (size[ru] < size[rv]) { swap(ru, rv); }
+        size[ru] += size[rv];
         root[rv] = ru;
         return true;
     }
