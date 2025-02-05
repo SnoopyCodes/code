@@ -1,13 +1,9 @@
 #include <bits/stdc++.h>
 #define rsz resize
-
-using std::cin, std::cout;
-using std::vector;
-using std::set, std::map;
-using std::array;
-using std::queue, std::stack, std::deque;
-using std::max, std::min;
-using std::swap;
+#define size sz
+#define len(x) (int) (x.end() - x.begin())
+#define in(x, y) bool(x.find(y) != x.end())
+using namespace std;
 
 int N;
 vector<vector<int>> tree;
@@ -80,6 +76,11 @@ int main() {
         tree[v].push_back(u);
     }
     dfs_size(0, 0);
+    //heavy[u] stores the heavy child on top of it
+    //we cannot go through many heavy childs
+    //our path() code is going up through them
+    //by storing heavy childs as the first child,
+    //we can very easily make light paths just a range from heavy[u] to u
     dfs_hld(0, 0);
     for (int q = 0; q < Q; q++) {
         int t; cin >> t;
