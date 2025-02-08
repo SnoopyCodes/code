@@ -3,23 +3,23 @@
 using namespace std;
  
 struct upd {
-    bool add = false;
+    bool add = true;
     long val = 0;
     upd(bool a, int v) { add = a; val = v; }
+    upd() {}
 };
-upd defu = upd(true, 0);
-long defv = 0;
+
 template<typename V, typename U>
 struct node {
     long l, r;
     node *lc = nullptr, *rc = nullptr;
-    V val = defv;
-    U lz = defu;
+    V defv = 0,  val = defv;
+    U defu, lz = defu;
     node(long lb, long rb) { l = lb; r = rb; }
     V comb(V v1, V v2) { return v1 + v2; }
     void extend() {
         if (!lc && l + 1 < r) {
-            long long m = (l + r) / 2;
+            long m = (l + r) / 2;
             lc = new node(l, m);
             rc = new node(m, r);
         }

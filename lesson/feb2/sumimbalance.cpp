@@ -16,7 +16,6 @@ long cnt(vector<int> &v) {  //# of subarrays where this value doesn't appear
 
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
-    freopen("in.txt", "r", stdin);
     int N; cin >> N;
     vector<vector<int>> appear(1e6 + 1);
     for (int i = 0; i < N; i++) {

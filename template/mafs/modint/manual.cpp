@@ -6,8 +6,8 @@ const int MOD = 1e9 + 7;
 
 #define add(x, y) (((x) % MOD + (y) % MOD) % MOD + MOD) % MOD
 #define sub(x, y) add((x), -(y))
-#define mul(x, y) ((long(x) % MOD * (y) % MOD) % MOD + MOD) % MOD
-#define div(x, y) long(x) * inv(y) % MOD
+#define mul(x, y) ((x % MOD * (y) % MOD) % MOD + MOD) % MOD
+#define div(x, y) x * inv(y) % MOD
 
 long exp(long x, int p) {
 	long res = 1;

@@ -100,3 +100,4 @@ int main() {
             cout << query(l, r) << "\n";
         }
     }
+}
