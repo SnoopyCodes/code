@@ -1,0 +1,12 @@
+something about sticks
+dfs with backtracking
+
+two pointers
+??
+
+circular array- thing
+usaco silver circular barn 2016 but not brute force..
+subtract averages from all of them
+therefore at each point is the number of cows we need to move away
+start at a point
+go backwards

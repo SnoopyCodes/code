@@ -1,8 +1,8 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-using ll = long long;
- 
+
+//min example
 struct node {
 	int l, r;
 	int val = 1e9;
@@ -27,8 +27,8 @@ struct node {
 		}
 	}
 	int query(int ql, int qr) {
+        if (qr <= l || r <= ql) { return 1e9; }
 		if (ql <= l && r <= qr) { return val; }
-		if (max(l, ql) >= min(r, qr)) { return 1e9; }
 		extend();
 		return min(lc->query(ql, qr), rc->query(ql, qr));
 	}
