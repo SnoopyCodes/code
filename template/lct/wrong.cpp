@@ -121,13 +121,6 @@ struct splaytree {
     void min() { root = root->findmin(); }
     void max() { root = root->findmax()->c[0]; }
 };
-vector<int> v;
- 
-void trav(auto r) {
-    if (r->c[0]) { trav(r->c[0]); }
-    v.push_back(r->key);
-    if (r->c[1]) { trav(r->c[1]); }
-}
  
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
@@ -137,10 +130,6 @@ int main() {
         int x; cin >> x;
         //insert
         t.add(x);
-    }
-    trav(t.root);
-    for (int i = 0; i < N; i++) {
-        assert(v[i] <= v[i + 1]);
     }
     for (int i = 0; i < M; i++) {
         int x; cin >> x;

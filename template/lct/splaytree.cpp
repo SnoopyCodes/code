@@ -18,7 +18,7 @@ struct splaytree {
         void detach() {  //from parent
             p = p->c[side()] = nullptr;
         }
-
+ 
         void rot() {  //default rotation
             bool x = side();
             node* o = p;
@@ -35,7 +35,7 @@ struct splaytree {
                 rot();
             }
         }
-
+ 
         node* find(int k) {  //find the node closest to k
             if (key == k) { splay(); return this; }
             else if (key < k && c[1]) { return c[1]->find(k); }
@@ -59,14 +59,12 @@ struct splaytree {
             if (c[1]) { c[1]->print(); }
         }
     } *root = nullptr;
-
+ 
     void join(node *v) {  //joins root to a tree less than itself
         if (root) {
             root = root->findmin();
             root->attach(v, 0);
-        }   else {
-            root = v;
-        }
+        }   else { root = v; }
     }
     node *split(int piv) { //returns tree with nodes < piv
         find(piv);
@@ -80,7 +78,7 @@ struct splaytree {
         }
         return l;
     }
-
+ 
     void add(int k) {
         if (!root) { root = new node(k); return; }
         node *l = split(k);
@@ -107,29 +105,22 @@ struct splaytree {
     void find(int x) {  //sets root to be closest node to x
         if (root) { root = root->find(x); }
     }
-    void ub(int x) {  //node >
+    void ub(int x) {
         if (!root) { return; }
         find(x);
         if (root->key > x || !root->c[1]) { return; }
         root = root->c[1]->findmin();
     }
-    void lb(int x) {  //node <=
+    void lb(int x) {
         if (!root) { return; }
-        node *cur = root;
-        node *candidate = nullptr;
-        while (cur) {
-            if (cur->key <= x) {
-                candidate = cur;
-                cur = cur->c[1];
-            } else {
-                cur = cur->c[0];
-            }
-        }
-        if (candidate) { candidate->splay(); root = candidate; }
+        find(x);
+        if (root->key <= x || !root->c[0]) { return; }
+        root = root->c[0]->findmax();
     }
     void min() { root = root->findmin(); }
     void max() { root = root->findmax(); }
 };
+
 
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
