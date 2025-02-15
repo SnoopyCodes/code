@@ -1,8 +1,10 @@
 #include <bits/stdc++.h>
-
+ 
 using namespace std;
 //https://usaco.guide/adv/link-cut-tree?lang=cpp
 //mit pdf lmao
+//zeocool impl orz!
+//this doesn't actually implement bst ops, mainly to be used with lct
 struct splaytree {
     struct node {
         array<node*, 2> c{};
@@ -18,7 +20,7 @@ struct splaytree {
         void detach() {  //from parent
             p = p->c[side()] = nullptr;
         }
-
+ 
         void rot() {  //default rotation
             bool x = side();
             node* o = p;
@@ -35,7 +37,8 @@ struct splaytree {
                 rot();
             }
         }
-
+ 
+        //tree ops, just set
         node* find(int k) {  //find the node closest to k
             if (key == k) { splay(); return this; }
             else if (key < k && c[1]) { return c[1]->find(k); }
@@ -58,8 +61,8 @@ struct splaytree {
             cout << key << " ";
             if (c[1]) { c[1]->print(); }
         }
-    } *root = nullptr;
-
+    } *root = new node(2e9);  //"end" of the tree
+ 
     void join(node *v) {  //joins root to a tree less than itself
         if (root) {
             root = root->findmin();
@@ -69,20 +72,15 @@ struct splaytree {
         }
     }
     node *split(int piv) { //returns tree with nodes < piv
-        find(piv);
+        lb(piv);  //all nodes to the left are < piv
         node *l = root->c[0];
         if (root->key >= piv) {
             if (l) { l->detach(); }
-        }   else {
-            l = root;
-            root = root->c[1];
-            if (root) { root->detach(); }
         }
         return l;
     }
-
+ 
     void add(int k) {
-        if (!root) { root = new node(k); return; }
         node *l = split(k);
         node *v = new node(k);
         v->attach(l, 0);
@@ -90,13 +88,11 @@ struct splaytree {
         root = v;
     }
     void rem(int k) {
-        if (!root) { return; }
-        find(k);
+        lb(k);
         if (root->key != k) { return; }
         node *left = root->c[0], *right = root->c[1];
         if (left) { left->detach(); }
         if (right) { right->detach(); }
-        delete root;
         root = right;
         join(left);
     }
@@ -105,49 +101,56 @@ struct splaytree {
         cout << endl;
     }
     void find(int x) {  //sets root to be closest node to x
-        if (root) { root = root->find(x); }
+        root = root->find(x);
     }
-    void ub(int x) {  //node >
-        if (!root) { return; }
+    void ub(int x) {  //root is first node > x
         find(x);
-        if (root->key > x || !root->c[1]) { return; }
-        root = root->c[1]->findmin();
+        node *v = root;
+        while (v->c[1] && v->key <= x) { v = v->c[1]; }
+        root = v;
+        root->splay();
     }
-    void lb(int x) {  //node <=
-        if (!root) { return; }
-        node *cur = root;
-        node *candidate = nullptr;
-        while (cur) {
-            if (cur->key <= x) {
-                candidate = cur;
-                cur = cur->c[1];
-            } else {
-                cur = cur->c[0];
-            }
-        }
-        if (candidate) { candidate->splay(); root = candidate; }
+    void lb(int x) {  //root is first node >= x
+        find(x);
+        node *v = root;
+        while (v->key < x) { v = v->c[1]; }
+        while (v->c[0] && v->c[0]->key == x) { v = v->c[0]; }
+        root = v;
+        root->splay();
     }
     void min() { root = root->findmin(); }
-    void max() { root = root->findmax(); }
+    void max() { root = root->findmax()->c[0]; }
 };
-
+vector<int> v;
+ 
+void trav(auto r) {
+    if (r->c[0]) { trav(r->c[0]); }
+    v.push_back(r->key);
+    if (r->c[1]) { trav(r->c[1]); }
+}
+ 
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
-    // freopen("in.txt", "r", stdin);
     int N, M; cin >> N >> M;
     splaytree t;
     for (int i = 0; i < N; i++) {
         int x; cin >> x;
+        //insert
         t.add(x);
+    }
+    trav(t.root);
+    for (int i = 0; i < N; i++) {
+        assert(v[i] <= v[i + 1]);
     }
     for (int i = 0; i < M; i++) {
         int x; cin >> x;
-        t.lb(x);
-        int k = t.root ? t.root->key : 2e9;
-        if (k <= x) {
-            cout << k << "\n";
-            t.rem(k);
-        }   else { cout << -1 << "\n"; }
+        t.ub(x);
+        auto res = t.root;
+        res = res->c[0];
+        if (res) {
+            cout << res->key << "\n";
+            t.rem(res->key);
+        }
+        else { cout << -1 << "\n"; }
     }
-
 }
