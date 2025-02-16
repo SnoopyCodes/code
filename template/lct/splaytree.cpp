@@ -105,13 +105,13 @@ struct splaytree {
     void find(int x) {  //sets root to be closest node to x
         if (root) { root = root->find(x); }
     }
-    void ub(int x) {
+    void ub(int x) { //first >
         if (!root) { return; }
         find(x);
         if (root->key > x || !root->c[1]) { return; }
         root = root->c[1]->findmin();
     }
-    void lb(int x) {
+    void lb(int x) {  //last <=
         if (!root) { return; }
         find(x);
         if (root->key <= x || !root->c[0]) { return; }
