@@ -5,7 +5,7 @@ using namespace std;
 //min example
 struct node {
 	int l, r;
-	int val = 1e9;
+	int val = 0;
 	node *lc = nullptr, *rc = nullptr;
 	node(int lb, int rb) { l = lb, r = rb; }
 
@@ -21,7 +21,7 @@ struct node {
 		if (lc) {
 			if (p < lc->r) { lc->upd(p, v); }
 			else { rc->upd(p, v); }
-            val = min(lc->val, rc->val);
+            val = max(lc->val, rc->val);
 		}	else {
 			val = v;
 		}
@@ -30,7 +30,10 @@ struct node {
         if (qr <= l || r <= ql) { return 1e9; }
 		if (ql <= l && r <= qr) { return val; }
 		extend();
-		return min(lc->query(ql, qr), rc->query(ql, qr));
+		return max(lc->query(ql, qr), rc->query(ql, qr));
+	}
+	int walk(int x, int ql, int qr) {  //find leftmost element >= x in range [ql, qr)
+
 	}
 };
 

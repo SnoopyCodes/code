@@ -35,7 +35,7 @@ int main() {
         if (v[s] > f) { return -1; }
         return s;
     };
-    auto get_more = [](vector<int> &v, int f) {  //last >=
+    auto get_more = [](vector<int> &v, int f) {  //first >=
         int s = -1, e = v.size();
         while (s + 1 < e) {
             int m = (s + e) / 2;
