@@ -11,7 +11,7 @@ struct upd {
 struct val {
     long v = 0;
 };
-
+//61 lines..
 template<typename V, typename U>
 struct node {
     long l, r;
@@ -21,6 +21,13 @@ struct node {
     node(long lb, long rb) { l = lb; r = rb; }
     V comb(V v1, V v2) { return V{v1.v + v2.v}; }
     //handle with care in conjunction with upd and val structs
+    void extend() {
+        if (!lc && l + 1 < r) {
+            long m = (l + r) / 2;
+            lc = new node(l, m);
+            rc = new node(m, r);
+        }
+    }
     void apply(U u) {
         if (u.add) {
             val.v += (r - l) * u.val;
@@ -28,13 +35,6 @@ struct node {
         }   else {
             val.v = (r - l) * u.val;
             lz = u;
-        }
-    }
-    void extend() {
-        if (!lc && l + 1 < r) {
-            long m = (l + r) / 2;
-            lc = new node(l, m);
-            rc = new node(m, r);
         }
     }
     void push() {
@@ -60,12 +60,17 @@ struct node {
         push();
         return comb(lc->query(ql, qr),rc->query(ql, qr));
     }
-    long walk(V v) {
-        if (val.v > v.v) { return l - 1; }
+    long walk(V v, long ql = -INFL, long qr = INFL + 1) {
+        if (v > val) { return -INFL - 1; }
+        if (qr <= l || r <= ql) { return -INFL - 1; }
         if (l + 1 == r) { return l; }
         extend();
-        if (lc->val.v >= v.v) { return lc->walk(v); }
-        return rc->walk(v);
+        push();
+        if (lc->val >= v && ql < (l + r) / 2) {
+            long res =  lc->walk(v, ql, qr);
+            if (res != -INFL - 1) { return res; }
+        }
+        return rc->walk(v, ql, qr);
     }
 };
 

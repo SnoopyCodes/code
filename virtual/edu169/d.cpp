@@ -56,7 +56,6 @@ void solve() {
         sweep[portal[i]] = i;
     }
     //now we should have the closest possible points of travel
-    //rg- 8 + 2 = 10
     for (int q = 0; q < Q; q++) {
         int i, j; cin >> i >> j; i--; j--;
         if (i > j) { swap(i, j); }

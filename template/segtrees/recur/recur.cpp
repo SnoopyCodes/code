@@ -11,7 +11,7 @@ using namespace std;
 
 template<typename T>
 struct SegTree {
-    int SN, ind, ql, qr;
+    int SN, ql, qr;
     vector<T> data;
     T def = 0, val;
     void init(int N) {
@@ -27,7 +27,7 @@ struct SegTree {
     }
     void upd(int n, int l, int r) {
         if(l + 1 == r) { data[n] = val; return; }
-        if(ind < m) { upd(2*n, l, m); }
+        if(ql < m) { upd(2*n, l, m); }
         else { upd(2*n+1, m, r); }
         data[n] = comb(data[2*n], data[2*n+1]);
     }
@@ -41,8 +41,8 @@ struct SegTree {
         return wlk(2*n+1, m, r);
     }
     #undef m
-    T query(int l, int r) { ql = l, qr = r; return q(1, 0, SN); }
-    void update(int idx, T v) { ind = idx, val = v; upd(1, 0, SN); }
+    T query(int l, int r) { ql = l, qr = r; return qry(1, 0, SN); }
+    void update(int idx, T v) { ql = idx, val = v; upd(1, 0, SN); }
     int walk(T x, int l, int r) { val = x, ql = l, qr = r; return wlk(1, 0, SN); }
 };
 //to change, change def and comb, and wlk
