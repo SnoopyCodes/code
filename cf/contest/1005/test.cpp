@@ -78,5 +78,12 @@ void solve() {
 
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
-    int T; cin >> T; while(T--) { solve(); }
+    // int T; cin >> T; while(T--) { solve(); }
+    long a = (1LL << 62) - (1LL << 32) + (int(1e9) + 10);
+    cout << 2 * a << endl;
+    cout << a << endl;
+    cout << -a << endl;
+    int x = -a;
+    cout << x << endl;
+    cout << (int) a << endl;
 }

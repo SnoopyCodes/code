@@ -28,9 +28,13 @@ int solve(string s) {
     //if we cross, we want overall suffix and prefix to be the same?
     //why is this incorrect?
     vec<int> freq(26);
-    rep(i, N) { freq[A[i]]++; }
+    rep(i, N) {
+        freq[A[i]]++;
+    }
     vec<int> half(26);
-    rep(i, N / 2) { half[A[i]]++; }
+    rep(i, N / 2) {
+        half[A[i]]++;
+    }
     bool dontcross = true;
     rep(i, 26) {
         half[i] -= freq[i] / 2;

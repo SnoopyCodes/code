@@ -11,11 +11,11 @@ using namespace std;
 
 template<typename T>
 struct SegTree {
-    int SN, ql, qr;
+    int N, ql, qr;
     vector<T> data;
     T def = 0, val;
-    void init(int N) {
-        SN = N;
+    void init(int _N) {
+        N = _N;
         data.resize(4 * N, def);
     }
     T comb(T a, T b) { return max(a, b); }
@@ -41,9 +41,9 @@ struct SegTree {
         return wlk(2*n+1, m, r);
     }
     #undef m
-    T query(int l, int r) { ql = l, qr = r; return qry(1, 0, SN); }
-    void update(int idx, T v) { ql = idx, val = v; upd(1, 0, SN); }
-    int walk(T x, int l, int r) { val = x, ql = l, qr = r; return wlk(1, 0, SN); }
+    T query(int l, int r) { ql = l, qr = r; return qry(1, 0, N); }
+    void update(int idx, T v) { ql = idx, val = v; upd(1, 0, N); }
+    int walk(T x, int l, int r) { val = x, ql = l, qr = r; return wlk(1, 0, N); }
 };
 //to change, change def and comb, and wlk
 

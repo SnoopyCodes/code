@@ -32,9 +32,6 @@ struct node {
 		extend();
 		return max(lc->query(ql, qr), rc->query(ql, qr));
 	}
-	int walk(int x, int ql, int qr) {  //find leftmost element >= x in range [ql, qr)
-
-	}
 };
 
 int main() {

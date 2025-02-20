@@ -20,13 +20,13 @@ struct upd {
 //61 lines, not too bad
 template<typename V, typename U>
 struct SegTree {
-    int SN, ql, qr;
+    int N, ql, qr;
     vector<V> data; 
     vector<U> change;
     V defv = 0, val;
     U defu = {0, true}, alt;
-    void init(int N) {
-        SN = N;
+    void init(int _N) {
+        N = _N;
         data.resize(4 * N, defv);
         change.resize(4 * N, defu);
     }
@@ -75,9 +75,9 @@ struct SegTree {
         return wlk(2*n+1, l, r);
     }
     #undef m
-    V query(int l, int r) { ql = l, qr = r; return qry(1, 0, SN); }
-    void update(int l, int r, U v) { ql = l, qr = r, alt = v; upd(1, 0, SN); }
-    int walk(V x, int l, int r) { val = x, ql = l, qr = r; return wlk(1, 0, SN); }
+    V query(int l, int r) { ql = l, qr = r; return qry(1, 0, N); }
+    void update(int l, int r, U v) { ql = l, qr = r, alt = v; upd(1, 0, N); }
+    int walk(V x, int l, int r) { val = x, ql = l, qr = r; return wlk(1, 0, N); }
 };
 
 int main() {
