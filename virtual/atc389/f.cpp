@@ -1,45 +1,29 @@
 #include <bits/stdc++.h>
 
-#define long int64_t
-#define vec vector
-#define arr array
-#define GET_MACRO(_1, _2, _3, NAME, ...) NAME
-#define rep(...) GET_MACRO(__VA_ARGS__, rep3, rep2)(__VA_ARGS__)
-#define rep3(x,s,e) for(auto x=(s);x!=(e);(s)<(e)?x++:x--)
-#define rep2(x,e) rep3(x,e>0?0:-e-1,e>0?e:-1)
-
-const int INF = 1e9;
-const long INFL = 4e18;
+#define MACRO(_1, _2, _3, NAME, ...) NAME
+#define rep(...) MACRO(__VA_ARGS__, rep3, rep2)(__VA_ARGS__)
+#define rep3(i, s, e) for (int i = s; i!=e; s<e?i++:i--)
+#define rep2(i, e) rep3(i, (e > 0 ? 0 : -(e)-1), (e>0?e:-1))
 
 using namespace std;
 
-struct upd {
-    long val;
-    bool add;
-};
-//61 lines, not too bad
 template<typename V, typename U>
 struct SegTree {
     int N, ql, qr;
     vector<V> data; 
     vector<U> change;
     V defv = 0, val;
-    U defu = {0, true}, alt;
+    U defu = 0, alt;
     void init(int _N) {
         N = _N;
         data.resize(4 * N, defv);
         change.resize(4 * N, defu);
     }
-    V comb(V a, V b) { return a + b; }
+    V comb(V a, V b) { return max(a, b); }
     void apply(int n, int l, int r, U u) {
         //change stuff, consider how updates stack
-        if (u.add) {
-            change[n].val += u.val;
-            data[n] += (r - l) * u.val;
-        }   else {
-            change[n] = u;
-            data[n] = (r - l) * u.val;
-        }
+        change[n] += u;
+        data[n] += u;
     }
     #define m ((l+r)/2)
     void push(int n, int l, int r) {
@@ -81,24 +65,25 @@ struct SegTree {
 };
 
 int main() {
-    cin.tie(0) -> sync_with_stdio(0);
-    //range updates and sums
-    int N, Q; cin >> N >> Q;
-    SegTree<long, upd> seg; seg.init(N);
-    rep(i, N) {
-        int x; cin >> x;
-        seg.update(i, i + 1, {x, false});
+    cin.tie(0) ->sync_with_stdio(0);
+    int N; cin >> N;
+    const int MAX = 5e5;
+    SegTree<int, int> seg; seg.init(MAX);
+    rep(i, MAX) {
+        seg.update(i, i + 1, i);
     }
-    rep(q, Q) {
-        int t, l, r; cin >> t >> l >> r; l--;
-        if (t == 1) {
-            int x; cin >> x;
-            seg.update(l, r, {x, true});
-        }   else if (t == 2) {
-            int x; cin >> x;
-            seg.update(l, r, {x, false});
-        }   else {
-            cout << seg.query(l, r) << "\n";
-        }
+    rep(i, N) {
+        int l, r; cin >> l >> r; l--; r--;
+        //increment all in the range[l, r]
+        int li = seg.walk(l, 0, 5e5);
+        int ri = seg.walk(r + 1, 0, 5e5);
+        if (ri == -1) { ri = MAX; }
+        if (seg.query(li, li + 1) > r) { continue; } //
+        seg.update(li, ri, 1);
+    }
+    int Q; cin >> Q;
+    rep(i, Q) {
+        int x; cin >> x; x--;
+        cout << seg.query(x, x + 1) + 1 << "\n";
     }
 }
