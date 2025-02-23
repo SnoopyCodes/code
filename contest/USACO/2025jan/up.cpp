@@ -1,52 +1,94 @@
 #include <bits/stdc++.h>
 
+#define long int64_t
 #define vec vector
+#define arr array
+#define GET_MACRO(_1, _2, _3, NAME, ...) NAME
+#define rep(...) GET_MACRO(__VA_ARGS__, rep3, rep2)(__VA_ARGS__)
+#define rep3(x,s,e) for(auto x=s;x!=e;s<e?x++:x--)
+#define rep2(x,e) rep3(x,(e>0?0:-(e)-1),(e>0?e:-1))
+
+const long INF = 4e18 + 7e9;
 
 using namespace std;
 
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
     int N; cin >> N;
-    //lets see
-    vec<vec<int>> table(N, vec<int>(N));
-    vec<int> original(2 * N + 1);
-    vec<bool> used(2 * N + 1);  //used in the final table
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            cin >> table[i][j];
-            original[table[i][j]]++;
+    if (N == 1) { cout << 2 << endl; return 0;}
+    vec<vec<int>> grid(N, vec<int>(N));
+    vec<int> appear(2 * N + 1);
+    rep(i, N) {
+        rep(j, N) {
+            cin >> grid[i][j];
+            appear[grid[i][j]]++;
         }
     }
-    cout << "\n";
-    for (int i = 1; i <= N; i++) {
-        for (int j = 1; j <= N; j++) {
-            cout << i+ j << " ";
+    vec<int> freq(2 * N + 1);
+    vec<arr<int, 2>> has(N + 2, {0, 0});
+    arr<int, 2> place{0, 0};  //where shall 2 be?
+    rep(i, 2, 2 * N + 1) {
+        if (i - 1 <= N) { freq[i] = i - 1; }
+        else { freq[i] = 2 * N - i + 1; }
+        has[freq[i]][bool(has[freq[i]][0])] = i;
+        if (appear[i] == 1) {
+            place[bool(place[0])] = i;
         }
-        cout << "\n";
     }
-    cout << "\n";
-    for (int i = 1; i <= 2 * N; i++) {
-        cout << original[i] << " ";
-    }
-    cout << "\n";
-    cout << "\n";
-    //actually wtf is this oding
-    vec<int> mapped(2 * N + 1);
-    for (int i = 0; i < N; i++) {
-        int sum = 0;
-        for (int j = 0; j < N; j++) {
-            sum += original[table[i][j]];
-            if (!mapped[table[i][j]]) {
-                int freq = original[table[i][j]];
-                //find the first number with freq = this
-                int num = freq + 1;
-                if (used[num]) { num = 2 * N - freq + 1; }
-                mapped[table[i][j]] = num;
-                used[num] = true;
+    auto check = [&](int col) {
+        int r, c;
+        rep(i, N) {
+            rep(j, N) {
+                if (grid[i][j] == col) {
+                    r = i, c = j;
+                }
             }
-            cout << original[table[i][j]] << " ";
-            table[i][j] = mapped[table[i][j]];
         }
-        cout << sum << "\n";
+        vec<int> mp(2 * N + 1); //which is it mapped to
+        rep(i, N) {
+            rep(j, N) {
+                if (i == r || j == c) {
+                    mp[grid[i][j]] = has[appear[grid[i][j]]][0];
+                }
+            }
+        }
+        rep(i, 2, 2 * N + 1) {
+            if (mp[i]) { continue; }
+            mp[i] = has[appear[i]][1];
+        }
+        vec<vec<int>> fin(N, vec<int>(N));
+        rep(i, N) {
+            rep(j, N) {
+                fin[i][j] = mp[grid[i][j]];
+            }
+        }
+        return fin;
+    };
+    vec<vec<int>> fin1 = check(place[0]);
+    
+    vec<vec<int>> fin2 = check(place[1]);
+    vec<vec<int>> fin;
+    bool done = false;
+    rep(i, N) {
+        rep(j, N) {
+            if (fin1[i][j] != fin2[i][j]) {
+                if (fin1[i][j] < fin2[i][j]) {
+                    fin = fin1;
+                    done = true;
+                    break;
+                }   else {
+                    fin = fin2;
+                    done = true;
+                    break;
+                }
+            }
+        }
+        if (done) { break; }
     }
+    rep(i, N) {
+        rep(j, N) {
+            cout << fin[i][j] << " \n"[j == N - 1];
+        }
+    }
+
 }
