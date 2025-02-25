@@ -11,73 +11,16 @@ const long INFL = 4e18;
 using namespace std;
 // ----------------- First Implementation -----------------
 
-template<typename V>
-struct node {
-    V def = 0, val = def;
-    V comb(V v1, V v2) { return max(v1, v2); }
-    long l, r;
-    node *lc = nullptr, *rc = nullptr;
-    node(long lb, long rb) { l = lb, r = rb; }
-    void extend() {
-        if (!lc && l + 1 < r) {
-            long m = (l + r) / 2;
-            lc = new node(l, m);
-            rc = new node(m, r);
-        }
-    }
-    void upd(long p, V v) {
-        extend();
-        if (lc) {
-            if (p < lc->r) { lc->upd(p, v); }
-            else { rc->upd(p, v); }
-            val = comb(lc->val, rc->val);
-        }   else {
-            val = v;
-        }
-    }
-    V query(long ql, long qr) {
-        if (ql <= l && r <= qr) { return val; }
-        if (qr <= l || r <= ql) { return def; }
-        extend();
-        return comb(lc->query(ql, qr), rc->query(ql, qr));
-    }
-    long walk(V v, long ql = -INFL, long qr = INFL + 1) {
-        if (v > val) { return -INFL - 1; }
-        if (qr <= l || r <= ql) { return -INFL - 1; }
-        if (l + 1 == r) { return l; }
-        extend();
-        if (lc->val >= v && ql < (l + r) / 2) {
-            long res =  lc->walk(v, ql, qr);
-            if (res != -INFL - 1) { return res; }
-        }
-        return rc->walk(v, ql, qr);
-    }
-};
 
 void solve() {
-    int N, M; cin >> N >> M;
-    node<int> *seg = new node<int>(0, N);
-    for (int i = 0; i < N; i++) {
-        int h; cin >> h;
-        seg->upd(i, h);
-    }
-    for (int i = 0; i < M; i++) {
-        int rooms, l, r; cin >> rooms >> l >> r; l--;
-        //2 5
-        long h = seg->walk(rooms, l, r);
-        if (h != -INFL-1) {
-            cout << h + 1 <<  " ";
-            seg->upd(h, seg->query(h, h + 1) - rooms);
-        }   else {
-            cout << 0 << " ";
-        }
-    }
-    cout << "\n";
+    //MODIFY
+    //run as normal, without multitest
 }
 
 // ----------------- Second Implementation -----------------
 //brute force
 void solve2() {
+    //MODIFY
     int N, Q; cin >> N >> Q;
     vec<int> A(N);
     for (int i = 0; i < N; i++) {
@@ -98,6 +41,7 @@ void solve2() {
 // ----------------- Test Case Generator -----------------
 string generateTestCase() {
     //write to oss
+    //MODIFY
     ostringstream oss;
     int n = 1000;
     int q = 1000;
@@ -144,6 +88,7 @@ string runSolve(function<void()> solveFunc, const string &testInput) {
 // ----------------- Main Stress-Testing Loop -----------------
 int main() {
     srand(time(NULL));
+    //MODIFY
     int stressTests = 10;
     for (int i = 1; i <= stressTests; i++) {
         string test = generateTestCase();
