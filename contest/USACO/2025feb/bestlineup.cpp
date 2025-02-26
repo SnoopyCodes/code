@@ -17,8 +17,7 @@ void solve() {
         A[i]--;
         appear[A[i]].push_back(i);
     }
-    //try to maximize its appearance
-    int l = -1;  //we can concatenate after l without consequence
+    int l = -1;
     vec<int> seq;
     bool done = false;
     rep(i, -N) {
@@ -27,14 +26,6 @@ void solve() {
                 l = appear[i][j];
                 seq.push_back(appear[i][j]);
             }   else if (!done) {
-                //operation time
-                //5 4 3 4 2 1
-                //this case will not happen
-                //4 3 2 1 3
-                //4 3 3 and we need to move 2
-                //we can only move the LAST OCCURRENCE
-                //so check if the second to last occurrence is greater than us
-                //if it is, we dip
                 if (seq.size() < 2 || seq[seq.size() - 2] < appear[i][j]) {
                     done = true;
                     seq.push_back(appear[i][j]);
