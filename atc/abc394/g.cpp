@@ -8,28 +8,21 @@ using namespace std;
 #define rep2(x,e) rep3(x,(e>0?0:-(e)-1),(e>0?e:-1))
 
 template<typename T> using vec = vector<T>;
-template<typename T, size_t a> using arr = array<T, a>;
+template<typename T, int a> using arr = array<T, a>;
 using i64 = long long;
+
 const i64 INF = 4e18 + 7e9;
 
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
-    int N; cin >> N;
-    vec<int> A(N);
+    int N, M; cin >> N >> M;
+    vec<vec<int>> city(N, vec<int>(M));
     rep(i, N) {
-        cin >> A[i];
-    }
-    int r = 1;
-    int ans = 0;
-    vec<bool> tk(N);
-    rep(i, N) {
-        if (tk[i]) { continue; }
-        while (r < N && A[r] < 2 * A[i]) { r++; }
-        if (r < N) {
-            ans++;
-            tk[r] = true;
-            r++;
+        rep(j, M) {
+            cin >> city[i][j];
         }
     }
-    cout << ans << "\n";
+    //this is like reversed ish
+    //we need to go down to access, so we should
+    
 }

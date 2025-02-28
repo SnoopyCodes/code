@@ -7,14 +7,13 @@ using namespace std;
 //at- iterator to kth element
 //__gnu_pds- required probably
 #include <ext/pb_ds/assoc_container.hpp>
+using namespace __gnu_pbds;
 
 #define rat order_of_key  //find how many less than element
 #define at find_by_order //iterator to the kth element, [] essentially
-#define gset gp_hash_table
-#define gmap gp_hash_table
+template<typename T> using gset = gp_hash_table<T, null_type>;
+template<typename K, typename V> using gmap = gp_hash_table<K, V>;
 
-//required in all policy ds
-using namespace __gnu_pbds;
 
 
 template <class T>
@@ -28,7 +27,7 @@ using imset = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statisti
 //use s.erase(s.upper_bound(value)) to remove one occurrence
 
 gmap<int, int> table;
-gset<int, null_type> hash_set;
+gset<int> hash_set;
 
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
