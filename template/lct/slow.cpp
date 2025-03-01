@@ -49,7 +49,7 @@ struct node {
     void splay() {
         //while not at root, splay step
         while (p) {
-            p->push(); push();
+            p->push(); push();  //?
             if (!p->p) { rot(); }
             else if (side() == p->side()) { p->rot(); rot(); }
             else { rot(); rot(); }
@@ -72,7 +72,7 @@ struct node {
                 aux->c[1]->aux = aux;
                 aux->c[1]->detach();
             }
-            aux->c[1] = this;
+            aux->attach(this, 1);
             aux = nullptr;
             splay();
         }
@@ -86,54 +86,42 @@ struct node {
     node* find() {
         access();
         node* tmp = this;
-        while (tmp->c[0] != nullptr) { tmp = c[0]; }
+        while (tmp->c[0] != nullptr) { tmp = tmp->c[0]; }
         tmp->splay();
         return tmp;
     }
     void cut(node* v) {
-        access();
-        if (v != c[0]) { v->cut(this); return; }
-        v->detach();
+        reroot();
+        v->access();
+        detach();
     }
     void link(node* v) {
         reroot();
         v->access();
         v->attach(this, 1);
     }
+    void print() {
+        cout << "P: " << (p ? p->key : -1) << " ";
+        cout << "aux: " << (aux ? aux ->key : -1) << endl;
+        cout << "left: " << (c[0] ? c[0]->key : -1) << " " << "right: " << (c[1] ? c[1]->key : -1) << endl;
+    }
 };
 vector<node*> lct;
 
 int main() {
-    cin.tie(0) -> sync_with_stdio(0);
+    cin.tie(0) ->sync_with_stdio(0);
+    // freopen("test_case.txt", "r", stdin);
+    // freopen("out.txt", "w", stdout);
     int N, Q; cin >> N >> Q;
     lct.resize(N);
     for (int i = 0; i < N; i++) { lct[i] = new node(i); }
-    lct[0]->link(lct[1]);
-    lct[0]->link(lct[2]);
-    for (int i = 0; i < N; i++) {
-        if (lct[i]->p) { cout << lct[i]->p->key << " " << lct[i]->side() << "_";}
-        else { cout << -1 << " ";}
-    }
-    cout << "\n";
-    cout << lct[1]->find()->key << "\n";
-    for (int i = 0; i < N; i++) {
-        if (lct[i]->p) { cout << lct[i]->p->key << " " << lct[i]->side() << "_";}
-        else { cout << -1 << " ";}
-    }
-    cout << "\n";
-	// for (int i = 0; i < Q; i++) {
-	// 	string a;
-	// 	cin >> a;
-	// 	int b, c;
-    //     for (int i = 0; i < N; i++) {
-    //         if (lct[i]->p) { cout << lct[i]->p->key << " ";}
-    //         else { cout << -1 << " ";}
-    //     }
-    //     cout << "\n";
-	// 	cin >> b >> c; b--; c--;
-	// 	if (a == "add") { lct[b]->link(lct[c]); }
-	// 	if (a == "rem") { lct[b]->cut(lct[c]); }
-	// 	if (a == "conn") { cout << lct[b]->find()->key << " " << lct[c]->find()->key << endl; }
-    //     cout << "?" << endl;
-	// }
+	for (int i = 0; i < Q; i++) {
+		string a;
+		cin >> a;
+		int b, c;
+		cin >> b >> c; b--; c--;
+		if (a == "add") { lct[b]->link(lct[c]); }
+		if (a == "rem") { lct[b]->cut(lct[c]); }
+		if (a == "conn") { cout << ((lct[b]->find()->key == lct[c]->find()->key) ? "YES" : "NO") << endl; }
+	}
 }

@@ -67,7 +67,10 @@ struct splaytree {
         return l;
     }
  
-    void find(int k) { if (root) { root = root->find(k); } }  //root = kth. k < size
+    int find(int p) {  //set root to pth, p < sz
+        if (root) { root = root->find(p); }
+        return root->key;
+    }
     void add(int key, int p) {
         node *v = new node(key);
         if (!root || p == root->size) { v->attach(root, 0); }
@@ -79,7 +82,7 @@ struct splaytree {
         v->upd();
         root = v;
     }
-    void rem(int p) {
+    void rem(int p) {  //position
         if (!root) { return; }
         find(p);
         node* del = root;

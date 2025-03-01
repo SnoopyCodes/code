@@ -2,21 +2,21 @@ path parent basically means that inside a splay tree (preferred path) it is on t
 
 note that splay trees are ONLY representing preferred paths
 access(u):
-	splay u
-	# remove u's preferred child
-	u.r.auxcon = u
-	u.r.par = none
-	u.r = none
+	splay
+	# remove this's preferred child
+	r.auxcon = this
+	r.par = none
+	r = none
 	# set a new preferred path to u in all the splay trees above
-	while u.auxcon
-		v = u.auxcon
+	while auxcon
+		v = auxcon
 		splay v
 		# remove v's preferred child
 		v.r.auxcon = v # we essentially split it into a new path, so give it a way back
 		v.r.p = none
-		v.r= u
-		u.aux = none # merged
-		splay u #to make it the root of its aux tree
+		v.r= this
+		aux = none # merged
+		splay #to make it the root of its aux tree
 # we loop because splaying u should give it the auxcon of v, one upwards, which doesn't have preferred path to u/v, by definition of having auxcon
 # number of loops = number of preferred child changes
 # awesome
