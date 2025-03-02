@@ -2,6 +2,17 @@
 
 using namespace std;
 
+/*
+peak data structure
+a few notes
+the mit lecture doesn't cover rerooting, which is pretty necessary
+the *aux pointer can be reused into just the parent pointer
+which is what the standard thing is doing
+this is probably faster but more confusing if you don't know it
+0.23 seconds
+*might* try removing the *aux pointer in the future
+*/
+
 //splay tree node
 struct node {
     array<node*, 2> c{};
@@ -42,7 +53,7 @@ struct node {
         attach(o, !x);
     }
 
-    void splay() {  //become root
+    void splay() {  //become root of splay tree
         while (p) {
             if (!p->p) {}
             else if (side() == p->side()) { p->rot(); }
@@ -51,26 +62,21 @@ struct node {
         }
     }
 
-    void print() {
-        if (c[0]) { c[0]->print(); }
-        cout << key << " ";
-        if (c[1]) { c[1]->print(); }
-    }
-
     void access() {
+        push();
         splay();
         if (c[1]) {
             c[1]->aux = this;
             c[1]->detach();
         }
         while (aux) {
-            auto v = aux;
-            v->splay();
-            if (v->c[1]) {
-                v->c[1]->aux = v;
-                v->c[1]->p = nullptr;
+            aux->splay();
+            aux->push();
+            if (aux->c[1]) {
+                aux->c[1]->aux = aux;
+                aux->c[1]->p = nullptr;
             }
-            v->attach(this, 1);
+            aux->attach(this, 1);
             aux = nullptr;
             splay();
         }
@@ -83,27 +89,28 @@ struct node {
         c[0]->aux = this;
         c[0]->detach();
     }
+
     node *find() {
         access();
         node *res = this;
         while (res->c[0]) { res = res->c[0]; }
+        res->access();  //do not forget to do this!
         return res;
     }
+
     void cut(node *v) {
         reroot();
         v->access();
         detach();
     }
+
     void link(node *v) {
         reroot();
         v->access();
         v->attach(this, 1);
     }
-    bool con(node *v) {
-        access();
-        v->access();
-        return p;
-    }
+
+    bool con(node *v) { return find() == v->find(); }
 };
 
 #define MACRO(_1, _2, _3, NAME, ...) NAME
@@ -112,7 +119,6 @@ struct node {
 #define rep2(x,e) rep3(x,(e>0?0:-(e)-1),(e>0?e:-1))
 
 template<typename T> using vec = vector<T>;
-template<typename T, int a> using arr = array<T, a>;
 
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
@@ -126,7 +132,7 @@ int main() {
 		cin >> a;
 		int b, c;
 		cin >> b >> c; b--; c--;
-		if (a == "add") { lct[b]->link(lct[c]); assert(lct[b]->con(lct[c])); }
+		if (a == "add") { lct[b]->link(lct[c]); }
 		if (a == "rem") { lct[b]->cut(lct[c]); }
 		if (a == "conn") { cout << (lct[b]->con(lct[c]) ? "YES" : "NO") << "\n"; }
     }

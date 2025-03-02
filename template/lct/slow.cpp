@@ -110,8 +110,8 @@ vector<node*> lct;
 
 int main() {
     cin.tie(0) ->sync_with_stdio(0);
-    // freopen("test_case.txt", "r", stdin);
-    // freopen("out.txt", "w", stdout);
+    freopen("test_case.txt", "r", stdin);
+    freopen("out.txt", "w", stdout);
     int N, Q; cin >> N >> Q;
     lct.resize(N);
     for (int i = 0; i < N; i++) { lct[i] = new node(i); }

@@ -1,20 +1,139 @@
 #include <bits/stdc++.h>
 
-#define long int64_t
-#define vec vector
-#define arr array
-#define rsz resize
-const int INF = 1e9;
-const long INFL = 4e18;
-
-
 using namespace std;
+
+#define MACRO(_1, _2, _3, NAME, ...) NAME
+#define rep(...) MACRO(__VA_ARGS__, rep3, rep2)(__VA_ARGS__)
+#define rep3(x,s,e) for(auto x=s;x!=e;s<e?x++:x--)
+#define rep2(x,e) rep3(x,(e>0?0:-(e)-1),(e>0?e:-1))
+
+template<typename T> using vec = vector<T>;
+template<typename T, int a> using arr = array<T, a>;
+
+
 // ----------------- First Implementation -----------------
+
+//splay tree node
+struct node {
+    array<node*, 2> c{};
+    node* p = nullptr;
+    node *aux = nullptr;
+    int key;
+    bool rev = false; //lazy
+
+    node(int k) { key = k; }
+
+    void push() {
+        if (!rev) { return; }
+        rev = false;
+        swap(c[0], c[1]);
+        if (c[0]) { c[0]->rev ^= true; }
+        if (c[1]) { c[1]->rev ^= true; }
+    }
+    
+    bool side() { return this == p->c[1]; }  //req parent
+
+    void attach(node* v, bool x) {
+        c[x] = v;
+        if (v) { v->p = this; }
+    }
+
+    void detach() { p = p->c[side()] = nullptr; }  //req parent
+
+    void rot() {  //req parent
+        p->push();
+        push();
+        bool x = side();
+        aux = p->aux;
+        p->aux = nullptr;
+        node* o = p;
+        if (o->p) { o->p->attach(this, o->side()); }
+        else { p = nullptr; }
+        o->attach(c[!x], x);
+        attach(o, !x);
+    }
+
+    void splay() {  //become root
+        while (p) {
+            if (!p->p) {}
+            else if (side() == p->side()) { p->rot(); }
+            else { rot(); }
+            rot();
+        }
+    }
+
+    void print() {
+        if (c[0]) { c[0]->print(); }
+        cout << key << " ";
+        if (c[1]) { c[1]->print(); }
+    }
+
+    void access() {
+        push();
+        splay();
+        if (c[1]) {
+            c[1]->aux = this;
+            c[1]->detach();
+        }
+        while (aux) {
+            aux->splay();
+            aux->push();
+            if (aux->c[1]) {
+                aux->c[1]->aux = aux;
+                aux->c[1]->p = nullptr;
+            }
+            aux->attach(this, 1);
+            aux = nullptr;
+            splay();
+        }
+    }
+
+    void reroot() {
+        access();
+        if (!c[0]) { return; }
+        c[0]->rev ^= true;
+        c[0]->aux = this;
+        c[0]->detach();
+    }
+    node *find() {
+        access();
+        node *res = this;
+        while (res->c[0]) { res = res->c[0]; }
+        return res;
+    }
+    void cut(node *v) {
+        reroot();
+        v->access();
+        detach();
+    }
+    void link(node *v) {
+        reroot();
+        v->access();
+        v->attach(this, 1);
+    }
+    bool con(node *v) {
+        return find() == v->find();
+    }
+};
 
 
 void solve() {
     //MODIFY
     //run as normal, without multitest
+    int N, Q; cin >> N >> Q;
+    vec<node*> lct(N);
+    rep(i, N) {
+        lct[i] = new node(i);
+    }
+    rep(q, Q) {
+		string a;
+		cin >> a;
+		int b, c;
+		cin >> b >> c; b--; c--;
+		if (a == "add") { lct[b]->link(lct[c]); }
+		if (a == "rem") { lct[b]->cut(lct[c]); }
+		if (a == "conn") { cout << (lct[b]->con(lct[c]) ? "YES" : "NO") << "\n"; }
+    }
 }
 
 // ----------------- Second Implementation -----------------
@@ -22,20 +141,33 @@ void solve() {
 void solve2() {
     //MODIFY
     int N, Q; cin >> N >> Q;
-    vec<int> A(N);
-    for (int i = 0; i < N; i++) {
-        cin >> A[i];
-    }
-    for (int q = 0; q < Q; q++) {
-        int rooms, l, r; cin >> rooms >> l >> r; l--;
-        int ans = -1;
-        for (int i = l; i < r; i++) {
-            if (A[i] >= rooms) { ans = i; break; }
+    vec<vec<bool>> con(N, vec<bool>(N));
+    rep(q, Q) {
+        string t; cin >> t;
+        int u, v; cin >> u >> v; u--; v--;
+        if (t == "add") {
+            con[u][v] = true;
+            con[v][u] = true;
+        }   else if (t == "rem") {
+            con[u][v] = false;
+            con[v][u] = false;
+        }   else {
+            vec<bool> vis(N);
+            queue<int> q;
+            q.push(u);
+            vis[u] = true;
+            while (!q.empty()) {
+                int u = q.front(); q.pop();
+                rep(v, N) {
+                    if (con[u][v] && !vis[v]) {
+                        vis[v] = true;
+                        q.push(v);
+                    }
+                }
+            }
+            cout << (vis[v] ? "YES" : "NO") << "\n";
         }
-        cout << ans + 1 << " ";
-        if (ans > -1) { A[ans] -= rooms; }
     }
-    cout << "\n";
 }
  
 // ----------------- Test Case Generator -----------------
@@ -43,21 +175,59 @@ string generateTestCase() {
     //write to oss
     //MODIFY
     ostringstream oss;
-    int n = 1000;
-    int q = 1000;
-    oss << n << " " << q << "\n";
-    for (int i = 0; i < n; i++) {
-        int w = rand() % 10 + 1;
-        oss << w << (i == n - 1 ? "\n" : " ");
-    }
-    for (int i = 0; i < q; i++) {
-        int x = rand() % 5 + 1;
-        int l = rand() % n + 1;
-        int r = rand() % n + 1;
-        if (l > r) { swap(l, r); }
-        oss << x << " ";
-        oss << l << " ";
-        oss << r << " ";
+    // cout << "GENERATING" << endl;
+
+    int N = 10, Q = 10;
+    oss << N << " " << Q << "\n";
+    vec<vec<bool>> con(N, vec<bool>(N));
+    vec<arr<int, 2>> e;
+
+    rep(q, Q) {
+        int t = rand() % 3;
+        while (((t == 1) && e.size() == 0) || (t == 0 && e.size() == N - 1)) {
+            t = rand() % 3;
+        }
+        if (t == 0) {
+            oss << "add ";
+            arr<int, 2> x = { rand() % N, rand() % N };
+
+            auto yes = [&](int u, int v) {
+                vec<bool> vis(N);
+                vis[u] = true;
+                queue<int> q; q.push(u);
+                while (!q.empty()) {
+                    int i = q.front(); q.pop();
+                    rep(j, N) {
+                        if (con[i][j] && !vis[j]) {
+                            vis[j] = true;
+                            q.push(j);
+                        }
+                    }
+                }
+                return bool(vis[v]);
+            };
+
+            sort(x.begin(), x.end());
+            while (yes(x[0], x[1])) {
+                x[0] = rand() % N, x[1] = rand() % N;
+                if (x[0] > x[1]) { swap(x[0], x[1]); }
+            }
+            oss << x[0]+1 << " " << x[1]+1;
+            e.push_back({x[0], x[1]});
+            con[x[0]][x[1]] = con[x[1]][x[0]] = true;
+            
+        }
+        else if (t == 1) {
+            oss << "rem ";
+            int i = rand() % e.size();
+            oss << e[i][0]+1 << " " << e[i][1]+1;
+            con[e[i][0]][e[i][1]] = con[e[i][0]][e[i][1]] = false;
+            e.erase(e.begin() + i);
+        }
+        else {
+            oss << "conn ";
+            oss << (rand() % N + 1) << " " << (rand() % N + 1);
+        }
         oss << "\n";
     }
     return oss.str();
@@ -89,11 +259,14 @@ string runSolve(function<void()> solveFunc, const string &testInput) {
 int main() {
     srand(time(NULL));
     //MODIFY
-    int stressTests = 10;
+    int stressTests = 100000;
     for (int i = 1; i <= stressTests; i++) {
         string test = generateTestCase();
-        string out1 = runSolve(solve, test);
+        // cout << test << endl;
         string out2 = runSolve(solve2, test);
+        // cout << ".." << endl;
+        string out1 = runSolve(solve, test);
+        // cout << "." << endl;
         if (out1 != out2) {
             cout << "Mismatch found on test case #" << i << ":\n";
             cout << "Test case input:\n" << test << "\n";

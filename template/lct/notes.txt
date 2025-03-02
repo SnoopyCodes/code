@@ -22,6 +22,8 @@ access(u):
 # awesome
 # u will become the overall root of the aux tree!
 
-
-say we have path -1 0 1 2 3 4 and subtree rooted at 0
-2 might be root of splay tree (pretty balanced) but there will be auxiliary connect from -1 to 2, not 0
+# okay, now we have a pretty gosh dang slow lct
+# we probably have to do some speedups
+# this might involve fixing parent pointer setting overheads,
+# and possibly splitting into an entire lct struct
+# i will do the latter first, as it is less drastic of a change
