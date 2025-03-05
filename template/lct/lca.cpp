@@ -2,6 +2,17 @@
 
 using namespace std;
 
+/*
+peak data structure
+a few notes
+the mit lecture doesn't cover rerooting, which is pretty necessary
+the *aux pointer can be reused into just the parent pointer
+which is what the standard thing is doing
+this is probably faster but more confusing if you don't know it
+0.23 seconds
+*might* try removing the *aux pointer in the future
+*/
+
 //splay tree node
 struct node {
     array<node*, 2> c{};
@@ -69,7 +80,7 @@ struct node {
             aux = nullptr;
             splay();
         }
-        push();  //whoops! i didn't have this before
+        push();
     }
 
     void reroot() {
@@ -84,35 +95,31 @@ struct node {
         access();
         node *res = this;
         while (res->c[0]) { res = res->c[0]; }
-        res->access();
+        res->access();  //do not forget to do this!
         return res;
     }
 
-    friend void link(node *u, node *v) {  //v becomes par of u
-        u->reroot();
+    //u is a root vertex, make v parent
+    friend void link(node *u, node *v) {
         v->access();
+        u->access();
         v->attach(u, 1);
     }
 
-    friend void cut(node *u, node *v) {
-        u->reroot();
-        v->access();
-        u->detach();
-    }
-
-    friend void cut(node *u) {  //WARNING: u cannot be root
+    //remove u from its parent (guaranteed non root)
+    friend void cut(node *u) {
         u->access();
         u->c[0]->detach();
     }
 
+    friend bool con(node *u, node *v) { return u->find() == v->find(); }
+
     friend node* lca(node *u, node *v) {
+        con(u, v);
         u->access();
         v->access();
-        u->splay();
         return u->aux ? u->aux : u;
     }
-
-    friend bool con(node *u, node *v) { return u->find() == v->find(); }
 };
 
 #define MACRO(_1, _2, _3, NAME, ...) NAME
