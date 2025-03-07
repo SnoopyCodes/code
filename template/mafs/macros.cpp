@@ -1,9 +1,9 @@
 #include <bits/stdc++.h>
 
 #define add(x, y) (((x) % MOD + (y) % MOD) % MOD + MOD) % MOD
-#define sub(x, y) add((x), -(y))
+#define sub(x, y) add(x, -y)
 #define mul(x, y) (((x) % MOD * (y) % MOD) % MOD + MOD) % MOD
-#define div(x, y) x * inv((y)) % MOD
+#define div(x, y) mul(x, inv(y))
 
 using namespace std;
 

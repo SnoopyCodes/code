@@ -43,7 +43,6 @@ int main() {
     vec<vec<char>> farm(N, vec<char>(N));
     vec<vec<bool>> vis(N, vec<bool>(N));
     queue<arr<int, 3>> q;
-    //HOW WA HOW WA BRO
     rep(i, N) {
         rep(j, N) {
             cin >> farm[i][j];
@@ -56,22 +55,24 @@ int main() {
     auto ob = [&](int r, int c) {
         return r < 0 || c < 0 || r >= N || c >= N || (farm[r][c] == '#');
     };
+    
     while (!q.empty()) {
+        //center, time that we arrive (smaller always better)
         auto [cr, cc, t] = q.front(); q.pop();
         int rad = t / D;
         bool plus = (t + 1) % D == 0;
-        set<arr<int, 2>> s;
+        set<arr<int, 2>> s;  //actually new stuff
         rep(d, 4) {
-            vec<arr<int, 2>> next;  //the new ones we found
+            vec<arr<int, 2>> next;  //the new ones we find
             bool bad = false;
-            int nr = cr + dr[d];  //new center
+            int nr = cr + dr[d];  //new center we move to
             int nc = cc + dc[d];
-            vec<arr<int, 2>> check = around(nr, nc, rad);
+            vec<arr<int, 2>> check = around(nr, nc, rad);  //default check
             for (auto [r, c] : check) {
                 if (ob(r, c)) { bad = true; break; }
                 if (!vis[r][c]) { next.push_back({r, c}); }
             }
-            if (bad || next.empty()) { continue; }
+            if (bad || next.empty() && !plus) { continue; }
             //make movement
             for (auto [r, c] : next) {  //we can make this movement
                 s.insert({r, c});

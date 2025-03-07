@@ -13,65 +13,29 @@ template<typename T, int a> using arr = array<T, a>;
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
     int N; cin >> N;
-    vec<arr<int, 2>> cows(N);
-    int maxx = 0, maxy = 0;
+    vec<arr<int, 3>> cows(N);
+    vec<int> rp(N), cp(N);  //cp...
     rep(i, N) {
         cin >> cows[i][0] >> cows[i][1];
+        cows[i][2] = i;
     }
-    if (N <= 22) {
-        int ans = 1;
-        rep(mask, 1, 1 << N) {
-            maxx = 0, maxy = 0;
-            int minx = 1e9, miny = 1e9;
-            rep(b, N) {
-                if (mask & 1 << b) {
-                    maxx = max(maxx, cows[b][0]);
-                    minx = min(minx, cows[b][0]);
-                    maxy = max(maxy, cows[b][1]);
-                    miny = min(miny, cows[b][1]);
-                }
-            }
-            int len = max(maxx - minx, maxy - miny);  //square length
-            bool ok = true;
-            //all bounds inclusive, i think
-            int lfb = maxx - len, rb = minx + len;
-            int ub = miny + len, lb = maxy - len;
-            rep(b, N) {
-                if (!(mask & 1 << b)) {
-                    auto [x, y] = cows[b];
-                    //we can maintain bounds on where this is forced to go to not include this
-                    if (minx <= x && x <= maxx && miny <= y && y <= maxy) { ok = false; }
-                    //if it is in x-zone
-                    if (minx <= x && x <= maxx) {
-                        if (y > maxy) { ub = min(ub, y - 1); }
-                        if (y < miny) { lb = max(lb, y + 1); }
-                    }   else if (miny <= y && y <= maxy) {
-                        if (x > maxx) { rb = min(rb, x - 1); }
-                        if (x < minx) { lfb = max(lfb, x + 1); }
-                    }
-                }
-            }
-            ans += ok && lfb <= rb - len && lb <= ub - len;
+    sort(cows.begin(), cows.end(), [](auto a1, auto a2) { return a1[1] < a2[1]});
+    rep(i, N) {
+        cp[cows[i][2]] = i;
+    }
+    sort(cows.begin(), cows.end());
+    rep(i, N) {
+        rp[cows[i][2]] = i;
+    }
+    vec<vec<int>> grid(N, vec<int>(N));
+    rep(i, N) {
+        grid[rp[cows[i][2]]][i]++;
+    }
+    //just sliding window it ong
+    //top, bottom
+    rep(i, N) {  //choose the ith 
+        rep(j, i + 1, N) {
+            
         }
-        cout << ans << "\n";
-    }   else if (maxx <= 25 && maxy <= 25) {
-        set<int> s;
-        rep(sl, 1, 51) {
-            rep(i, -25, 25) {
-                rep(j, -25, 25) {
-                    int mask = 0;
-                    for (int b = 0; b < N; b++) {
-                        auto [x, y] = cows[b];
-                        if (i <= x && x <= i + sl && j <= y && y <= j + sl) {
-                            mask += 1 << b;
-                        }
-                    }
-                    s.insert(mask);
-                }
-            }
-        }
-        cout << s.size() << "\n";
-    }   else {
-        cout << "i give up" << "\n";
     }
 }

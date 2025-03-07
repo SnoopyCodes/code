@@ -1,6 +1,5 @@
 #include <bits/stdc++.h>
 
-#define long int64_t
 #define vec vector
 #define arr array
 #define GET_MACRO(_1, _2, _3, NAME, ...) NAME
@@ -11,26 +10,29 @@
 const long INF = 4e18 + 7e9;
 
 using namespace std;
+using i64 = long long;
 
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
     long N; cin >> N;
     //well shoot
     int M, A, B; cin >> M >> A >> B;
-    long l = 1, r = 1;  //possible range of where we can be?
+    i64 l = 1, r = 1;  //possible range of where we can be, inclusive
+    //create a structure that answers queries of the type:
+    //q(l, r, qr) -> vec<bool>(x - B, x) representing the reachability of these squares
+    //l and r represent where we might be at
+    //qr represents where we move up to?
+    
+    bool ok = true;
     rep(i, M) {
-        long ql, qr; cin >> ql >> qr;
-        //shoot im dumb
-        //i feel as if, though, that the bound can be reduced ish
-        //because it takes at most 400 steps for it to be able to reach any- is this true?
-        //
-        //unless it is only range one, in which case solution is simple
-        //otherwise we can calculate the reachability
-        //we can actually precalculate the reachability of a range given a range
-        //this takes at most like not a lot of time to set up
-        //and we do this for the up to 20 squares before each range
-        //so... im guessing potato was not locked in
-        //took everyone 20 minutes though so maybe he did cook
+        i64 ql, qr; cin >> ql >> qr;
+        if (ql <= l && r <= qr) { ok = false; break; }
+        if (r > qr) { l = max(qr + 1, l); }
+        else if (l > ql) { r = min(ql - 1, r); }
+        if (l > qr) { continue; }
+        if (qr - ql >= B - 1) { ok = false; break; }
+        
     }
-
+    if (ok) { cout << "Yes" << "\n"; }
+    else { cout << "No" << "\n"; }
 }
