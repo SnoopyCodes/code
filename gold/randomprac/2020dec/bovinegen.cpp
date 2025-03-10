@@ -13,7 +13,7 @@ template <typename T> using vec = vector<T>;
 
 template <typename T> T mvec(T def) { return def; }
 template <typename T, typename... Dims>
-auto mvec(size_t fd, Dims... rd) { return vec<decltype(mvec<T>(rd...))>(fd, mvec<T>(rd...)); }
+auto mvec(int fd, Dims... rd) { return vec<decltype(mvec<T>(rd...))>(fd, mvec<T>(rd...)); }
 
 int main() {
     string s; cin >> s;

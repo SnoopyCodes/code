@@ -14,7 +14,11 @@ auto multivec(size_t first_dim, Dims... rest_dims) {
 }
 
 //usage: auto x = multivec<T>(len1, len2, len3, ..., default value)
-
+//why did i make this? idk
+void hm(auto x) {
+    cout << "type safety is not a rela thing" << "\n";
+    cout << x[0];
+}
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
     int N = 5;
@@ -22,6 +26,7 @@ int main() {
     for (int i = 0; i < N; i++) {
         cout << x[i] << endl;
     }
+    hm(x);
     int M = 4;
     auto twod = multivec<int>(N, M, -2);
     for (int i = 0; i < N; i++) {

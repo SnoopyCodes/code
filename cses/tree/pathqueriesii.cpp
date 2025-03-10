@@ -1,13 +1,10 @@
 #include <bits/stdc++.h>
 #define rsz resize
-#define size sz
-#define len(x) (int) (x.end() - x.begin())
-#define in(x, y) bool(x.find(y) != x.end())
 using namespace std;
 
 int N;
 vector<vector<int>> tree;
-vector<int> depth, parent, size, in, heavy, val;
+vector<int> depth, parent, subsize, in, heavy, val;
 int euler = 0;
 
 vector<int> seg;
@@ -34,8 +31,8 @@ void dfs_size(int u, int p) {
         depth[v] = depth[u] + 1;
         parent[v] = u;
         dfs_size(v, u);
-        size[u] += size[v];
-        if (size[v] > size[tree[u][0]]) { swap(v, tree[u][0]); }
+        subsize[u] += subsize[v];
+        if (subsize[v] > subsize[tree[u][0]]) { swap(v, tree[u][0]); }
     }
 }
 
@@ -65,7 +62,7 @@ int path(int u, int v) {
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
     int Q; cin >> N >> Q;
-    tree.rsz(N), depth.rsz(N), parent.rsz(N), size.rsz(N, 1), in.rsz(N), heavy.rsz(N);
+    tree.rsz(N), depth.rsz(N), parent.rsz(N), subsize.rsz(N, 1), in.rsz(N), heavy.rsz(N);
     seg.rsz(2 * N), val.rsz(N);
     for (int i = 0; i < N; i++) {
         cin >> val[i];

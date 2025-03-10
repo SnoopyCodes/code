@@ -67,10 +67,8 @@ struct splaytree {
         return l;
     }
  
-    int find(int p) {  //set root to pth, p < sz
-        if (root) { root = root->find(p); }
-        return root->key;
-    }
+    void find(int p) { if (root) { root = root->find(p); } }
+    
     void add(int key, int p) {
         node *v = new node(key);
         if (!root || p == root->size) { v->attach(root, 0); }
@@ -93,6 +91,7 @@ struct splaytree {
         delete del;
         join(r);
     }
+    int operator[](int i) { find(i); return root->key; }
 };
 
 #define long int64_t

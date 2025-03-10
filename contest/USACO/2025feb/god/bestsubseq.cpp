@@ -1,60 +1,102 @@
 #include <bits/stdc++.h>
 
-#define vec vector
-#define arr array
-#define GET_MACRO(_1, _2, _3, NAME, ...) NAME
-#define rep(...) GET_MACRO(__VA_ARGS__, rep3, rep2)(__VA_ARGS__)
+using namespace std;
+
+#define MACRO(_1, _2, _3, NAME, ...) NAME
+#define rep(...) MACRO(__VA_ARGS__, rep3, rep2)(__VA_ARGS__)
 #define rep3(x,s,e) for(auto x=s;x!=e;s<e?x++:x--)
 #define rep2(x,e) rep3(x,(e>0?0:-(e)-1),(e>0?e:-1))
 
-using namespace std;
+template<typename T> using vec = vector<T>;
+template<typename T, int a> using arr = array<T, a>;
+using i64 = long long;
+const i64 INF = 4e18 + 7e9;
 
-#define long int64_t
+const int MOD = 1e9 + 7, power = 2, to = 1 << 16;
+arr<i64, to> small, large;
+void comp_pow() {
+    small[0] = large[0] = 1;
+    for (int i = 1; i < to; i++) {
+        small[i] = small[i-1] * power % MOD;
+    }
+    for (int i = 1; i < to; i++) {
+        large[i] = large[i-1] * small[to-1] % MOD;
+    }
+}
+
+int pow(int p) {
+    return small[p & (to-1)] * large[p / to] % MOD;
+}
+
+const int sq = 512;
+
+struct Query { int l, r, k, ind; };
+vec<Query> qs;
+vec<int> ans;
+
+int ml = -1, mr = -1;
+int cur = 0;
+
+void reml(int ind) {
+
+}
+void remr(int ind) {
+
+}
+void addl(int ind) {
+
+}
+void addr(int ind) {
+
+}
+
+void answer() {
+    for (int q = 0; q < qs.size(); q++) {
+        int l = qs[q].l, r = qs[q].r;
+        while (ml < l) { reml(ml++); }
+        while (ml > l) { addl(--ml); }
+        while (mr < r) { addr(++mr); }
+        while (mr > r) { remr(mr--); }
+        ans[qs[q].ind] = cur;
+    }
+}
+void mo() {  //qs is filled out
+    ans.resize(qs.size());
+    int sq = int(sqrt(qs.size()));
+    sort(qs.begin(), qs.end(), [&](Query a, Query b) {
+        int ba = a.l / sq;
+        int bb = b.l / sq;
+        if (ba == bb) { return a.r < b.r; }
+        return ba < bb;
+    });
+    answer();
+}
 
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
+    comp_pow();
     int N, M, Q; cin >> N >> M >> Q;
-    //wtf
-    //basically largest subsequence
-    //wait this isnt even sequence reversal tysm
-    //is this just lazy sparse segtree
-    //we need a specific length
-    //chat.. is this real..
-    //we want to stick as many 1's in front as we can
-    //without running out of space
-    //we can skip some number of 0's
-    //call it "leeway"
-    //we query for the left half first.
-    //it will return some value and some remaining "leeway", if there is any
-    //this problem.. is boring af and just annoying
-    //lowkey segtree is cool i just don't really like segtree problems yeah
-    //ok there is definitely an offline way but what is the offline way
-    //store a set with segments alternating parities of lengths, iset is ok
-    //it is impossible to iterate over segments manually to find what to "skip"
-    //square root decomp *sigh*
-    //idek which ones better
-    multiset<arr<int, 2>> ms;
-    ms.insert({0, N});
-    rep(m, M) {
-        int l, r; cin >> l >> r; l--; r--;
-        //find where the left bound falls
-        //c'est la depression
-        auto lb = (*(--ms.upper_bound({l, 0})));
-        auto rb = (*(--ms.upper_bound({r, 0})));
-        if (lb == rb) {
-            //split this one
-            ms.erase(lb);
-            if (l != lb[0])
-            ms.insert({lb[0], l - lb[0]});
-            ms.insert({l, r - l + 1});
-            ms.insert({r, lb[0] + lb[1] - r});
-        }   else {
-            //we split it into 4??
-        }
+    //process
+    //important thing that doesn't force maintaining intervals:
+    //just add all the endpoints :|
+    vec<int> ep;
+    rep(i, M) {
+        int l, r; cin >> l >> r;
+        ep.push_back(l);
+        ep.push_back(r);
     }
-    cout << "\n";
-    for (auto const&[l, len] : ms) {
-        cout << l << " " << len << "\n";
+    sort(ep.begin(), ep.end());
+
+    //ok
+
+    //queries
+    qs.resize(Q);
+    rep(q, Q) {
+        cin >> qs[q].l >> qs[q].r >> qs[q].k;
+        qs[q].ind = q;
     }
-    
+    mo();
+    rep(q, Q) {
+        cout << ans[q] << "\n";
+    }
 }

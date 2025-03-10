@@ -67,7 +67,8 @@ struct splaytree {
         return l;
     }
  
-    void find(int k) { if (root) { root = root->find(k); } }  //root = kth. k < size
+    void find(int p) { if (root) { root = root->find(p); } }
+    
     void add(int key, int p) {
         node *v = new node(key);
         if (!root || p == root->size) { v->attach(root, 0); }
@@ -79,7 +80,7 @@ struct splaytree {
         v->upd();
         root = v;
     }
-    void rem(int p) {
+    void rem(int p) {  //position
         if (!root) { return; }
         find(p);
         node* del = root;
@@ -90,12 +91,12 @@ struct splaytree {
         delete del;
         join(r);
     }
+    int operator[](int i) { find(i); return root->key; }
 };
-
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
-    freopen("bcount.in", "r", stdin);
-    freopen("bcount.out", "w", stdout); 
+    // freopen("bcount.in", "r", stdin);
+    // freopen("bcount.out", "w", stdout); 
     splaytree t;
     int N, Q; cin >> N >> Q;
     for (int i = 0; i < N; i++) {
@@ -115,10 +116,8 @@ int main() {
     }
     for (int q = 0; q < Q; q++) {
         int l, r; cin >> l >> r; l--;
-        one.find(r);
-        int x = one.root->key;
-        one.find(l);
-        cout << x - one.root->key << " ";
+        int x = one[r];
+        cout << x - one[l] << " ";
         two.find(r);
         x = two.root->key;
         two.find(l);
