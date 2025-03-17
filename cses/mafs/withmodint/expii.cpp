@@ -1,12 +1,16 @@
-//no root cause idk fft /shrug
-//a few things: p in power >= 0
-//must never be 0 when doing inverse
-//use c++ 20 for <=> comparisons
-//this is a little more inefficient than others b/c it does modulo op each time?
 #include <bits/stdc++.h>
 
 using namespace std;
+
+#define MACRO(_1, _2, _3, NAME, ...) NAME
+#define rep(...) MACRO(__VA_ARGS__, rep3, rep2)(__VA_ARGS__)
+#define rep3(x,s,e) for(auto x=s;x!=e;s<e?x++:x--)
+#define rep2(x,e) rep3(x,(e>0?0:-(e)-1),(e>0?e:-1))
+
+template<typename T> using vec = vector<T>;
+template<typename T, int a> using arr = array<T, a>;
 using i64 = long long;
+
 template<int MOD> struct mint {
 	int v;
 	mint():v(0) {}
@@ -35,4 +39,16 @@ template<int MOD> struct mint {
 
     explicit operator int() const { return v; } // explicit -> don't silently convert to int
 };
-using mi = mint<int(1e9 + 7)>;
+using mb = mint<int(1e9 + 7)>;
+using me = mint<int(1e9 + 6)>;
+
+int main() {
+    cin.tie(0) -> sync_with_stdio(0);
+    int N; cin >> N;
+    rep(i, N) {
+        mb a; cin >> a;
+        me b; cin >> b;
+        int c; cin >> c;
+        cout << pow(a, int(pow(b, c))) << "\n";
+    }
+}

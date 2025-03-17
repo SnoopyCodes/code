@@ -24,8 +24,8 @@ int dfs(int u, int from, int k) {  //path length through this node
 }
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
-    freopen("deleg.in", "r", stdin);
-    freopen("deleg.out", "w", stdout);
+    // freopen("deleg.in", "r", stdin);
+    // freopen("deleg.out", "w", stdout);
     int N; cin >> N;
     barns.resize(N);
     for (int i = 0; i < N - 1; i++) {
