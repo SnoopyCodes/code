@@ -17,20 +17,20 @@ access(u):
 		v.r= this
 		aux = none # merged
 		splay #to make it the root of its aux tree
-# we loop because splaying u should give it the auxcon of v, one upwards, which doesn't have preferred path to u/v, by definition of having auxcon
-# number of loops = number of preferred child changes
-# awesome
-# u will become the overall root of the aux tree!
+we loop because splaying u should give it the auxcon of v, one upwards, which doesn't have preferred path to u/v, by definition of having auxcon
+number of loops = number of preferred child changes
+awesome
+u will become the overall root of the aux tree!
 
-# okay, now we have a pretty gosh dang slow lct
-# we probably have to do some speedups
-# this might involve fixing parent pointer setting overheads,
-# and possibly splitting into an entire lct struct
-# i will do the latter first, as it is less drastic of a change
-# it turns out the problem was from not accessing the result of find()
-# lca is mildly slow, but we take those
-# im guessing the lca version will likely be of more help
-# for hdlt
+okay, now we have a pretty gosh dang slow lct
+we probably have to do some speedups
+this might involve fixing parent pointer setting overheads,
+and possibly splitting into an entire lct struct
+i will do the latter first, as it is less drastic of a change
+it turns out the problem was from not accessing the result of find()
+lca is mildly slow, but we take those
+im guessing the lca version will likely be of more help
+for hdlt
 
 why was i using hashtags idk
 the way i see it, lct has a rooted, lca version for subtrees
