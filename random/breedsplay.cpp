@@ -95,8 +95,8 @@ struct splaytree {
 };
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
-    // freopen("bcount.in", "r", stdin);
-    // freopen("bcount.out", "w", stdout); 
+    freopen("bcount.in", "r", stdin);
+    freopen("bcount.out", "w", stdout); 
     splaytree t;
     int N, Q; cin >> N >> Q;
     for (int i = 0; i < N; i++) {
@@ -116,16 +116,9 @@ int main() {
     }
     for (int q = 0; q < Q; q++) {
         int l, r; cin >> l >> r; l--;
-        int x = one[r];
-        cout << x - one[l] << " ";
-        two.find(r);
-        x = two.root->key;
-        two.find(l);
-        cout << x - two.root->key << " ";
-        three.find(r);
-        x = three.root->key;
-        three.find(l);
-        cout << x - three.root->key << "\n";
+        cout << one[r] - one[l] << " ";
+        cout << two[r] - two[l] << " ";
+        cout << three[r] - three[l] << "\n";
     }
 
 }

@@ -12,9 +12,9 @@ template<int MOD> struct mint {
 	mint():v(0) {}
 	mint(i64 _v):v(int(_v % MOD)) { v += (v < 0) * MOD; }
    
-	friend mint operator+(mint a, const mint& b) { return mint(a.v + b.v); }
-	friend mint operator-(mint a, const mint& b) { return mint(a.v - b.v); }
-	friend mint operator*(mint a, const mint& b) { return mint((i64)a.v*b.v); }
+	friend mint operator+(mint a, const mint& b) { return a.v + b.v; }
+	friend mint operator-(mint a, const mint& b) { return a.v - b.v; }
+	friend mint operator*(mint a, const mint& b) { return (i64)a.v*b.v); }
 	friend mint operator/(mint a, const mint& b) { return a * inv(b); }
 	friend mint pow(mint a, i64 p) { return p ? pow(a * a, p / 2) * (p & 1 ? a : 1) : 1; }
 	friend mint inv(const mint& a) { return pow(a, MOD-2); }
@@ -29,7 +29,7 @@ template<int MOD> struct mint {
 	mint& operator--() { return *this -= 1; }
 
     friend ostream& operator<<(ostream& os, const mint& a){ os << a.v; return os; }
-    friend istream& operator>>(istream& is, mint& a) { i64 x; is >> x; a = mint(x); return is; }
+    friend istream& operator>>(istream& is, mint& a) { i64 x; is >> x; a = x; return is; }
 
     auto operator<=>(const mint&) const = default;
 

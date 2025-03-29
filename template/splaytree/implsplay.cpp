@@ -94,13 +94,22 @@ struct splaytree {
     int operator[](int i) { find(i); return root->key; }
 };
 
+#include <ext/pb_ds/assoc_container.hpp>
+using namespace __gnu_pbds;
+#define rat order_of_key  //find how many less than element
+#define at find_by_order //iterator to the kth element, [] essentially
+
+template<class T>
+using imset = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
+//use s.erase(s.upper_bound(value)) to remove one occurrence
+
 #define long int64_t
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 long uld(long a, long b) { return uniform_int_distribution<long>(a, b)(rng); }
 
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
-    int ops = 1000000;
+    int ops = 500000;
     int sz = 0;
     vector<array<int, 2>> oper(2 * ops);
     for (int i = 0; i < ops; i++) {
@@ -126,6 +135,16 @@ int main() {
             t.find(p);
         }
     }
+    // imset<int> ims;
+    // for (auto const&[type, p] : oper) {
+    //     if (type == 0) {
+    //         ims.insert(p);
+    //     }   else if (type == 1) {
+    //         ims.erase(ims.upper_bound(p));
+    //     }   else {
+    //         ims.find(p);
+    //     }
+    // }
     auto end = chrono::system_clock::now();
     chrono::duration<double> elapsed = end - beg;
     cout << elapsed.count() << "\n";
