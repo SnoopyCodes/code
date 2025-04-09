@@ -4,28 +4,25 @@ using namespace std;
 using ll = long long;
 template <typename T>
 struct SegTree {
-    int SN, DN;
+    int N;
     vector<T> data;
-    virtual T def() const { return 0; }
-    virtual T comb(T t1, T t2) const { return t1 + t2; }
+    const T def;
+    T comb(T t1, T t2) const { return t1 + t2; }
     void init(const vector<T>& v) {
-        SN = v.size();
-        DN = v.size();
-        SN = 1 << (1 + __lg(SN - 1));
-        data.resize(2 * SN);
-        for (int i = 0; i < DN; i++) { data[i + SN] = v[i]; }
-        for (int i = SN - 1; i > 0; i--) { data[i] = comb(data[2 * i], data[2 * i + 1]); }
+        N = 1 << (1 + __lg(v.size() - 1));
+        data.resize(2 * N);
+        for (int i = 0; i < v.size(); i++) { data[i + N] = v[i]; }
+        for (int i = N - 1; i > 0; i--) { data[i] = comb(data[2 * i], data[2 * i + 1]); }
     }
     void alter(int i, T dat) {
-        data[i + SN] = dat;
-        for (i = (i + SN) / 2; i > 0; i /= 2) {
+        data[i + N] = dat;
+        for (i = (i + N) / 2; i > 0; i /= 2) {
             data[i] = comb(data[2 * i], data[2 * i + 1]);
         }
     }
     T query(int l, int r) {
-        T ansl = def();
-        T ansr = def();
-        for (l += SN, r += SN; l < r; l /= 2, r /= 2) {
+        T ansl = def, ansr = def;
+        for (l += N, r += N; l < r; l /= 2, r /= 2) {
             if (l & 1) { ansl = comb(ansl, data[l++]); }
             if (r & 1) { ansr = comb(data[--r], ansr); }
         }
@@ -35,12 +32,12 @@ struct SegTree {
         if (x > data[1]) { return -1; }
         bool add = 0;
         int p = 1;
-        while (p < SN) {
+        while (p < N) {
             add = data[2 * p] < x;
             p = 2 * p + add;
             add = 0;
         }
-        return p - SN;
+        return p - N;
     }
 };
 int main() {

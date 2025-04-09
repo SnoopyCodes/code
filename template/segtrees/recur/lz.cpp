@@ -25,7 +25,7 @@ struct SegTree {
     vector<U> change;
     V defv = 0, val;
     U defu = {0, true}, alt;
-    void SegTree(int _N):N(_N):data(4*_N, defv):change(4*_N);
+    SegTree(int _N):N(_N),data(4*_N, defv),change(4*_N);
     V comb(V a, V b) { return a + b; }
     void apply(int n, int l, int r, U u) {
         //change stuff, consider how updates stack

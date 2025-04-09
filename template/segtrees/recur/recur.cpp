@@ -1,21 +1,14 @@
 #include <bits/stdc++.h>
 
-#define long int64_t
-#define vec vector
-#define arr array
-#define rsz resize
-const int INF = 1e9;
-const long INFL = 4e18;
-
 using namespace std;
 
 template<typename T>
 struct SegTree {
     int N, ql, qr;
     vector<T> data;
-    T def = 0, val;
-    void SegTree(int _N):N(_N):data(_N*2, def);
-    T comb(T a, T b) { return max(a, b); }
+    T def = 1e9, val;
+    SegTree(int _N):N(_N),data(4 * _N, def) {}
+    T comb(T a, T b) { return min(a, b); }
     #define m ((l + r) / 2)
     T qry(int n, int l, int r) {
         if(r <= ql || qr <= l) { return def; }
@@ -44,44 +37,23 @@ struct SegTree {
 };
 //to change, change def and comb, and wlk
 
-int fl(int x) {
-    for (int b = 30; b > -1; b--) {
-        if (x & 1 << b) { return b; }
-    }
-}
-
-void solve() {
-    int N, Q; cin >> N >> Q;
-    vec<int> W(N);
-    for (int i = 0; i < N; i++) {
-        cin >> W[i];
-    }
-    SegTree<int> seg(N);
-    reverse(W.begin(), W.end());
-    vec<int> px(N+1);
-    for (int i = 0; i < N; i++) {
-        seg.update(i, fl(W[i]));
-        px[i+1] = px[i] ^ W[i];
-    }
-    for (int q = 0; q < Q; q++) {
-        int ans = -1;  //index we eat up to
-        int w; cin >> w;
-        for (int b = 29; b > -1; b--) {
-            if (!(w & 1 << b)) { continue; }
-            long to = seg.walk(b, ans + 1, N);
-            if (to == -1) { ans = N - 1; break; }
-            w ^= px[to] ^ px[ans+1];
-            ans = to - 1;
-            if (W[to] > w) { break; }
-            w ^= W[to];
-            ans++;
-        }
-        cout << ans+1 << " ";
-    }
-    cout << "\n";
-}
-
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
-    int T; cin >> T; while(T--) { solve(); }
+    int N, Q; cin >> N >> Q;
+    SegTree<int> seg(N);
+    for (int i = 0; i < N; i++) {
+        int x; cin >> x;
+        seg.update(i, x);
+    }
+    while (Q--) {
+        int t; cin >> t;
+        if (t & 1) {
+            int k, x; cin >> k >> x;
+            seg.update(k-1, x);
+        }   else {
+            int l, r; cin >> l >> r;
+            cout << seg.query(l-1, r) << "\n";
+        }
+    }
+
 }
