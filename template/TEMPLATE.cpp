@@ -1,31 +1,32 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-
-#define MACRO(_1, _2, _3, NAME, ...) NAME
-#define rep(...) MACRO(__VA_ARGS__, rep3, rep2)(__VA_ARGS__)
-#define rep3(x,s,e) for(auto x=s;x!=e;s<e?x++:x--)
-#define rep2(x,e) rep3(x,(e>0?0:-(e)-1),(e>0?e:-1))
-
-template<typename T> using vec = vector<T>;
-template<typename T, size_t a> using arr = array<T, a>;
 using i64 = long long;
+const int INF = 1e9 + 10;
+const i64 INFL = 4LL * INF * INF;
 
-const i64 INF = 4e18 + 7e9;
-
-//this is (not) fine
-#define que queue
-#define stk stack
-#define pq priority_queue
+#define rep(i,s,e) for(auto i=s;i<e;i++)
+#define rev(i,s,e) for(auto i=s;i>e;i--)
 #define rsz resize
+#define emp emplace
+#define emb emplace_back
+#define pob pop_back
 
+template <typename T> T mvec(T def) { return def; }
+template <typename T, typename...D> auto mvec(size_t f, D...r) {
+    return vector<decltype(mvec<T>(r...))>(f, mvec<T>(r...));
+}
+/*
+no need to template stl types
+i have never met a queue<deque<deque<int>> or something random like that
+emplace is superior
+use vector as stack, queue is queue still
+just use a set instead of a pstk, always
+*/
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
     int N = 5;
-    rep(i, -N) {
-        cout << i << "\n";
-    }
-    vec<int> a(100);
-    set<int> x; x.insert(2);
+    set<int> x;
+    x.emp(2);
     x.insert(3);
 }

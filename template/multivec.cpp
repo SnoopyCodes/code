@@ -11,7 +11,7 @@ template <typename T> using vec = vector<T>;
 template <typename T> T mvec(T def) { return def; }
 template <typename T, typename... Ds>
 auto mvec(size_t fd, Ds... rd) {
-    return vec<decltype(mvec<T>(rd...))>(fd, mvec<T>(rd...));
+    return vector<decltype(mvec<T>(rd...))>(fd, mvec<T>(rd...));
 }
 
 void hm(auto x) {
@@ -26,7 +26,7 @@ int main() {
         cout << x[i] << endl;
     }
     auto y = mvec<double> (N, 3.0);
-    auto z = mvec<long long>(N, 4);
+    auto z = mvec<long long>(N, 4LL);  //need LL
     hm(x);
     int M = 4;
     auto twod = mvec<int>(N, M, -2);

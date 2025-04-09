@@ -1,13 +1,14 @@
 #include <bits/stdc++.h>
-#define long int64_t
 using namespace std;
-vector<long> seg;
+using i64 = long long;
+vector<int> seg;
 int SN;
-long query(int l, int r) {
-    long res = 1e18;
+
+int query(int l, int r) {
+    int res = 0;
     for (l += SN, r += SN; l < r; l /= 2, r /= 2) {
-        if (l & 1) { res = min(res, seg[l++]); }
-        if (r & 1) { res = min(res, seg[--r]); }
+        if (l & 1) { res += seg[l++]; }
+        if (r & 1) { res += seg[--r]; }
     }
     return res;
 }

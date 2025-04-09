@@ -25,11 +25,7 @@ struct SegTree {
     vector<U> change;
     V defv = 0, val;
     U defu = {0, true}, alt;
-    void init(int _N) {
-        N = _N;
-        data.resize(4 * N, defv);
-        change.resize(4 * N, defu);
-    }
+    void SegTree(int _N):N(_N):data(4*_N, defv):change(4*_N);
     V comb(V a, V b) { return a + b; }
     void apply(int n, int l, int r, U u) {
         //change stuff, consider how updates stack
@@ -84,7 +80,7 @@ int main() {
     cin.tie(0) -> sync_with_stdio(0);
     //range updates and sums
     int N, Q; cin >> N >> Q;
-    SegTree<long, upd> seg; seg.init(N);
+    SegTree<long, upd> seg(N);
     rep(i, N) {
         int x; cin >> x;
         seg.update(i, i + 1, {x, false});

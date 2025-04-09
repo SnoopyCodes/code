@@ -14,10 +14,7 @@ struct SegTree {
     int N, ql, qr;
     vector<T> data;
     T def = 0, val;
-    void init(int _N) {
-        N = _N;
-        data.resize(4 * N, def);
-    }
+    void SegTree(int _N):N(_N):data(_N*2, def);
     T comb(T a, T b) { return max(a, b); }
     #define m ((l + r) / 2)
     T qry(int n, int l, int r) {
@@ -59,8 +56,7 @@ void solve() {
     for (int i = 0; i < N; i++) {
         cin >> W[i];
     }
-    SegTree<int> seg;
-    seg.init(N);
+    SegTree<int> seg(N);
     reverse(W.begin(), W.end());
     vec<int> px(N+1);
     for (int i = 0; i < N; i++) {
