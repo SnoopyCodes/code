@@ -1,18 +1,17 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-using ll = long long;
-template <typename T>
-struct SegTree {
+
+template <typename T> struct SegTree {
     int N;
     vector<T> data;
-    const T def;
-    T comb(T t1, T t2) const { return t1 + t2; }
-    void init(const vector<T>& v) {
-        N = 1 << (1 + __lg(v.size() - 1));
-        data.resize(2 * N);
+    const T def = 0;
+    T comb(T t1, T t2) const { return max(t1, t2); }
+    SegTree(const vector<T>& v):N(1 << 1 + __lg(v.size() - 1)),data(2 * N, def){
         for (int i = 0; i < v.size(); i++) { data[i + N] = v[i]; }
-        for (int i = N - 1; i > 0; i--) { data[i] = comb(data[2 * i], data[2 * i + 1]); }
+        for (int i = N - 1; i > 0; i--) {
+            data[i] = comb(data[2 * i], data[2 * i + 1]);
+        }
     }
     void alter(int i, T dat) {
         data[i + N] = dat;
@@ -30,13 +29,8 @@ struct SegTree {
     }
     int walk(T x) {
         if (x > data[1]) { return -1; }
-        bool add = 0;
         int p = 1;
-        while (p < N) {
-            add = data[2 * p] < x;
-            p = 2 * p + add;
-            add = 0;
-        }
+        while (p < N) { p = 2 * p + (data[2 * p] < x); }
         return p - N;
     }
 };
@@ -47,4 +41,14 @@ int main() {
     for (int i = 0; i < N; i++) {
         cin >> v[i];
     }
+    v = {1, 2, 3, 4};
+
+    SegTree<int> seg(v);
+    cout << seg.walk(5) << "\n";
+    // for (int q = 0; q < Q; q++) {
+    //     int r; cin >> r;
+    //     int i = seg.walk(r);
+    //     cout << i + 1 << " \n"[q == Q - 1];
+    //     if (i != -1) { seg.alter(i, seg.query(i, i + 1) - r); }
+    // }
 }

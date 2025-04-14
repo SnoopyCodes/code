@@ -1,10 +1,9 @@
 #include <bits/stdc++.h>
 
-#define add(x, y) (((x) % MOD + (y) % MOD) % MOD + MOD) % MOD
-#define sub(x, y) add(x, -y)
-#define mul(x, y) (((x) % MOD * (y) % MOD) % MOD + MOD) % MOD
-#define div(x, y) mul(x, inv(y))
-
+#define am(x, y) ((((x) % MOD + (y) % MOD) % MOD + MOD) % MOD)
+#define sm(x, y) am(x, -y)
+#define mm(x, y) ((((x) % MOD * (y) % MOD) % MOD + MOD) % MOD)
+const int MOD = 1e9 + 7;
 using namespace std;
 
 int main() {

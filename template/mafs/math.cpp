@@ -35,8 +35,6 @@ int main() {
 		fac[i] = fac[i-1] * i % MOD;
 	}
 }
-//i don't like mod int classes, nor do i like spamming integers
-//use only one of long or int depending on use case
 
 //declare a mod before using
 //filong up fac

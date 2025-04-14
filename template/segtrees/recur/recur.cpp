@@ -2,8 +2,7 @@
 
 using namespace std;
 
-template<typename T>
-struct SegTree {
+template<typename T> struct SegTree {
     int N, ql, qr;
     vector<T> data;
     T def = 1e9, val;
