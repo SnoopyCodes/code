@@ -11,9 +11,5 @@ struct mi {
 	friend mi operator/(mi a, const mi& b) { return a * inv(b); }
 	friend mi pow(mi a, i64 p) { return p ? pow(a * a, p / 2) * (p & 1 ? a : 1) : 1; }
 	friend mi inv(const mi& a) { return pow(a, MOD-2); }
-	mi& operator+=(const mi& o) { return (*this) = (*this) + o; }
-	mi& operator-=(const mi& o) { return (*this) = (*this) - o; }
-	mi& operator*=(const mi& o) { return (*this) = (*this) * o; }
-	mi& operator/=(const mi& o) { return (*this) = (*this) / o; }
     auto operator<=>(const mi&) const = default;
 };

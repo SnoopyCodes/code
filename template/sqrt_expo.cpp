@@ -6,7 +6,7 @@ const int MOD = 1e9 + 7, power = 2, to = 1 << 16;
 
 using i64 = long long;
 template<typename T, int a> using arr = array<T, a>;
-//extraordinarily niche use for precomputing powers of 2
+//extraordinarily niche use for precomputing powers of b
 //up to 1e9
 //e.g. usaco 2025 feb gold p2
 //very cringe problem, I don't understand this either

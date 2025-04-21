@@ -4,12 +4,8 @@ using namespace std;
 struct DSU {
     int N;
     vector<int> root, size;
-    void init(int _N) {
-        int N = _N;
-        root.resize(N);
-        size.resize(N, 1);
-        for (int i = 0; i < N; i++) { root[i] = i; }
-    }
+    DSU(int _N):N(_N), root(N), size(N, 1)
+    { iota(root.begin(), root.end(), 0); }
     int find(int u) {
         if (root[u] != u) { root[u] = find(root[u]); }
         return root[u];
@@ -27,7 +23,7 @@ struct DSU {
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
     int N, Q; cin >> N >> Q;
-    DSU cc; cc.init(N);
+    DSU cc(N);
     for (int i = 0; i < Q; i++) {
         int t, u, v; cin >> t >> u >> v;
         if (t) {

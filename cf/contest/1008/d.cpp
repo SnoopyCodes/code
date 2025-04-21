@@ -1,93 +1,52 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-
-#define MACRO(_1, _2, _3, NAME, ...) NAME
-#define rep(...) MACRO(__VA_ARGS__, rep3, rep2)(__VA_ARGS__)
-#define rep3(x,s,e) for(auto x=s;x!=e;s<e?x++:x--)
-#define rep2(x,e) rep3(x,(e>0?0:-(e)-1),(e>0?e:-1))
-
-template<typename T> using vec = vector<T>;
-template<typename T, int a> using arr = array<T, a>;
 using i64 = long long;
+
+const int MOD = 1e9 + 7;
 const i64 INF = 4e18 + 7e9;
+
+#define rsz resize
+#define emp emplace
+#define emb emplace_back
+#define pob pop_back
 
 void solve() {
     int N; cin >> N;
-    //do we not just precompute this
-    vec<arr<int, 4>> ops(N, {0,0,0,0});
-    i64 lm = 1, rm = 1;
-    rep(i, N) {
-        string s; cin >> s;
-        cin >> ops[i][1];
-        if (s == "x") { ops[i][0] = 1; lm *= ops[i][1]; }
-        cin >> s;
-        cin >> ops[i][3];
-        if (s == "x") { ops[i][2] = 1; rm *= ops[i][3]; }
+    //we can know the contribution of each one at every turn
+    //we can have N^2
+    vector<array<int, 2>> op(N);
+    vector<array<int, 2>> type(N);
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < 2; j++) {
+            char c; cin >> c;
+            type[i][j] = c == 'x';
+            cin >> op[i][j];
+        }
     }
-    //can we just greedy and calculate multiplying coefficients at every step?
-    //surely.. not
-    //it fails 2 because we can go to x3 first and then multiply
-    //and then come back to the larger multiplier
-    //2, 33
-    //1, 11
-    //meet in the middle?
-    //2^15, 2^15
-    //we can represent all paths as a certain multiplier + ? value?
-    //nah just brute force it why not
-    //brute force N / 2, take the best 512, and brute force those
-    //wait no brute force the first 20, take the best 1000, and brute force those
-    //yes
-    auto brute = [&](vec<arr<i64, 2>> &v, int s, int e) {
-        vec<arr<i64, 2>> res;
-        for (auto [l, r] : v) {
-            i64 ol = l;
-            auto o = r;
-            rep(mask, 1 << e - s) {
-                l = ol;
-                r = o;
-                rep(b, e - s) {
-                    i64 xtra = 0;
-                    if (ops[s + b][0]) { xtra += (ops[s+b][1]-1) * l; }
-                    else { xtra += ops[s+b][1]; }
-                    if (ops[s + b][2]) { xtra += (ops[s+b][3]-1) * r; }
-                    else { xtra += ops[s+b][3]; }
-                    if (mask & 1 << b) {  //go right
-                        r += xtra;
-                    }   else {
-                        l += xtra;
-                    }
-                }
-                res.push_back({l, r});
+    //maybe we if back compute the maximum that anyone can adding one to either
+    vector<array<i64, 2>> gain(N + 1, {1, 1});
+    for (int i = N - 1; i > -1; i--) {
+        i64 best = max(gain[i+1][0], gain[i+1][1]);
+        for (int j = 0; j < 2; j++) {
+            if (!type[i][j]) { gain[i][j] = gain[i+1][j]; }
+            else {
+                gain[i][j] = (op[i][j] - 1) * best + gain[i+1][j];
             }
         }
-        return res;
-    };
-    vec<arr<i64, 2>> fst{{1, 1}};
-    vec<arr<i64, 2>> first = brute(fst, 0, min(N, 15));
-    if (N <= 15) {
-        i64 mx = 0;
-        rep(i, first.size()) {
-            mx = max(first[i][0] + first[i][1], mx);
+    }
+
+    array<i64, 2> cur{1, 1};
+    for (int i = 0; i < N; i++) {
+        i64 inc = 0;
+        for (int j = 0; j < 2; j++) {
+            if (type[i][j]) { inc += op[i][j] * cur[j] - cur[j]; }
+            else { inc += op[i][j]; }
         }
-        cout << mx << "\n";
-        return;
+        if (gain[i+1][0] >= gain[i+1][1]) { cur[0] += inc; }
+        else { cur[1] += inc; }
     }
-    auto cmp = [](arr<i64, 2> a, arr<i64, 2> b) {
-        return a[0] + a[1] > b[0] + b[1];
-    };
-    sort(first.begin(), first.end(), cmp);
-    vec<arr<i64, 2>> use;
-    rep(i, 40) {
-        use.push_back(first[i]);
-    }
-    first.clear();
-    auto fin = brute(use, 15, N);
-    i64 mx = 0;
-    rep(i, fin.size()) {
-        mx = max(fin[i][0] + fin[i][1], mx);
-    }
-    cout << mx << "\n";
+    cout << cur[0] + cur[1] << "\n";
 }
 
 int main() {
