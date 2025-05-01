@@ -9,11 +9,12 @@ using namespace std;
 #include <ext/pb_ds/assoc_container.hpp>
 using namespace __gnu_pbds;
 
+#define rat order_of_key  //find how many less than element
+#define at find_by_order //iterator to the kth element, [] essentially
 template<typename T> using gset = gp_hash_table<T, null_type>;
 template<typename K, typename V> using gmap = gp_hash_table<K, V>;
 
-#define rat order_of_key  //find how many less than element
-#define at find_by_order //iterator to the kth element, [] essentially
+
 
 template <class T>
 using iset = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;

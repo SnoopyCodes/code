@@ -5,6 +5,8 @@ using i64 = long long;
 const int MOD = 1e9 + 7;
 const i64 INF = 4e18;
 
+#define rep(i,s,e) for(auto i=s;i<e;i++)
+#define rev(i,s,e) for(auto i=s;i>e;i--)
 #define rsz resize
 #define emp emplace
 #define emb emplace_back
@@ -30,6 +32,7 @@ int main() {
     cin.tie(0) -> sync_with_stdio(0);
     int N = 5;
     vector<array<double, 2>> a;
+    auto vec = mvec<array<int, 2>>(N, N, ta(2, 2));
     a.emb(ta(2.0, 3.0));
     cout << a[0][0] << " " << a[0][1] << "\n";
 }

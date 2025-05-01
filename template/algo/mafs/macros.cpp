@@ -1,8 +1,8 @@
 #include <bits/stdc++.h>
 
-#define am(x, y) ((((x) % MOD + (y) % MOD) % MOD + MOD) % MOD)
+#define am(x, y) (((x) + (y)) % MOD)
 #define sm(x, y) am(x, -y)
-#define mm(x, y) ((((x) % MOD * (y) % MOD) % MOD + MOD) % MOD)
+#define mm(x, y) (((x) * (y)) % MOD)
 const int MOD = 1e9 + 7;
 using namespace std;
 

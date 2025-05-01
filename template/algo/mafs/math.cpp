@@ -9,10 +9,9 @@ const int MOD = 7;
 
 long exp(long x, int p) {
 	long res = 1;
-	while (p > 0) {
+	for (; p; p /= 2) {
 		if (p % 2 & 1) { res = res * x % MOD; }
 		x = x * x % MOD;
-		p /= 2;
 	}
 	return res;
 }
