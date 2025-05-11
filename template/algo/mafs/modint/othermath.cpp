@@ -1,18 +1,18 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-using i64 = long long;
+#define long long long
 
 struct mi {
     static const int MOD = 1e9 + 7;
     int v;
     mi() : v(0) {}
-	mi(i64 _v):v(int(_v % MOD)) { v += (v < 0) * MOD; }
+	mi(long _v):v(int(_v % MOD)) { v += (v < 0) * MOD; }
 	friend mi operator+(mi a, const mi& b) { return a.v + b.v; }
 	friend mi operator-(mi a, const mi& b) { return a.v - b.v; }
-	friend mi operator*(mi a, const mi& b) { return (i64)a.v*b.v; }
+	friend mi operator*(mi a, const mi& b) { return (long)a.v*b.v; }
 	friend mi operator/(mi a, const mi& b) { return a * inv(b); }
-	friend mi pow(mi a, i64 p) { return p ? pow(a * a, p / 2) * (p & 1 ? a : 1) : 1; }
+	friend mi pow(mi a, long p) { return p ? pow(a * a, p / 2) * (p & 1 ? a : 1) : 1; }
 	friend mi inv(const mi& a) { return pow(a, MOD-2); }
 	mi& operator+=(const mi& o) { return (*this) = (*this) + o; }
 	mi& operator-=(const mi& o) { return (*this) = (*this) - o; }

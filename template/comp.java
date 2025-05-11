@@ -50,18 +50,18 @@ public class comp {
     }
 }
 
-class Scanner {
-    BufferedReader r; StringTokenizer st;
-    public Scanner() { r = new BufferedReader(new InputStreamReader(System.in)); }
-    String next() {
-        try {
-            while (st == null || !st.hasMoreTokens())
-                st = new StringTokenizer(r.readLine());
-            return st.nextToken();
-        } catch (Exception e) { }
-        return null;
-    }
-    int nextInt() { return Integer.parseInt(next()); }
-    double nextDouble() { return Double.parseDouble(next()); }
-    long nextLong() { return Long.parseLong(next()); }
-}
+// class Scanner {
+//     BufferedReader r; StringTokenizer st;
+//     public Scanner() { r = new BufferedReader(new InputStreamReader(System.in)); }
+//     String next() {
+//         try {
+//             while (st == null || !st.hasMoreTokens())
+//                 st = new StringTokenizer(r.readLine());
+//             return st.nextToken();
+//         } catch (Exception e) { }
+//         return null;
+//     }
+//     int nextInt() { return Integer.parseInt(next()); }
+//     double nextDouble() { return Double.parseDouble(next()); }
+//     long nextLong() { return Long.parseLong(next()); }
+// }

@@ -33,7 +33,6 @@ int main() {
         int u, v; cin >> u >> v; u--; v--;
         G[u].push_back(v);
     }
-    cout << "\n";
     for (int i = 0; i < N; i++) {
         if (in[i] == -1) { dfs(i); }
     }
