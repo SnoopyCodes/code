@@ -48,7 +48,7 @@ int main() {
     for (int i = 0; i < 2 * N; i++) {
         in_cc[i] = ncc - in_cc[i] - 1;
     }
-    for (int i = 0, u = 0; i < N; i++, u = 2 * i) {
-        cout << (in_cc[u] < in_cc[u ^ 1] ? "-" : "+") << " \n"[i == N - 1];
+    for (int u = 0; u < 2 * N; u += 2) {
+        cout << (in_cc[u] < in_cc[u ^ 1] ? "-" : "+") << " \n"[u == 2 * N - 2];
     }
 }
