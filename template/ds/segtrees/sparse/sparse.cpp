@@ -1,11 +1,11 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-using i64 = long long;
+#define long long long
 
 template<typename T> struct node {
     static const T def = 0;
-    array<node*, 2> c{nullptr, nullptr};
+    array<node*, 2> c{};
     int l, r;
     T val = def;
     T comb(T a, T b) { return max(a, b); }

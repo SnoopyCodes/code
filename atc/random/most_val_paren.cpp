@@ -12,23 +12,36 @@ const long INF = 4e18;
 #define emb emplace_back
 #define pob pop_back
 
-template<typename T> using max_heap = std::priority_queue<T>;
-template<typename T> using min_heap = std::priority_queue<T, vector<T>, std::greater<T>>;
 template <typename T> T mvec(T def) { return def; }
 template <typename T, typename...D> auto mvec(size_t f, D...r)
 { return vector<decltype(mvec<T>(r...))>(f, mvec<T>(r...)); }
 template<class T,class... A>auto ta(T f,A...r)->array<T, sizeof...(A)+1>{return {f, r...};}
 
-struct obj {
-    int x, y, z;
-};
+void solve() {
+    int N; cin >> N;
+    long total = 0;
+    vector<int> A(2 * N);
+    std::set<array<int, 2>> ms;
+    for (int i = 0; i < 2 * N; i++) {
+        cin >> A[i];
+        total += A[i];
+        ms.emp(ta(A[i], i));
+    }
+    int cur = 2 * N - 1;
+    vector<bool> done(2 * N);
+    while (!ms.empty()) {
+        while (done[cur]) { cur--; }
+        auto [v, i] = *--ms.end(); ms.erase(--ms.end());
+        if (i == cur) { continue; }
+        total -= v;
+        done[cur] = true;
+        ms.erase(ta(A[cur], cur));
+        done[i] = true;
+    }
+    cout << total << "\n";
+}
+
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
-    int N = 5;
-    min_heap<array<int, 2>> aa;
-    aa.emp(ta(1, 2));
-    vector<array<double, 2>> a;
-    auto vec = mvec<array<int, 2>>(N, N, ta(2, 2));
-    a.emb(ta(2.0, 3.0));
-    cout << a[0][0] << " " << a[0][1] << "\n";
+    int T; cin >> T; while(T--) { solve(); }
 }
