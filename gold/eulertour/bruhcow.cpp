@@ -75,7 +75,6 @@ int main() {
         if (t == 1) {
             int u, c; cin >> u >> c; u--; c--;
             auto it = at[c].lower_bound({in[u], u});
-            //we have to see whether a parent exists here, shoot
             if (it != at[c].begin()) {
                 --it;
                 if (in[u] < out[(*it)[1]]) {

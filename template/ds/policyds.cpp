@@ -11,20 +11,19 @@ using namespace __gnu_pbds;
 
 #define rat order_of_key  //find how many less than element
 #define at find_by_order //iterator to the kth element, [] essentially
-template<typename T> using gset = gp_hash_table<T, null_type>;
-template<typename K, typename V> using gmap = gp_hash_table<K, V>;
-
-
 
 template <class T>
-using iset = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
+using iset = tree<T, null_type, std::less<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
 template<class K, class V>
-using imap = tree<K, V, less<K>, rb_tree_tag, tree_order_statistics_node_update>;
+using imap = tree<K, V, std::less<K>, rb_tree_tag, tree_order_statistics_node_update>;
 
 template<class T>
-using imset = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
+using imset = tree<T, null_type, std::less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
 //use s.erase(s.upper_bound(value)) to remove one occurrence
+
+template<typename T> using gset = gp_hash_table<T, null_type>;
+template<typename K, typename V> using gmap = gp_hash_table<K, V>;
 
 gmap<int, int> table;
 gset<int> hash_set;

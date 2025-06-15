@@ -31,9 +31,10 @@ const int MAXN = 1e8 + 1;
     
 // }
 
-vector<bool> sieve(MAXN);
+vector<bool> sieve;
 
-void normal_sieve(int n) {
+void era(int n) {
+    sieve.resize(n + 1);
     for (int i = 4; i <= n; i += 2) {
         sieve[i] = 2;
     }
@@ -43,7 +44,7 @@ void normal_sieve(int n) {
     // bool jump = 0;
     for (int i = 3; i * i <= n; i += 2) {
         if (sieve[i]) { continue; }
-        for (int j = i * i; j < n; j += i) {
+        for (int j = i * i; j <= n; j += i) {
             sieve[j] = true;
         }
     }
@@ -53,7 +54,7 @@ void normal_sieve(int n) {
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
     auto beg = std::chrono::system_clock::now();
-    normal_sieve(1e8);
+    era(1e8);
     /*
     neither are usable for 1e9, just use normal sieve
     250 ms for 1e8, less annoying to code
