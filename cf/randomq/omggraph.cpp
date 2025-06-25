@@ -58,7 +58,7 @@ void solve() {
     cout << best << "\n";
 }
 
-int main() {
+signed main() {
     cin.tie(0) -> sync_with_stdio(0);
     int T; cin >> T; while(T--) { solve(); }
 }

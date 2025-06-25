@@ -2,26 +2,25 @@
 using namespace std;
 using i64 = long long;
 vector<int> seg;
-int SN;
+int N;
 
 int query(int l, int r) {
     int res = 0;
-    for (l += SN, r += SN; l < r; l /= 2, r /= 2) {
+    for (l += N, r += N; l < r; l /= 2, r /= 2) {
         if (l & 1) { res += seg[l++]; }
         if (r & 1) { res += seg[--r]; }
     }
     return res;
 }
 void alter(int p, long val) {
-    seg[p + SN] = val;
-    for (p = (p + SN) / 2; p > 0; p /= 2) {
+    seg[p + N] = val;
+    for (p = (p + N) / 2; p > 0; p /= 2) {
         seg[p] = min(seg[2 * p], seg[2 * p + 1]);
     }
 }
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
-    int N, Q; cin >> N >> Q;
-    SN = N;
+    int Q; cin >> N >> Q;
     seg.resize(2 * N);
     vector<long> A(N);
     for (int i = 0; i < N; i++) {

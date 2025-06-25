@@ -1,13 +1,11 @@
 //im bored
 #include <bits/stdc++.h>
 
-using namespace std;
 #define long long long
 
 template<int MOD> struct mint {
 	int v;
-	mint():v(0) {}
-	mint(long _v):v(int(_v % MOD)) { v += (v < 0) * MOD; }
+	mint(long v = 0):v(int(v % MOD)) { v += (v < 0) * MOD; }
 	friend mint operator+(mint a, mint b) { return a.v + b.v; }
 	friend mint operator-(mint a, mint b) { return a.v - b.v; }
 	friend mint operator*(mint a, mint b) { return (long)a.v*b.v; }

@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 
 using namespace std;
+#define union zzzz
 struct DSU {
     int N;
     vector<int> root, size;
@@ -10,7 +11,7 @@ struct DSU {
         if (root[u] != u) { root[u] = find(root[u]); }
         return root[u];
     }
-    bool merge(int u, int v) {
+    bool union(int u, int v) {
         int ru = find(u);
         int rv = find(v);
         if (ru == rv) { return false; }
@@ -29,7 +30,7 @@ int main() {
         if (t) {
             cout << (cc.find(u) == cc.find(v)) << "\n";
         }   else {
-            cc.merge(u, v);
+            cc.union(u, v);
         }
     }
 }
