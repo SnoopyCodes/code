@@ -5,7 +5,7 @@ using std::vector, std::min, std::max;
 #define long long long
 
 const int BIG = 1e9 + 1;
-const long INF = 4e18 + 1;
+const long INF = 4e18 + 7e9;
 
 template<size_t z> using ints = std::array<int, z>;
 template<size_t z> using longs = std::array<long, z>;
