@@ -5,16 +5,30 @@
 using namespace std;
 using namespace chrono; // For convenience
 
+static char buf[400 << 20];
+static size_t buf_offset = 0;
+ 
+void* alloc(size_t s) {
+    const size_t align = alignof(std::max_align_t);
+    buf_offset = (buf_offset + align - 1) & ~(align - 1);
+    if (buf_offset + s > sizeof(buf)) throw std::bad_alloc();
+    void* ptr = buf + buf_offset;
+    buf_offset += s;
+    return ptr;
+}
+
+
 struct node {
     int val = 0;
     int l, r;
     node *lc = nullptr, *rc = nullptr;
     node(int lb, int rb) { l = lb, r = rb; }
+
     void extend() {
         if (!lc && l + 1 < r) {
             int m = (l + r) / 2;
-            lc = new node(l, m);
-            rc = new node(m, r);
+            lc = new (alloc(sizeof(node))) node(l, m);
+            rc = new (alloc(sizeof(node))) node(m, r);
         }
     }
     void upd(int p, int v) {
@@ -36,8 +50,8 @@ struct node {
 int main() {
     auto start = high_resolution_clock::now();
     cin.tie(0) -> sync_with_stdio(0);
-    freopen("in.txt", "r", stdin);
-    freopen("out.txt", "w", stdout);
+    // freopen("in.txt", "r", stdin);
+    // freopen("out.txt", "w", stdout);
     int N, Q; cin >> N >> Q;
     vector<int> sals(N);
     node seg(0, 1e9 + 1);
@@ -61,5 +75,5 @@ int main() {
     }
      auto end = high_resolution_clock::now();
     auto duration = duration_cast<milliseconds>(end - start);
-    cout << duration.count() / 1000.0 << "\n";
+    // cout << duration.count() / 1000.0 << "\n";
 }

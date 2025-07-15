@@ -3,6 +3,18 @@
 using namespace std;
 #define long long long
 
+static char buf[400 << 20];
+static size_t buf_offset = 0;
+ 
+void* alloc(size_t s) {
+    const size_t align = alignof(std::max_align_t);
+    buf_offset = (buf_offset + align - 1) & ~(align - 1);
+    if (buf_offset + s > sizeof(buf)) throw std::bad_alloc();
+    void* ptr = buf + buf_offset;
+    buf_offset += s;
+    return ptr;
+}
+
 template<typename T> struct node {
     static const T def = 0;
     array<node*, 2> c{};
@@ -11,8 +23,8 @@ template<typename T> struct node {
     T comb(T a, T b) { return max(a, b); }
     node(int _l, int _r):l(_l),r(_r) {
         if (l + 1 == r) { return; }
-        c[0] = new node(l, (l + r) / 2);
-        c[1] = new node((l + r) / 2, r);
+        c[0] = new (alloc(sizeof(node))) node(l, (l + r) / 2);
+        c[1] = new (alloc(sizeof(node))) node((l + r) / 2, r);
     }
     T qry(int ql, int qr) {
         if (qr <= l || r <= ql) { return def; }
