@@ -1,74 +1,92 @@
 #include <bits/stdc++.h>
 
-using namespace std;
-vector<vector<array<int, 2>>> network;
-vector<vector<array<int, 2>>> single;
-vector<vector<array<int, 3>>> two;
-vector<int> dist;
-vector<int> ans;
-void calc_long(int u, int par, int d) {
+using std::min, std::max;
+
+template<size_t z> using ints = std::array<int, z>;
+template<class T> using list = std::vector<T>;
+
+/*
+you are a given a tree.
+find the maximum sum of longest paths in the resulting graph(s) if any one edge is removed.
+*/
+list<list<ints<2>>> T;
+
+list<int> dist, in, out, par;
+int euler = 0;
+bool is_anc(int u, int v) { return in[u] <= in[v] && out[v] <= out[u]; }
+void dfs_far(int u, int p, int d, bool e) {  //res contains dist from node
+    if (e) { in[u] = euler++; par[u] = p; }
     dist[u] = d;
-    for (auto const& [v, vd] : network[u]) {
-        if (v == par) { continue; }
-        calc_long(v, u, d + vd);
-        //i regret my variable naming
-        if (single[v].size() != 0)
-            single[u].push_back({single[v][0][0], v});
-        else
-            single[u].push_back({ dist[v], v });
-        if (two[v].size() != 0) 
-            two[u].push_back({two[v][0][0], v, -1});
+    for (auto [v, w] : T[u]) {
+        if (v == p) { continue; }
+        dfs_far(v, u, d + w, e);
     }
-    sort(single[u].begin(), single[u].end());
-    reverse(single[u].begin(), single[u].end());
-    if (single[u].size() > 1) {
-        two[u].push_back({single[u][0][0] + single[u][1][0] - 2 * dist[u], single[u][0][1], single[u][1][1]});
-    }
-    sort(two.begin(), two.end());
-    reverse(two.begin(), two.end());
+    if (e) { out[u] = euler; }
 }
-void set_ans(int u, int par, int res, int dir) {
-    ans[u] = res;
-    cout << u << " " << res << " " << dir << "\n";
-    for (auto const&[v, vd] : network[u]) {
-        if (v == par) { continue; }
-        cout << v << "\n";
-        vector<int> er(2);
-        int cnt = 0;
-        for (auto const&[x, y] : single[u]) {
-            if (y == v) { continue; }
-            er[cnt++] = x;
-            if (cnt > 1) { break; }
-        }
-        int besttwo = -1;
-        for (auto const&[x, y, z] : two[u]) {
-            if (v == y || v == z) { continue; }
-            besttwo = x; break;
-        }
-        cout << er[0] << " " << er[1] << "\n";
-        set_ans(v, u, max(res, max(dir + er[0] - dist[u], besttwo)), max(dir, er[0] - dist[u]) + vd);
+
+std::array<list<ints<2>>, 2> from;
+void dfs_dp(int u, int p, bool z) {
+    int p1 = 0, p2 = 0;
+    int maxd = 0;
+    for (auto [v, w] : T[u]) {
+        if (v == p) { continue; }
+        dfs_dp(v, u, z);
+        maxd = max(from[z][v][1], maxd);
+        if (from[z][v][0] + w > p1) { p1 = from[z][v][0] + w; }
+        else if (from[z][v][0] + w > p2) { p2 = from[z][v][0] + w; }
+    }
+    maxd = max(maxd, p1 + p2);
+    from[z][u] = { p1, maxd };
+}
+
+list<bool> on_diameter;
+void dfs_dia(int u, int p, int dv) {
+    if (u == dv) { on_diameter[u] = true; return; }
+    for (auto [v, w] : T[u]) {
+        if (v == p) { continue; }
+        dfs_dia(v, u, dv);
+        on_diameter[u] = on_diameter[u] | on_diameter[v];
     }
 }
-int main() {
-    cin.tie(0) -> sync_with_stdio(0);
-    int N, Q; cin >> N >> Q;
-    network.resize(N), single.resize(N), dist.resize(N), ans.resize(N), two.resize(N);
+
+void solve() {
+    int N, Q; std::cin >> N >> Q;
+    T.clear(); T.resize(N);
+    dist.resize(N); from[0].resize(N); from[1].resize(N);
+    in.resize(N), out.resize(N), par.resize(N), on_diameter.resize(N);
     for (int i = 0; i < N - 1; i++) {
-        int u, v, d; cin >> u >> v >> d; u--; v--;
-        network[u].push_back({v, d});
-        network[v].push_back({u, d});
+        int u, v, d; std::cin >> u >> v >> d; u--; v--;
+        T[u].push_back({ v, d });
+        T[v].push_back({ u, d });
     }
-    calc_long(0, -1, 0);
-    for (int i = 0; i < N; i++) {
-        cout << i << "\n";
-        if (single[i].size())
-        cout << single[i][0][0] << "\n";
-        cout << "\n";
-    }
-    set_ans(0, -1, 0, 0);
+    /*
+    if a node is not part of the diameter, the answer for if we split that and its parent is:
+    diameter of its subtree + overall tree diameter.
+    else it is diameter of subtree from v and dimaeter subtree from u
+    */
+    dfs_far(0, -1, 0, true);
+    int du = std::max_element(dist.begin(), dist.end()) - dist.begin();
+    dfs_far(du, -1, 0, false);
+    int dv = std::max_element(dist.begin(), dist.end()) - dist.begin();
+    int diameter_len = *std::max_element(dist.begin(), dist.end());
+
+    dfs_dp(du, -1, 0), dfs_dp(dv, -1, 1);
+    dfs_dia(du, -1, dv);
     for (int q = 0; q < Q; q++) {
-        int u; cin >> u; u--;
-        cout << ans[u] << "\n";
+        int u; std::cin >> u; u--;
+        if (!on_diameter[u]) {
+            std::cout << diameter_len << "\n";
+        }   else {
+            if (is_anc(u, du)) {
+                std::cout << from[0][par[u]][1] << "\n";
+            }   else {
+                std::cout << from[1][par[u]][1] << "\n";
+            }
+        }
     }
-    
+}
+
+int main() {
+    std::cin.tie(0) -> sync_with_stdio(0);
+    solve();
 }
