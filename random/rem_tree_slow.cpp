@@ -31,7 +31,7 @@ void solve() {
     }
     int ans = 0;
     for (auto [u, v] : E) {
-        ans = max(ans, dfs_dp(u, v, T)[0] + dfs_dp(v, u, T)[0]);
+        ans = max(ans, dfs_dp(u, v, T)[1] + dfs_dp(v, u, T)[1]);
     }
     std::cout << ans << "\n";
 }
