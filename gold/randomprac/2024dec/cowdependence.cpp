@@ -11,13 +11,6 @@ int main() {
         cin >> label[i]; label[i]--;
         appear[label[i]].push_back(i);
     }
-    // for (int i = 0; i < N; i++) {
-    //     for (int x : appear[i]) {
-    //         cout << x << " ";
-    //     }
-    //     cout << "\n";
-    // }
-    // cout << "\n";
     vector<int> groups(N + 1);
     vector<int> diff(N + 2);
     for (int i = 0; i < N; i++) {
@@ -26,9 +19,9 @@ int main() {
         int g = M;
         if (g == 0) { continue; }
         int lst = 0;
-        while (g > 1) {
+        while (g > 1) { //i theorize that changes in g are <= sqrt(n).
             //find the minimum size necessary to elicit a change in number of cc
-            int s = 0, e = N;
+            int s = lst, e = N;
             int res = -1;
             while (s + 1 < e) {
                 int m = (s + e) / 2;

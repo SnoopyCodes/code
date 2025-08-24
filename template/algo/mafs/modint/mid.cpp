@@ -10,8 +10,12 @@ template<int MOD> struct mint {
 	mint operator+(mint x) { return v + x.v; }
 	mint operator-(mint x) { return v - x.v; }
 	mint operator*(mint x) { return (long) v * x.v; }
-	mint operator/(mint x) { return (*this) * pow(a, MOD - 2); }
-	friend mint pow(mint a, long p) { return p ? pow(a * a, p / 2) * (p & 1 ? a : 1) : 1; }
+	mint operator/(mint x) { return (*this) * pow(x, MOD - 2); }
+	mint& operator+=(mint x) { return (*this) = (*this) + x; }
+	mint& operator-=(mint x) { return (*this) = (*this) - x; }
+	mint& operator*=(mint x) { return (*this) = (*this) * x; }
+	mint& operator/=(mint x) { return (*this) = (*this) / x; }
+	friend mint pow(mint x, long p) { return p ? pow(x * x, p / 2) * (p & 1 ? x : 1) : 1; }
 };
 using mi = mint<int(1e9 + 7)>;
 
@@ -26,4 +30,8 @@ void spit_fax(int N) {
 
 mi choose(int n, int r) {
     return fax[n] / fax[r] / fax[n-r];
+}
+
+int main() {
+	
 }
