@@ -122,21 +122,16 @@ struct node {
     }
 };
 
-#define MACRO(_1, _2, _3, NAME, ...) NAME
-#define rep(...) MACRO(__VA_ARGS__, rep3, rep2)(__VA_ARGS__)
-#define rep3(x,s,e) for(auto x=s;x!=e;s<e?x++:x--)
-#define rep2(x,e) rep3(x,(e>0?0:-(e)-1),(e>0?e:-1))
-
-template<typename T> using vec = vector<T>;
+template<class T> using vt = vector<T>;
 
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
     int N, Q; cin >> N >> Q;
-    vec<node*> tree(N);
-    rep(i, N) {
+    vt<node*> tree(N);
+    for (int i = 0; i < N; i++) {
         tree[i] = new node(i);
     }
-    rep(q, Q) {
+    while (Q--) {
 		string a;
 		cin >> a;
 		int b, c;

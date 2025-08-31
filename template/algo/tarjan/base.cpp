@@ -2,13 +2,15 @@
 
 using namespace std;
 
+#define add push_back
+
 vector<vector<int>> G;
 vector<int> in, in_cc;
-deque<int> path;
+vector<int> path;
 int euler = 0, ncc = 0;
 int dfs(int u) {
     int low = in[u] = euler++;
-    path.push_back(u);
+    path.add(u);
     for (int v : G[u]) {
         if (in[v] == -1) { low = min(low, dfs(v)); }
         if (in_cc[v] == -1) { low = min(low, in[v]); }
@@ -28,7 +30,7 @@ int main() {
     G.resize(N), in.resize(N, -1), in_cc.resize(N, -1);
     for (int i = 0; i < M; i++) {
         int u, v; cin >> u >> v; u--; v--;
-        G[u].push_back(v);
+        G[u].add(v);
     }
     for (int i = 0; i < N; i++) {
         if (in[i] == -1) { dfs(i); }

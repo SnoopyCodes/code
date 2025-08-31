@@ -10,10 +10,6 @@ template<int z> using ll = array<long, z>;
 template<class T> using vt = vector<T>;
 template<class T> using vv = vt<vt<T>>;
 
-
-
-// ----------------- First Implementation -----------------
-
 void solve() {
     int N, M; cin >> N >> M;
     //annoying casework
@@ -59,7 +55,7 @@ void solve() {
             }
         }
     }
-    
+
     if (N == 0) { first_fill = 0; }
     else if (M == 0) { first_fill = 1; }
 
@@ -96,104 +92,8 @@ void solve() {
 
 }
 
-
-// ----------------- Second Implementation -----------------
-//brute force
-
-void solve2() {
-    int N, M; cin >> N >> M;
-    
-    int ALL = N + M + 1;
-    vt<ii<2>> j_bbers(ALL);
-    for (int i = 0; i < ALL; i++) {
-        cin >> j_bbers[i][0];
-    }
-    for (int i = 0; i < ALL; i++) {
-        cin >> j_bbers[i][1];
-    }
-
-    for (int j = 0; j < ALL; j++) {
-        long initial = 0;
-        vt<bool> type(ALL);
-        ii<2> sz { N, M };
-        ii<2> ct { 0, 0 };
-
-        for (int i = 0; i < ALL; i++) {
-            type[i] = j_bbers[i][0] <= j_bbers[i][1];
-            if (i != j) {
-                if (ct[type[i]] < sz[type[i]]) {
-                    ct[type[i]]++;
-                    initial += j_bbers[i][type[i]];
-                }   else {
-                    ct[type[i] ^ 1]++;
-                    initial += j_bbers[i][type[i] ^ 1];
-                }
-            }
-        }
-        cout << initial << " \n"[j == N + M];
-    }
-    
-}
- 
-// ----------------- Test Case Generator -----------------
-string generateTestCase() {
-    //write to oss
-    //MODIFY
-    ostringstream oss;
-    // cout << "GENERATING" << endl;
-    int N = rand() % 2, M = rand() % 3;
-    oss << N << " " << M << endl;
-    for (int i = 0; i < N + M + 1; i++) {
-        oss << rand() % 4 + 1 << " \n"[i == N + M];
-    }
-    for (int i = 0; i < N + M + 1; i++) {
-        oss << rand() % 4 + 1 << " \n"[i == N + M];
-    }
-    return oss.str();
-}
- 
-// ----------------- Helpers to Run a Solve Function -----------------
-string runSolve(function<void()> solveFunc, const string &testInput) {
-    // Save the original stream buffers.
-    streambuf* origCin  = cin.rdbuf();
-    streambuf* origCout = cout.rdbuf();
- 
-    // Redirect cin and cout.
-    istringstream iss(testInput);
-    ostringstream oss;
-    cin.rdbuf(iss.rdbuf());
-    cout.rdbuf(oss.rdbuf());
- 
-    // Run the provided solve function.
-    solveFunc();
- 
-    // Restore original stream buffers.
-    cin.rdbuf(origCin);
-    cout.rdbuf(origCout);
- 
-    return oss.str();
-}
- 
-// ----------------- Main Stress-Testing Loop -----------------
 int main() {
-    srand(time(NULL));
-    //MODIFY
-    int stressTests = 1000;
-    for (int i = 1; i <= stressTests; i++) {
-        string test = generateTestCase();
-        // cout << test << endl;
-        string out2 = runSolve(solve2, test);
-        // cout << ".." << endl;
-        string out1 = runSolve(solve, test);
-        // cout << "." << endl;
-        if (out1 != out2) {
-            cout << "Mismatch found on test case #" << i << ":\n";
-            cout << "Test case input:\n" << test << "\n";
-            cout << "Output from solve:\n" << out1 << "\n";
-            cout << "Output should be:\n" << out2 << "\n";
-            return 0;
-        }
-    }
-    cout << "All stress tests passed.\n";
-    return 0;
+    cin.tie(0) -> sync_with_stdio(0);
+    int T; cin >> T;
+    for (int tt = 1; tt <= T; tt++) { solve(); }
 }

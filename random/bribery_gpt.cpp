@@ -11,7 +11,6 @@ int main() {
     cin.tie(nullptr);
 
     int T; 
-    if (!(cin >> T)) return 0;
     while (T--) {
         int N; 
         cin >> N;
@@ -26,17 +25,6 @@ int main() {
             ch[p].push_back(i);
         }
 
-        // iterative postorder
-        vector<int> order; order.reserve(N);
-        {
-            vector<int> st = {1};
-            while (!st.empty()){
-                int u = st.back(); st.pop_back();
-                order.push_back(u);
-                for (int v: ch[u]) st.push_back(v);
-            }
-        }
-
         // dp[u][c][M], M=1..7; initialize to INF
         // store as vector of arrays for cache-friendliness
         struct NodeDP { int a[3][8]; };
@@ -46,8 +34,7 @@ int main() {
                 for (int m=0;m<8;++m) dp[u].a[c][m] = INF;
 
         // process bottom-up
-        for (int i=(int)order.size()-1; i>=0; --i){
-            int u = order[i];
+        for (int u= N - 1; u>=0; --u){
             int orig = cid(S[u-1]);
 
             for (int c=0; c<3; ++c){
@@ -98,8 +85,6 @@ int main() {
                     dp[u].a[c][M] = min(dp[u].a[c][M], cur[X]);
                 }
             }
-
-            // Leaf shortcut (optional clarity): already handled by the generic loop.
         }
 
         int ans = INF;

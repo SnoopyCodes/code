@@ -4,6 +4,8 @@ using namespace std;
 
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
+    freopen("in.txt", "r", stdin);
+    auto beg = std::chrono::system_clock::now();
     int N; cin >> N;
     vector<int> label(N);
     vector<vector<int>> appear(N);
@@ -19,8 +21,10 @@ int main() {
         int g = M;
         if (g == 0) { continue; }
         int lst = 0;
-        while (g > 1) { //i theorize that changes in g are <= sqrt(n).
+        int ct = 0;
+        while (g > 1) { //changes in g are <= sqrt(M) * 2 and idk why
             //find the minimum size necessary to elicit a change in number of cc
+            ct++;
             int s = lst, e = N;
             int res = -1;
             while (s + 1 < e) {
@@ -43,6 +47,7 @@ int main() {
             g = res;
             lst = e;
         }
+        cout << ct << "\n";
         diff[lst] += 1;
         diff[N + 1] -= 1;
     }
@@ -51,7 +56,11 @@ int main() {
         cur += diff[i];
         groups[i] = cur;
     }
-    for (int i = 1; i <= N; i++) {
-        cout << groups[i] << "\n";
-    }
+    // for (int i = 1; i <= N; i++) {
+    //     cout << groups[i] << "\n";
+    // }
+    auto end = std::chrono::system_clock::now();
+    std::chrono::duration<double> elapsed = end - beg;
+    cout << elapsed.count() << "\n";
 }
+//i have no idea why this works someone please help.

@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int N = 1e5 + 5;
+const int N = 3e5 + 5;
 vector<int> lab_idx[N];
 
 // use two pointers to manually calculate number of groups
@@ -31,6 +31,9 @@ int get_groups_big(int label, int x) {
 
 int main() {
 	cin.tie(0)->sync_with_stdio(0);
+	freopen("in.txt", "r", stdin);
+	    auto beg = std::chrono::system_clock::now();
+
 	cin >> n;
 	nxt.resize(n + 1);
 	for (int i = 0; i < n; i++) {
@@ -73,7 +76,11 @@ int main() {
 		}
 	}
 	for (int i = 2; i <= n; i++) { small_ans[i] += small_ans[i - 1]; }
-	for (int i = 1; i <= n; i++) {
-		cout << small_ans[i] + large_ans[i] << "\n";
-	}
+	// for (int i = 1; i <= n; i++) {
+	// 	cout << small_ans[i] + large_ans[i] << "\n";
+	// }
+	    auto end = std::chrono::system_clock::now();
+    std::chrono::duration<double> elapsed = end - beg;
+    cout << elapsed.count() << "\n";
+
 }

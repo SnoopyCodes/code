@@ -34,8 +34,7 @@ public class LOL {
         });
         set.add(0);
         while (!set.isEmpty()) {
-            int u = set.first();
-            set.remove(set.first());
+            int u = set.pollFirst();
             for (Pair<Integer, Integer> to : cities[u]) {
                 int v = to.a, d = to.b;
                 if (dists[u] + d < dists[v]) {
