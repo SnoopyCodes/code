@@ -65,8 +65,8 @@ void solve() {
     dfs_far(0, -1, 0, T, dist);
     int du = std::max_element(dist.begin(), dist.end()) - dist.begin();
     dfs_far(du, -1, 0, T, dist);
-    int dv = std::max_element(dist.begin(), dist.end()) - dist.begin();
-    int diameter_len = *std::max_element(dist.begin(), dist.end());
+    int dv = std::ranges::max_element(dist) - std::begin(dist);
+    int diameter_len = *std::ranges::max_element(dist);
 
     list<ints<2>> from_u(N), from_v(N);
     dfs_dp(du, -1, T, from_u), dfs_dp(dv, -1, T, from_v);

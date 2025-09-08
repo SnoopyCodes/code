@@ -36,8 +36,8 @@ int bs(int t, int c) {  //largest value <= start[t]
 
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
-    freopen("milkvisits.in", "r", stdin);
-    freopen("milkvisits.out", "w", stdout);
+    // freopen("milkvisits.in", "r", stdin);
+    // freopen("milkvisits.out", "w", stdout);
     int N, M; cin >> N >> M;
     roads.resize(N);
     cow.resize(N);

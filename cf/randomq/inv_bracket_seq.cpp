@@ -29,22 +29,15 @@ void solve() {
         sum += s[i];
         sf[i] = sum;
     }
-    // for each index i, find the number of prefix that match its suffix
-    long ans = 0;
-    vt<int> cnt_pf(N + 1);
-    for (int i = 0; i < N; i++) {
-        cout << cnt_pf[i] << EN(i, cnt_pf);
-    }
-    for (int i = 0; i < N; i++) {
-        cout << i;
-        if (s[i] <= 0) {
-            ans += cnt_pf[-s[i]];
-            cout << " " << cnt_pf[-s[i]];
-        }
-        cout << "\n";
-        cnt_pf[pf[i]]++;
-    }
-    cout << ans << "\n";
+    //suppose we flip from l to r
+    //sum to l - 1 must be >= sum of 
+    //maximum prefix sum in [l, r]
+    //so now it is easy to solve in N^2 log
+    //we cannot swap across any zero points? incorrect.
+    //we can only swap with range sum 0
+    //and yea it has that condition of pref[0...l - 1] >= maxprefsum[l, r]
+    //pref[0,r] = pref[0...l-1]
+    //
 }
 
 int main() {

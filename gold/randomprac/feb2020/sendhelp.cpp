@@ -26,16 +26,17 @@ int main() {
 		interval[r]--;
 	}
 	//find the contribution of each one as a left bound
-	//
-	int active = N;
+	//set some segments to be active
+	//all l, r are distinct
+	//simply count a single segment's contributions
+	//as a left bound
+	//so how many cover this one
+	int can = N;
 	for (int i = 2 * N - 1; i > -1; i--) {
-		if (interval[i] == -1) {
-			//end of a segment
-			active--;
-		}	else {
-			ans = (ans + exp(2, active)) % MOD;
-			active++;
+		if (interval[i] > 0) {
+			(ans = (ans + exp(2, can))) %= MOD;
 		}
+		can += interval[i];
 	}
 	cout << ans << "\n";
 	

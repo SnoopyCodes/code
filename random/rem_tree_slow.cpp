@@ -22,7 +22,7 @@ ints<2> dfs_dp(int u, int p, list<list<int>> &T) {
 void solve() {
     int N; std::cin >> N;
     list<list<int>> T(N);
-    list<ints<2>> E(N);
+    list<ints<2>> E(N - 1);
     for (int i = 0; i < N - 1; i++) {
         int u, v; std::cin >> u >> v; u--; v--;
         T[u].push_back(v);

@@ -25,7 +25,7 @@ struct node {
         swap(c[0], c[1]);
         for (auto &x : c) if (x) { x->flip ^= 1; }
     }
-    inline bool is_root() { return !p || p->c[0] != this && p->c[1] != this; } //is splay tree root
+    inline bool is_root() { return p ? p->c[0] != this && p->c[1] != this : 1; } //is splay tree root
     inline int dir() { return is_root() ? -1 : p->c[1] == this; }
     friend void rel(node *u, node *v, int d) { //set the relationship b/w the two
         if (d >= 0) { u->c[d] = v; }
