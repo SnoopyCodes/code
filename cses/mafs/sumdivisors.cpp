@@ -1,18 +1,18 @@
 #include <bits/stdc++.h>
-#define ll long long
+
 using namespace std;
-const ll MOD = 1e9 + 7;
+
+#define long long long
+#define add push_back
+const int  BIG = 1e9  +    7;
+const long INF = 4e18 + 1000;
+template<int z> using ii = array<int , z>;
+template<int z> using ll = array<long, z>;
+template<class T> using vt = vector<T>;
+template<class T> using mt = vt<vt<T>>;
+
 int main() {
-    ios_base::sync_with_stdio(false); cin.tie(nullptr);
-    ll N; cin >> N;
-    N = 4e9;
-    ll total = 0;
-    for (ll i = 1; i * i < N + 1; i++) {
-        ll lim = N / i;
-        total += ((((lim + i + 1)) * ((lim - i) % MOD)) / 2) % MOD;
-        total %= MOD;
-        total += (i * ((lim-i + 1))) % MOD;
-        total %= MOD;
-    }
-    cout << total << "\n";
+    cin.tie(0) -> sync_with_stdio(0);
+    long N; cin >> N;
+    
 }

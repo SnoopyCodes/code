@@ -36,7 +36,6 @@ int main() {
     }
     dfs(0, -lay[0]);
     arrive[0] = 0;
-    // cout << "\n";
     for (int i = 0; i < N; i++) {
         if (arrive[i] == 1e9 + 1) { cout << -1 << "\n"; }
         else { cout << arrive[i] << "\n"; }

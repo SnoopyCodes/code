@@ -1,11 +1,17 @@
 #include <bits/stdc++.h>
 
 using namespace std;
+//If you just brute force w/ binary search it passes, no grouping needed as in edi
+//pretty stupid problem, but funny
 
+//solve independently for each label.
+//while the groups (g) > 1, binary search on min size to change # cc
+//use difference arrays to construct final answer
+
+//# changes in g are bounded by 2 * sqrt(M)
+//counting changes w/ all 1's shows this.
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
-    freopen("in.txt", "r", stdin);
-    auto beg = std::chrono::system_clock::now();
     int N; cin >> N;
     vector<int> label(N);
     vector<vector<int>> appear(N);
@@ -21,10 +27,7 @@ int main() {
         int g = M;
         if (g == 0) { continue; }
         int lst = 0;
-        int ct = 0;
-        while (g > 1) { //changes in g are <= sqrt(M) * 2 and idk why
-            //find the minimum size necessary to elicit a change in number of cc
-            ct++;
+        while (g > 1) {
             int s = lst, e = N;
             int res = -1;
             while (s + 1 < e) {
@@ -47,20 +50,12 @@ int main() {
             g = res;
             lst = e;
         }
-        cout << ct << "\n";
         diff[lst] += 1;
         diff[N + 1] -= 1;
     }
-    int cur = 0;
-    for (int i = 0; i <= N; i++) {
+    int cur = diff[0];
+    for (int i = 1; i <= N; i++) {
         cur += diff[i];
-        groups[i] = cur;
+        cout << cur << "\n";
     }
-    // for (int i = 1; i <= N; i++) {
-    //     cout << groups[i] << "\n";
-    // }
-    auto end = std::chrono::system_clock::now();
-    std::chrono::duration<double> elapsed = end - beg;
-    cout << elapsed.count() << "\n";
 }
-//i have no idea why this works someone please help.

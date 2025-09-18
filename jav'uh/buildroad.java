@@ -9,10 +9,6 @@ static class beep extends PrintWriter {
         solve();
     }
     boolean B(int x) { return x != 0; }
-    class node {
-        li<node> adj;
-        node() { adj = new li(); }
-    }
     void solve() {
         int N = sc.nextInt();
         int M = sc.nextInt();
