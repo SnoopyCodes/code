@@ -1,5 +1,10 @@
 import java.util.*;
 import java.io.*;
+import static java.lang.Math.*;
+import static java.lang.Character.*;
+// import static java.lang.Integer.*;
+// import static java.lang.Double.*;
+// import static java.lang.Long.*;
 
 public class wang {
 static class beep extends PrintWriter {
@@ -28,7 +33,6 @@ static class beep extends PrintWriter {
         int[] in = new int[N]; Arrays.fill(in, -1);
         int[] in_cc = new int[N]; Arrays.fill(in_cc, -1);
         var ccs = new li<li<Integer>>();
-
         var lambda = new Object() {
             int euler = 0, pt = 0, cc = 0;
             int[] path = new int[N];
@@ -36,7 +40,7 @@ static class beep extends PrintWriter {
                 int low = in[u] = euler++;
                 path[pt++] = u;
                 for (int v : G[u]) {
-                    if (in[v] == -1) { low = Math.min(low, dfs(v)); }
+                    if (in[v] == -1) { low = min(low, dfs(v)); }
                     if (in_cc[v] == -1) { low = Math.min(low, in[v]); }
                 }
                 if (low != in[u]) { return low; }
@@ -44,7 +48,7 @@ static class beep extends PrintWriter {
                 while (in_cc[u] == -1) {
                     int v = path[--pt];
                     in_cc[v] = cc;
-                    ccs.get(cc).add(v);
+                    ccs.g(cc).add(v);
                 }
                 cc++;
                 return low;
@@ -53,26 +57,27 @@ static class beep extends PrintWriter {
         for (int i = 0; i < N; i++) {
             if (in[i] == -1) { lambda.dfs(i); }
         }
-        for (int i = 0; i < ccs.size(); i++) {
-            Collections.sort(ccs.get(i), (a, b) -> {
+        for (var cc : ccs) {
+            Collections.sort(cc, (a, b) -> {
                 return names[a].compareTo(names[b]);
             });
         }
         Collections.sort(ccs, (a, b) -> {
-            return a.size() == b.size() ? names[a.get(0)].compareTo(names[b.get(0)])
+            return a.size() == b.size() ? names[a.g(0)].compareTo(names[b.g(0)])
                 : b.size() - a.size();
         });
         for (int i = 0; i < ccs.size(); i++) {
+            var cc = ccs.g(i);
             print("{");
-            for (int j = 0; j < ccs.get(i).size(); j++) {
-                print(names[ccs.get(i).get(j)] + (j == ccs.get(i).size() - 1 ? "}" : ", "));
+            for (int j = 0; j < cc.size(); j++) {
+                print(names[cc.g(j)] + (j == cc.size() - 1 ? "}" : ", "));
             }
             print(i == ccs.size() - 1 ? "\n" : ", ");
         }
     }
 
 }
-static class li<E> extends ArrayList<E> {}
+static class li<E> extends ArrayList<E> { E g(int i) { return get(i); } }
 
     public static void main(String[] args) throws IOException { new beep().close(); }
 }

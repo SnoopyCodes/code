@@ -8,11 +8,7 @@ static class beep extends PrintWriter {
         super(System.out);
         solve();
     }
-    int x;
     void solve() {
-        int T = 10;
-        x = 0;
-        while (x ++< T) { println(x); }
         int N = sc.nextInt();
         int M = sc.nextInt();
         boolean[] set = new boolean[N + 1];

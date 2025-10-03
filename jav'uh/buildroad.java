@@ -20,7 +20,7 @@ static class beep extends PrintWriter {
             G[u].add(v);
             G[v].add(u);
         }
-        var add = new li<int[]>();
+        var add = new li<Integer>();
         var visited = new int[N];
         var dfs = new Object() {
             void go(int u) {
@@ -36,16 +36,16 @@ static class beep extends PrintWriter {
             if (!B(visited[i])) {
                 dfs.go(i);
                 if (B(i)) {
-                    add.add(new int[]{ 1, i + 1 });
+                    add.add(i + 1);
                 }
             }
         }
         println(add.size());
-        for (int[] p : add) {
-            println(p[0] + " " + p[1]);
+        for (int p : add) {
+            println(1 + " " + p);
         }
     }
-    class li<E> extends ArrayList<E> {}
+    class li<E> extends ArrayList<E> { E g(int i) { return get(i); } }
 }
 
     public static void main(String[] args) { new beep().close(); }

@@ -10,7 +10,9 @@ template<int z> using ii = array<int , z>;
 template<int z> using ll = array<long, z>;
 template<class T> using vt = vector<T>;
 template<class T> using mt = vt<vt<T>>;
- 
+//is dir() unclean?
+//splitting into !is_root() improves perf by .02 s
+
 struct node {
     int val, size = 1;
     array<node*, 2> c{};
@@ -25,26 +27,23 @@ struct node {
         swap(c[0], c[1]);
         for (auto &x : c) if (x) { x->flip ^= 1; }
     }
-    inline bool is_root() { return p ? p->c[0] != this && p->c[1] != this : 1; } //is splay tree root
-    inline int dir() { return is_root() ? -1 : p->c[1] == this; }
+    inline int dir() { return !p || (p->c[0] != this && p->c[1] != this) ? -1 : p->c[1] == this; }
     friend void rel(node *u, node *v, int d) { //set the relationship b/w the two
-        if (d >= 0) { u->c[d] = v; }
+        if (~d) { u->c[d] = v; }
         if (v) { v->p = u; }
     }
     void rot() { //needs p
-        p->push(); push();
-        int x = dir();
+        int d = dir();
         node *o = p;
         rel(o->p, this, o->dir());
-        rel(o, c[x ^ 1], x);
-        rel(this, o, x ^ 1);
+        rel(o, c[d ^ 1], d);
+        rel(this, o, d ^ 1);
     }
-    void splay() {
-        while (!is_root()) {
-            if (!p->is_root()) { (dir() == p->dir() ? p : this)->rot(); }
-            rot();
+    void par_push() { if (~dir()) p->par_push(); push(); }
+    void splay() { //cursed rot() location
+        for (par_push(); ~dir(); rot()) {
+            if (~p->dir()) { (dir() == p->dir() ? p : this)->rot(); }
         }
-        push();
     }
  
     void access() {

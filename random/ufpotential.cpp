@@ -1,36 +1,18 @@
 #include <bits/stdc++.h>
-
+#define long long long
 using namespace std;
 
-struct mi {
-    static const int MOD = 998244353;
-    int v;
-    
-    mi() : v(0) {}
-    mi(long long _v) : v(int(_v % MOD)) {
-        if (v < 0) v += MOD;
-    }
-
-    mi& operator+=(mi x) {
-        v += x.v;
-        if (v >= MOD) v -= MOD;
-        return *this;
-    }
-    mi& operator-=(mi x) {
-        v -= x.v;
-        if (v < 0) v += MOD;
-        return *this;
-    }
-    mi& operator*=(mi x) {
-        v = int((long long)v * x.v % MOD);
-        return *this;
-    }
-    friend mi operator+(mi a, mi b) { return a += b; }
-    friend mi operator-(mi a, mi b) { return a -= b; }
-    friend mi operator*(mi a, mi b) { return a *= b; }
-    friend bool operator==(mi a, mi b) { return a.v == b.v; }
-    friend bool operator!=(mi a, mi b) { return a.v != b.v; }
+template<int MOD> struct mint {
+	#define fmo(o, z) friend mint operator o (const mint &a, const mint &b) { return z; }
+	#define mo(o,p) mint& operator o (const mint &x) { return (*this) = (*this) p x; }
+	int v; mint(long _v = 0):v(_v % MOD) { v += (v < 0) * MOD; }
+	fmo(+, a.v + b.v) fmo(-, a.v - b.v) fmo(*, a.v * (long) b.v) fmo(/, a * pow(b, MOD - 2))
+	mo(+=, +) mo(-=, -) mo(*=, *) mo(/=, /)
+	friend mint pow(mint x, long p) { return p ? pow(x * x, p / 2) * (p & 1 ? x : 1) : 1; }
+	#undef fmo
+	#undef mo
 };
+using mi = mint<998244353>;
 
 vector<int> dsu;
 vector<int> sizes;
@@ -47,10 +29,10 @@ int find(int u) {
 bool merge(int u, int v, int x) {
     int ru = find(u);
     int rv = find(v);
-    if (ru == rv) { return diff[u] - diff[v] == x; }
+    if (ru == rv) { return (diff[u] - diff[v]).v == x; }
     if (sizes[ru] < sizes[rv]) { swap(ru, rv); x = -x; swap(u, v); }
     sizes[ru] += sizes[rv];
-    diff[rv] = -x + diff[u] - diff[v];
+    diff[rv] = mi(-x) + diff[u] - diff[v];
     dsu[rv] = ru;
     return true;
 }

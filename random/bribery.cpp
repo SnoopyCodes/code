@@ -61,9 +61,6 @@ void solve() {
         else if (c == 'J') { t[i] = 1; }
         else { t[i] = 2; }
     }
-    sort(t.begin(), t.end(), [](int a, int b) {
-        
-    });
     for (int i = 1; i < N; i++) {
         int p; cin >> p; p--;
         T[p].add(i);

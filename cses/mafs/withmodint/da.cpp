@@ -9,47 +9,29 @@ using namespace std;
 
 template<typename T> using vec = vector<T>;
 template<typename T, int a> using arr = array<T, a>;
-using i64 = long long;
+#define long long long
 
 template<int MOD> struct mint {
-	int v;
-	mint():v(0) {}
-	mint(i64 _v):v(int(_v % MOD)) { v += (v < 0) * MOD; }
-   
-	friend mint operator+(mint a, const mint& b) { return mint(a.v + b.v); }
-	friend mint operator-(mint a, const mint& b) { return mint(a.v - b.v); }
-	friend mint operator*(mint a, const mint& b) { return mint((i64)a.v*b.v); }
-	friend mint operator/(mint a, const mint& b) { return a * inv(b); }
-	friend mint pow(mint a, i64 p) { return p ? pow(a * a, p / 2) * (p & 1 ? a : 1) : 1; }
-	friend mint inv(const mint& a) { return pow(a, MOD-2); }
-		
-	mint& operator+=(const mint& o) { return (*this) = (*this) + o; }
-	mint& operator-=(const mint& o) { return (*this) = (*this) - o; }
-	mint& operator*=(const mint& o) { return (*this) = (*this) * o; }
-	mint& operator/=(const mint& o) { return (*this) = (*this) / o; }
-
-	mint operator-() const { return mint(-v); }
-	mint& operator++() { return *this += 1; }
-	mint& operator--() { return *this -= 1; }
-
-    friend ostream& operator<<(ostream& os, const mint& a){ os << a.v; return os; }
-    friend istream& operator>>(istream& is, mint& a) { i64 x; is >> x; a = mint(x); return is; }
-
-    auto operator<=>(const mint&) const = default;
-
-    explicit operator int() const { return v; } // explicit -> don't silently convert to int
+	#define fmo(o, z) friend mint operator o (const mint &a, const mint &b) { return z; }
+	#define mo(o,p) mint& operator o (const mint &x) { return (*this) = (*this) p x; }
+	int v; mint(long _v = 0):v(_v % MOD) { v += (v < 0) * MOD; }
+	fmo(+, a.v + b.v) fmo(-, a.v - b.v) fmo(*, a.v * (long) b.v) fmo(/, a * pow(b, MOD - 2))
+	mo(+=, +) mo(-=, -) mo(*=, *) mo(/=, /)
+	friend mint pow(mint x, long p) { return p ? pow(x * x, p / 2) * (p & 1 ? x : 1) : 1; }
+	#undef fmo
+	#undef mo
 };
 using mi = mint<int(1e9 + 7)>;
 using me = mint<int(1e9 + 6)>;
 
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
-    i64 N; cin >> N;
+    long N; cin >> N;
 	mi ndiv = 1, sdiv = 1, pdiv = 1;
 	me prev_nd = 1;
 	rep(i, N) {
-		mi x; cin >> x;
-		i64 p; cin >> p;
+		mi x; cin >> x.v;
+		long p; cin >> p;
 		sdiv *= (pow(x, p + 1) - 1) / (x - 1);
 		//product of divisors? each factor is multiplied
 		//by x^arithmetic sum of p?

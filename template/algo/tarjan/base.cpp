@@ -12,15 +12,15 @@ int dfs(int u) {
     int low = in[u] = euler++;
     path.add(u);
     for (int v : G[u]) {
-        if (in[v] == -1) { low = min(low, dfs(v)); }
-        if (in_cc[v] == -1) { low = min(low, in[v]); }
+        if (~in_cc[v]) { continue; }
+        low = min(low, ~in[v] ? in[v] : dfs(v));
     }
-    if (in[u] != low) { return low; }
-    while (in_cc[u] == -1) {
-        int v = path.back(); path.pop_back();
-        in_cc[v] = ncc;
+    if (in[u] == low) {
+        while (in_cc[u] == -1) {
+            in_cc[path.back()] = ncc; path.pop_back();
+        }
+        ncc++;
     }
-    ncc++;
     return low;
 }
 

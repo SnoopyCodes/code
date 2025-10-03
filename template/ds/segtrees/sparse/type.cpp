@@ -7,7 +7,7 @@ struct node {
     int l, r;
     int v;
     array<node*, 2> c{};
-    node(int _l, int _r):l(_l),r(_r) {
+    node(int l, int r):l(l),r(r) {
         if (l + 1 == r) { return; }
         c[0] = new node(l, (l + r) / 2);
         c[1] = new node((l + r) / 2, r);

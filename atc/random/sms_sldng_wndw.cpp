@@ -39,7 +39,6 @@ int main() {
         ans[i] += V * (a + b - 1 - i)
     */
     vt<long> sum(N + 3), mult(N + 3);
-    set<int> set;
     for (int i = 0; i < N; i++) {
         int l = i - cl[i];
         int r = cr[i] - i;

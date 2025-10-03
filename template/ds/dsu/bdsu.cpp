@@ -1,39 +1,31 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-
 vector<int> dsu;
-
+//O(n lg n / lg lg n)
+//~O(n * 4.29) ~ O(n) (trust)
+void init(int N) { dsu.resize(N); while (N--) dsu[N] = N; }
 int find(int u) {
     if (dsu[u] != u) { dsu[u] = find(dsu[u]); }
     return dsu[u];
 }
-void merge(int u, int v) {
+void unite(int u, int v) {
     u = find(u), v = find(v);
     if (u == v) { return; }
-    if (rand()) { dsu[u] = v; }
-    else { dsu[v] = u; }
+    if (rand() & 1) { swap(u, v); }
+    dsu[v] = u;
 }
-//to initialize:
-//dsu.resize(N);
-//for (int i = 0; i < N; i++) {
-//  dsu[i] = i;
-//}
-//doesnt track component sizes or anything, just merge stuff
 
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
     int N, Q; cin >> N >> Q;
-    dsu.resize(N);
-    for (int i = 0; i < N; i++) {
-        dsu[i] = i;
-    }
+    init(N);
     for (int i = 0; i < Q; i++) {
         int t, u, v; cin >> t >> u >> v;
         if (t) {
             cout << (find(u) == find(v)) << "\n";
         }   else {
-            merge(u, v);
+            unite(u, v);
         }
     }
 }

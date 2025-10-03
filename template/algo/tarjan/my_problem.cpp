@@ -21,4 +21,5 @@ transform it into a block cut tree
 for any non articulation points
 the answer is 0
 for articulation points the answer is
+subtree size of all nodes rooted from there
 */

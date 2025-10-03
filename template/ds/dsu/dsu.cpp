@@ -1,23 +1,23 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-#define union zzzz
 struct DSU {
     int N;
-    vector<int> root, size;
-    DSU(int _N):N(_N), root(N), size(N, 1)
-    { iota(root.begin(), root.end(), 0); }
+    vector<int> par, size;
+    DSU(int _N):N(_N), par(N), size(N, 1)
+    { iota(par.begin(), par.end(), 0); }
     int find(int u) {
-        if (root[u] != u) { root[u] = find(root[u]); }
-        return root[u];
+        if (par[u] != u) { par[u] = find(par[u]); }
+        return par[u];
     }
-    bool union(int u, int v) {
+    bool unite(int u, int v) {
         int ru = find(u);
         int rv = find(v);
         if (ru == rv) { return false; }
         if (size[ru] < size[rv]) { swap(ru, rv); }
         size[ru] += size[rv];
-        root[rv] = ru;
+        par[rv] = ru;
+        N--;
         return true;
     }
 };
@@ -30,7 +30,7 @@ int main() {
         if (t) {
             cout << (cc.find(u) == cc.find(v)) << "\n";
         }   else {
-            cc.union(u, v);
+            cc.unite(u, v);
         }
     }
 }

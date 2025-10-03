@@ -29,7 +29,7 @@ static class beep extends PrintWriter {
             cur += D[i];
             ans = Math.max(ans, cur);
         }
-        println(ans);
+        System.out.println(ans);
     }
 }
 
