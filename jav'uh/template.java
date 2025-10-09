@@ -21,8 +21,7 @@ static class beep extends PrintWriter {
         public String next() {
             try { while (st == null || !st.hasMoreTokens()) st = new StringTokenizer(r.readLine());
                 return st.nextToken();
-            } catch (Exception e) { }
-            return null;
+            } catch (Exception e) { return null; }
         }
         int nextInt() { return Integer.parseInt(next()); }
         long nextLong() { return Long.parseLong(next()); }

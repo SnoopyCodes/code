@@ -21,13 +21,11 @@ int dfs(int x, int lim) {
     }
     return count;
 }
-#define n m
-#define m n
 int main() {
     //the indexes that we need to visit are the indexes of our unsorted ones and the indexes of the ones out of place
     ios_base::sync_with_stdio(false); cin.tie(nullptr);
-    // freopen("wormsort.in", "r", stdin);
-    // freopen("wormsort.out", "w", stdout);
+    freopen("wormsort.in", "r", stdin);
+    freopen("wormsort.out", "w", stdout);
     int N, M;
     cin >> N >> M;
     vector<int> widths(M);

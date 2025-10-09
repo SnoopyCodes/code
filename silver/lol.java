@@ -51,8 +51,8 @@ public class lol {
             }
         }
         //i think the maximum is literally 3
-        System.out.println(3);
-        for (int i = 0; i < 3; i++) {
+        System.out.println(10);
+        for (int i = 0; i < 10; i++) {
             int res = 0;
             for (int b = 0; b < 32; b++) {
                 if (multiply[b] > 0) {
@@ -60,7 +60,7 @@ public class lol {
                     res += 1 << b;
                 }
             }
-            System.out.print(res + (i < 3 ? " " : "\n"));
+            System.out.print(res + (i < 9 ? " " : "\n"));
         }
     }
     public static void main(String[] args) {

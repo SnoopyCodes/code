@@ -31,6 +31,7 @@ int main() {
         edges[i][1]--; edges[i][2]--;
         edges[i][3] = i;
     }
+    array<int, 2> test{};
     sort(edges.begin(), edges.end());
     reverse(edges.begin(), edges.end());
     vector<dynaUF> children(K);

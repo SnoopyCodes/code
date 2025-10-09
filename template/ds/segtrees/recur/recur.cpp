@@ -6,7 +6,7 @@ template<typename T> struct SegTree {
     int N, ql, qr;
     vector<T> data;
     T def = 1e9, val;
-    SegTree(int _N):N(_N),data(4 * _N, def) {}
+    SegTree(int N):N(N),data(4 * N, def) {}
     T comb(T a, T b) { return min(a, b); }
     #define m ((l + r) / 2)
     T qry(int n, int l, int r) {

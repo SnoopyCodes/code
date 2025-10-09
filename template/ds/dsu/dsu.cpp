@@ -3,20 +3,19 @@
 using namespace std;
 struct DSU {
     int N;
-    vector<int> par, size;
-    DSU(int _N):N(_N), par(N), size(N, 1)
-    { iota(par.begin(), par.end(), 0); }
+    vector<int> p, s;
+    DSU(int n):N(n), p(N), s(N, 1) { while (n--) p[n] = n; }
     int find(int u) {
-        if (par[u] != u) { par[u] = find(par[u]); }
-        return par[u];
+        if (p[u] != u) { p[u] = find(p[u]); }
+        return p[u];
     }
     bool unite(int u, int v) {
         int ru = find(u);
         int rv = find(v);
         if (ru == rv) { return false; }
-        if (size[ru] < size[rv]) { swap(ru, rv); }
-        size[ru] += size[rv];
-        par[rv] = ru;
+        if (s[ru] < s[rv]) { swap(ru, rv); }
+        s[ru] += s[rv];
+        p[rv] = ru;
         N--;
         return true;
     }

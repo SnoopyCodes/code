@@ -11,10 +11,12 @@ template<int z> using ll = array<long, z>;
 template<class T> using vt = vector<T>;
 template<class T> using mt = vt<vt<T>>;
 
-using namespace ranges;
+void solve() {
+    int N, K; cin >> N >> K;
+    
+}
 
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
-    vt<int> a(2);
-    int x = *max_element(a);
+    int T; cin >> T; while(T--) { solve(); }
 }

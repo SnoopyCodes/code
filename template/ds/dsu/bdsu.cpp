@@ -4,7 +4,7 @@ using namespace std;
 vector<int> dsu;
 //O(n lg n / lg lg n)
 //~O(n * 4.29) ~ O(n) (trust)
-void init(int N) { dsu.resize(N); while (N--) dsu[N] = N; }
+void init(int N) { dsu = vector<int>(N); while (N--) dsu[N] = N; }
 int find(int u) {
     if (dsu[u] != u) { dsu[u] = find(dsu[u]); }
     return dsu[u];
