@@ -1,9 +1,0 @@
-in all but boneseg, make sure comb() and def are ok for usage
-i now have segtree walk working- needs comparison operators or smth, needs testing
-overriding is possible! example usage given- pizzeria queries
-
-more specific use cases:
-boneseg is to be used if there is only one segtree needed, and the type is integer/long long
-baseseg is if more than one segtree is needed, and supports any node type
-segtree is to be used if non commutative ops are used and/or walks
-lazy segtree added holy

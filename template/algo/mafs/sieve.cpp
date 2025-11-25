@@ -19,7 +19,7 @@ void era(int n) {
     }
 }
 
-void lin_sieve(int n) {
+vector<int> lin_sieve(int n) {
     sieve.resize(n + 1);
     vector<int> primes;
     for (int i = 2; i <= n; i++) {
@@ -28,10 +28,11 @@ void lin_sieve(int n) {
             sieve[i] = i;
         }
         for (int j = 0; i * primes[j] <= n; j++) {
-            sieve[i * primes[j]] = i;
+            sieve[i * primes[j]] = primes[j];
             if (primes[j] == sieve[i]) { break; }
         }
     }
+    return primes;
 }
 
 vector<ints<2>> factor(int n) {

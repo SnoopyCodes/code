@@ -12,14 +12,15 @@ static class beep extends PrintWriter {
     void solve() {
         int N = sc.nextInt();
         int M = sc.nextInt();
-        li<Integer>[] G = new li[N];
-        for (int i = 0; i < N; i++) { G[i] = new li(); }
+        var G = new int[N][0];
+        var sz = new int[N];
         for (int i = 0; i < M; i++) {
             int u = sc.nextInt() - 1;
             int v = sc.nextInt() - 1;
-            G[u].add(v);
-            G[v].add(u);
+            append(G[u], v, sz[u]++);
+            append(G[v], u, sz[v]++);
         }
+        
         var add = new li<Integer>();
         var visited = new int[N];
         var dfs = new Object() {
@@ -44,6 +45,10 @@ static class beep extends PrintWriter {
         for (int p : add) {
             println(1 + " " + p);
         }
+    }
+    void append(int a[], int e, int sz) { //make a and e same type
+        if (sz == a.length) { a = Arrays.copyOf(a, 2 * a.length + 1); }
+        a[sz++] = e;
     }
     class li<E> extends ArrayList<E> { E g(int i) { return get(i); } }
 }

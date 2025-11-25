@@ -8,23 +8,20 @@ struct update {
     i64 val = 0;
     constexpr update(bool a, int v) { add = a; val = v; }
 };
-template<typename V, typename U> struct node {
-    static constexpr V defv = ;
-    static constexpr U defu = ;
+template<class V, class U, V defv, U defu, V (*comb)(V, V), U (*agg) (U, U), V (*act)(U, V)>
+struct node {
     array<node*, 2> c{};
     int l, r;
     V val = defv;
     U lz = defu;
-    V comb(V a, V b) {
-
-    }
     node(int l, int r):l(l),r(r) {
         if (l + 1 == r) { return; }
         c[0] = new node(l, (l + r) / 2);
         c[1] = new node((l + r) / 2, r);
     }
     void apply(U u) {
-        
+        val = act(u, val);
+        lz = agg(u, lz);
     }
     void push() {
         c[0]->apply(lz);
@@ -47,10 +44,17 @@ template<typename V, typename U> struct node {
     }
 };
 //change: def definitions, comb, apply
+i64 comb(i64 a, i64 b) { return a + b; }
+update agg(update a, update b) {
+    
+}
+i64 act(update u, i64) {
+
+}
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
     int N, Q; cin >> N >> Q;
-    node<i64, update>seg(0, N);
+    node<i64, update, 0, update(false, 0), comb, agg, act>seg(0, N);
     for (int i = 0; i < N; i++) {
         int x; cin >> x;
         seg.upd(i, i + 1, update(false, x));

@@ -9,31 +9,59 @@ const int MOD = 7;
 
 long exp(long x, int p) {
 	long res = 1;
-	for (; p; p /= 2) {
-		if (p % 2 & 1) { res = res * x % MOD; }
-		x = x * x % MOD;
+	while (p > 0) {
+		if (p % 2 & 1) { (res *= x) %= MOD; }
+		(x *= x) %= MOD;
+		p /= 2;
 	}
 	return res;
 }
 
-long inv(long x) {
-    return exp(x, MOD - 2);
-}
-
-const int MAXV = 1e6;
-vector<long> fac;
+vector<long> fac, ifac;
 
 long choose(int n, int r) {
-    return fac[n] * inv(fac[r]) % MOD * inv(fac[n - r]) % MOD;
+    return fac[n] * ifac[r] % MOD * ifac[n - r] % MOD;
+}
+void prec(int n) {
+	fac.resize(n + 1);
+	ifac.resize(n + 1);
+	fac[0] = 1;
+    for (int i = 1; i <= n; i++) {
+		fac[i] = fac[i-1] * i % MOD;
+	}
+	ifac[n] = exp(fac[n], MOD - 2);
+	for (int i = n - 1; i > 0; i--) {
+		ifac[i] = ifac[i + 1] * (i + 1) % MOD;
+	}
 }
 
 int main() {
-	fac.resize(MAXV + 1);
-	fac[0] = 1;
-    for (int i = 1; i <= MAXV; i++) {
-		fac[i] = fac[i-1] * i % MOD;
-	}
+	
 }
+using ll = long;
+#define M 998244353
+#define mxN 1000000
+ll inv(ll a) {
+    return a<=1 ? a: M - (ll)(M/a) * inv(M%a) % M;
+}
+ll fact[mxN];
+ll inv_fact[mxN];
+void calc_fact() {
+    fact[0] = 1;
+    for (int i=1; i<mxN; i++) {
+        fact[i] = fact[i-1]*i % M;
+    }
+    inv_fact[mxN-1] = inv(fact[mxN-1]);
+    for (int i=mxN-1; i>=1; i--) {
+        inv_fact[i-1] = inv_fact[i]*i%M;
+    }
+}
+ 
+ll nCr(int n, int k) {
+    if (k>n) return 0;
+    return fact[n] * inv_fact[k]%M*inv_fact[n-k] % M;
+}
+
 
 //declare a mod before using
 //filong up fac

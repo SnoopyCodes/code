@@ -1,0 +1,8 @@
+2 300 5
+A
+B
+
+{# players} {# secs} { # secs increment }
+player 1 name
+player 2 name
+...

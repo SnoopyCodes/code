@@ -1,19 +1,29 @@
 import java.util.*;
 import java.io.*;
+import static java.lang.Math.*;
 public class template {
 
-static class beep extends PrintWriter {
+static class gg extends PrintWriter {
     Scanner sc = new Scanner(System.in);
-    public beep() {
+    gg() {
         super(System.out);
         solve();
     }
     void solve() {
         
     }
+    void append(int[] a, int e, int sz) { //make a and e same type
+        if (sz == a.length) { a = Arrays.copyOf(a, 2 * a.length + 1); }
+        a[sz++] = e;
+    }
+    <T> void append(T[] a, T e, int sz) {
+        if (sz == a.length) { a = Arrays.copyOf(a, 2 * a.length + 1); }
+        a[sz++] = e;
+    }
+    //void trunc(int[] a, int sz) { a = Arrays.copyOf(a, sz); }
 }
 
-    public static void main(String[] args) { new beep().close(); }
+    public static void main(String[] args) { new gg().close(); }
     static class Scanner {
         private BufferedReader r;
         private StringTokenizer st;
@@ -27,4 +37,5 @@ static class beep extends PrintWriter {
         long nextLong() { return Long.parseLong(next()); }
     }
 
+    static class li<E> extends ArrayList<E> {}
 }

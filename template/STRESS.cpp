@@ -11,67 +11,21 @@ template<int z> using ll = array<long, z>;
 template<class T> using vt = vector<T>;
 template<class T> using mt = vt<vt<T>>;
 
-
+//FIND RIGHTMOST INDEX IN UNIMODAL MAXIMAL ARRAY == MAXIMUM
 
 // ----------------- First Implementation -----------------
 
-struct DSU {
-    vector<int> par, size;
-    long pairs = 0;
-    DSU(int N): par(N), size(N) { while (N--) par[N] = N; }
-    int find(int u) {
-        if (par[u] != u) { par[u] = find(par[u]); }
-        return par[u];
-    }
-    void add(int u) {
-        u = find(u);
-        pairs += size[u];
-        size[u]++;
-    }
-    bool unite(int u, int v) {
-        int ru = find(u), rv = find(v);
-        if (ru == rv) { return false; }
-        pairs -= (long) size[ru] * (size[ru] - 1) / 2;
-        pairs -= (long) size[rv] * (size[rv] - 1) / 2;
-        size[ru] += size[rv];
-        pairs += (long) size[ru] * (size[ru] - 1) / 2;
-        par[rv] = ru;
-        return true;
-    }
-};
-
 void solve() {
-    int N, M; cin >> N >> M;
-    vt<bool> type(N);
-    for (int i = 0; i < N; i++) {
-        char c; cin >> c;
-        type[i] = c == '1';
+    int N; cin >> N;
+    vt<int> A(N);
+    for (int &u : A) { cin >> u; }
+    int s = 0, e = N - 1;
+    while (s < e) {
+        int m = (s + e) / 2;
+        if (A.at(m) <= A.at(m + 1)) { s = m + 1; }
+        else { e = m; }
     }
-    mt<int> G(N);
-    DSU cc(N);
-    while (M--) {
-        int u, v; cin >> u >> v; u--; v--;
-        G[u].add(v);
-        G[v].add(u);
-    }
-    for (int i = 0; i < N; i++) {
-        if (type[i]) {
-            for (int v : G[i]) {
-                if (v > i) { cc.unite(v, i); }
-            }
-        }
-    }
-    vt<long> ans(N);
-    for (int u = N - 1; u > -1; u--) {
-        cc.add(u);
-        for (int v : G[u]) {
-            if (u < v) { cc.unite(u, v); }
-        }
-        ans[u] = cc.pairs;
-    }
-    for (long x : ans) {
-        cout << x << "\n";
-    }
+    cout << s << "\n";
 }
 
 
@@ -79,57 +33,12 @@ void solve() {
 //brute force
 
 void solve2() {
-    int N, M; cin >> N >> M;
-    vt<bool> type(N);
-    for (int i = 0; i < N; i++) {
-        char c; cin >> c;
-        type[i] = c == '1';
+    int N; cin >> N;
+    vt<int> A(N);
+    for (int &u : A) { cin >> u; }
+    for (int i = N - 1; i > -1; i--) {
+        if (i == 0 || A[i - 1] < A[i]) { cout << i << "\n"; return; }
     }
-    vt<set<int>> G(N);
-    while (M--) {
-        int u, v; cin >> u >> v; u--; v--;
-        G[u].insert(v);
-        G[v].insert(u);
-    }
-    
-    for (int t = 0; t < N; t++) {
-        int ct = 0;
-        vt<bool> vis(N);
-        vt<int> q(N);
-        int s = 0, e = 0;
-        for (int i = t; i < N; i++) {
-            if (vis[i]) { continue; }
-            int cur = 1;
-            q[e++] = i;
-            vis[i] = true;
-            while (s < e) {
-                int u = q[s++];
-                for (int v : G[u]) {
-                    if (!vis[v] && v > t) {
-                        cur++;
-                        q[e++] = v;
-                        vis[v] = true;
-                    }
-                }
-            }
-            ct += cur * (cur - 1) / 2;
-        }
-        cout << ct << "\n";
-        if (type[t]) {
-            auto jit = G[t].begin();
-            while (jit != G[t].end()) {
-                auto kit = jit;
-                kit++;
-                for (; kit != G[t].end(); kit++) {
-                    G[*jit].insert(*kit);
-                    G[*kit].insert(*jit);
-                }
-                jit++;
-            }
-        }
-        G[t].clear();
-    }
-
 }
  
 // ----------------- Test Case Generator -----------------
@@ -138,18 +47,39 @@ string generateTestCase() {
     //MODIFY
     ostringstream oss;
     // cout << "GENERATING" << endl;
-    int N = 5, M = 4;
-    oss << N << " " << M << endl;
+    int N = 10;
+    oss << N << "\n";
+    int pk = rand() % N;
+    int pkv = 10;
+    int curv = 0;
+    vt<int> a;
     for (int i = 0; i < N; i++) {
-        oss << (rand() % 2);
+        //choose a random integer in [curv, pkv]
+        if (i < pk) {
+            int v = curv + rand() % (pkv - curv + 1);
+            curv = v;
+            a.add(v);
+            oss << v;
+        }   else if (i > pk) {
+            //[curv, 0]
+            int v = curv - rand() % (curv + 1);
+            curv = v;
+            a.add(v);
+            oss << v;
+        }   else {
+            a.add(pkv);
+            oss << pkv;
+        }
+        oss << " ";
+    }
+    for (int i = 0; i < N - 1; i++) {
+        if (i < pk) {
+            assert(a[i] <= a[i + 1]);
+        }   else {
+            assert(a[i] >= a[i + 1]);
+        }
     }
     oss << "\n";
-    for (int i = 0; i < M; i++) {
-        int u = rand() % N + 1;
-        int v = rand() % N + 1;
-        while (u == v) { v = rand() % N + 1; }
-        oss << u << " " << v << "\n";
-    }
     return oss.str();
 }
  
