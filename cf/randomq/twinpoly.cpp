@@ -12,9 +12,9 @@ template<class T> using vt = vector<T>;
 template<class T> using mt = vt<vt<T>>;
 
 template<int MOD> struct mint {
-	int v; mint(long _v = 0):v(_v % MOD) { v += (v < 0) * MOD; }
+	long v; mint(long _v = 0):v(_v % MOD) { v += (v < 0) * MOD; }
 	#define fmo(o, z) friend mint operator o (mint a, mint b) { return z; }
-	fmo(+, a.v + b.v) fmo(-, a.v - b.v) fmo(*, a.v * (long) b.v) fmo(/, a * pow(b, MOD - 2))
+	fmo(+, a.v + b.v) fmo(-, a.v - b.v) fmo(*, a.v * b.v) fmo(/, a * pow(b, MOD - 2))
 	friend mint pow(mint x, long p) { return p ? pow(x * x, p / 2) * (p & 1 ? x : 1) : 1; }
 	#undef fmo
 	#define mo(o, z) mint& operator o (mint x) { return (*this) = (*this) z x; }

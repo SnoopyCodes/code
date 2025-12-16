@@ -5,7 +5,7 @@ commands:
 type enter after a command to activate it
 p -> pause the game (press p to start as well)
 space -> next player turn
-u -> undo last action
+u -> undo last action (not implemented)
 
 to alter a player's balance 
 [1-6]['f', 'h', 'i'][+-][0-9]

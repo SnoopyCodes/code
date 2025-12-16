@@ -6,7 +6,6 @@
 using namespace std; //lets go bad practice
 
 template<class T> using vt = vector<T>;
-template<class T> using mt = vt<vt<T>>;
 
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 long long uld(long long a, long long b) { return uniform_int_distribution<long long>(a, b)(rng); }

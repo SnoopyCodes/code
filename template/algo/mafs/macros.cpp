@@ -6,7 +6,7 @@
 #define dm(x, y) mm(x, inv(y))
 const int MOD = 1e9 + 7;
 
-int Add(int &a, int b) { return a -= ((a += b) > MOD) * MOD; }
+int Add(int &a, int b) { return a -= ((a += b) >= MOD) * MOD; }
 int add(int a, int b) { return Add(a, b); }
 
 int Sub(int &a, int b) { return a += ((a -= b) < 0) * MOD; }

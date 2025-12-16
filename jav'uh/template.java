@@ -10,32 +10,33 @@ static class gg extends PrintWriter {
         solve();
     }
     void solve() {
-        
+
     }
-    void append(int[] a, int e, int sz) { //make a and e same type
-        if (sz == a.length) { a = Arrays.copyOf(a, 2 * a.length + 1); }
-        a[sz++] = e;
+    int[] arr(int... a) { return a; }
+    int[] app(int a[], int e, int sz) {
+        if (sz == a.length) { a = Arrays.copyOf(a, 2 * sz + 1); }
+        a[sz] = e;
+        return a;
     }
-    <T> void append(T[] a, T e, int sz) {
-        if (sz == a.length) { a = Arrays.copyOf(a, 2 * a.length + 1); }
-        a[sz++] = e;
+    <T> T[] app(T[] a, T e, int sz) {
+        if (sz == a.length) { a = Arrays.copyOf(a, 2 * sz + 1); }
+        a[sz] = e;
+        return a;
     }
-    //void trunc(int[] a, int sz) { a = Arrays.copyOf(a, sz); }
 }
 
     public static void main(String[] args) { new gg().close(); }
-    static class Scanner {
-        private BufferedReader r;
-        private StringTokenizer st;
-        public Scanner(InputStream in) { r = new BufferedReader(new InputStreamReader(in)); }
-        public String next() {
-            try { while (st == null || !st.hasMoreTokens()) st = new StringTokenizer(r.readLine());
-                return st.nextToken();
-            } catch (Exception e) { return null; }
-        }
-        int nextInt() { return Integer.parseInt(next()); }
-        long nextLong() { return Long.parseLong(next()); }
+static class Scanner extends StreamTokenizer {
+    Scanner(InputStream in) {
+        super(new BufferedReader(new InputStreamReader(in)));
+        resetSyntax();
+        whitespaceChars(0, ' ');
+        wordChars(' ' + 1, 255);
     }
+    String next() { try { nextToken(); return sval; } catch(Exception e){ return null; } }
+    int nextInt() { return Integer.parseInt(next()); }
+    long nextLong() { return Long.parseLong(next()); }
+}
 
     static class li<E> extends ArrayList<E> {}
 }

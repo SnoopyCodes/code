@@ -35,6 +35,28 @@ template<typename T> struct SegTree {
     int walk(T x, int l, int r) { val = x, ql = l, qr = r; return wlk(1, 0, N); }
 };
 //to change, change def and comb, and wlk
+template<typename T> struct simple {
+    int N, ql, qr;
+    vector<T> data;
+    T def = 1e9, val;
+    SegTree(int N):N(N),data(4 * N, def) {}
+    T comb(T a, T b) { return min(a, b); }
+    #define m ((l + r) / 2)
+    T qry(int n, int l, int r) {
+        if(r <= ql || qr <= l) { return def; }
+        if(ql <= l && r <= qr) { return data[n]; }
+        return comb(qry(2*n, l, m), qry(2*n+1, m, r));
+    }
+    void upd(int n, int l, int r) {
+        if(l + 1 == r) { data[n] = val; return; }
+        if(ql < m) { upd(2*n, l, m); }
+        else { upd(2*n+1, m, r); }
+        data[n] = comb(data[2*n], data[2*n+1]);
+    }
+    #undef m
+    T query(int l, int r) { ql = l, qr = r; return qry(1, 0, N); }
+    void update(int idx, T v) { ql = idx, val = v; upd(1, 0, N); }
+};
 
 int main() {
     cin.tie(0) -> sync_with_stdio(0);

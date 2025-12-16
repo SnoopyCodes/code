@@ -12,14 +12,12 @@ template<typename T, int a> using arr = array<T, a>;
 #define long long long
 
 template<int MOD> struct mint {
-	#define fmo(o, z) friend mint operator o (const mint &a, const mint &b) { return z; }
-	#define mo(o,p) mint& operator o (const mint &x) { return (*this) = (*this) p x; }
-	int v; mint(long _v = 0):v(_v % MOD) { v += (v < 0) * MOD; }
-	fmo(+, a.v + b.v) fmo(-, a.v - b.v) fmo(*, a.v * (long) b.v) fmo(/, a * pow(b, MOD - 2))
-	mo(+=, +) mo(-=, -) mo(*=, *) mo(/=, /)
+	long v; mint(long _v = 0):v(_v % MOD) { v += (v < 0) * MOD; }
+	#define fmo(o, c, z) friend mint operator o (mint a, mint b) { return a.v z c.v; }
+	fmo(+, b, +) fmo(-, b, -) fmo(*, b, *) fmo(/, pow(b, MOD - 2), *)
 	friend mint pow(mint x, long p) { return p ? pow(x * x, p / 2) * (p & 1 ? x : 1) : 1; }
-	#undef fmo
-	#undef mo
+	#define mo(o, z) mint& operator o (mint x) { return (*this) = (*this) z x; }
+	mo(+=, +) mo(-=, -) mo(*=, *) mo(/=, /)
 };
 using mi = mint<int(1e9 + 7)>;
 using me = mint<int(1e9 + 6)>;
@@ -35,7 +33,7 @@ int main() {
 		sdiv *= (pow(x, p + 1) - 1) / (x - 1);
 		//product of divisors? each factor is multiplied
 		//by x^arithmetic sum of p?
-		//p^0 * f0 * p^0 * f1... 
+		//p^0 * f0 * p^0 * f1...
 		me np = p * (p + 1) / 2;
 		np *= prev_nd;
 		pdiv = pow(x, np.v) * pow(pdiv, p + 1);

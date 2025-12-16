@@ -7,7 +7,7 @@ long uld(long a, long b) { return uniform_int_distribution<long>(a, b)(rng); }
 
 const int MOD = 7;
 
-long exp(long x, int p) {
+long exp(long x, int p = MOD - 2) {
 	long res = 1;
 	while (p > 0) {
 		if (p % 2 & 1) { (res *= x) %= MOD; }
@@ -29,7 +29,7 @@ void prec(int n) {
     for (int i = 1; i <= n; i++) {
 		fac[i] = fac[i-1] * i % MOD;
 	}
-	ifac[n] = exp(fac[n], MOD - 2);
+	ifac[n] = exp(fac[n]);
 	for (int i = n - 1; i > 0; i--) {
 		ifac[i] = ifac[i + 1] * (i + 1) % MOD;
 	}

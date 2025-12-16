@@ -15,7 +15,7 @@ int query(int l, int r) {
 void alter(int p, long val) {
     seg[p + N] = val;
     for (p = (p + N) / 2; p > 0; p /= 2) {
-        seg[p] = min(seg[2 * p], seg[2 * p + 1]);
+        seg[p] = seg[2 * p] + seg[2 * p + 1];
     }
 }
 

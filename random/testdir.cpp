@@ -20,6 +20,7 @@ int main() {
         output = "";
         if (stat(path, &sb) == 0 && !(sb.st_mode & S_IFDIR)) {
             output.append(path).append(" is a file\n");
+            output = outfilename_str + " is a file\n";
             cout << output << "\n";
         }   else {
             output.append(path).append(" is a directory\n");

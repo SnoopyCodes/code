@@ -10,7 +10,8 @@ template<int z> using ii = array<int , z>;
 template<int z> using ll = array<long, z>;
 template<class T> using vt = vector<T>;
 template<class T> using mt = vt<vt<T>>;
-
+#define rep(i, a, b, d) for (int i = a; i < (b); i += d)
+#define rev(i, a, b, d) for (int i = a; i > (b); i -= d)
 int N, V;
 mt<int> G;
 vt<int> vals;

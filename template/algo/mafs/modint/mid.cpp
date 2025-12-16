@@ -6,9 +6,9 @@ using namespace std;
 #define long long long
 
 template<int MOD> struct mint {
-	int v; mint(long _v = 0):v(_v % MOD) { v += (v < 0) * MOD; }
-	#define fmo(o, z) friend mint operator o (mint a, mint b) { return z; }
-	fmo(+, a.v + b.v) fmo(-, a.v - b.v) fmo(*, a.v * (long) b.v) fmo(/, a * pow(b, MOD - 2))
+	long v; mint(long _v = 0):v(_v % MOD) { v += (v < 0) * MOD; }
+	#define fmo(o, c, z) friend mint operator o (mint a, mint b) { return a.v z c.v; }
+	fmo(+, b, +) fmo(-, b, -) fmo(*, b, *) fmo(/, pow(b, MOD - 2), *)
 	friend mint pow(mint x, long p) { return p ? pow(x * x, p / 2) * (p & 1 ? x : 1) : 1; }
 	#define mo(o, z) mint& operator o (mint x) { return (*this) = (*this) z x; }
 	mo(+=, +) mo(-=, -) mo(*=, *) mo(/=, /)

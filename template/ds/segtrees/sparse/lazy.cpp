@@ -48,7 +48,7 @@ i64 comb(i64 a, i64 b) { return a + b; }
 update agg(update a, update b) {
     
 }
-i64 act(update u, i64) {
+i64 act(update u, i64 v) {
 
 }
 int main() {
