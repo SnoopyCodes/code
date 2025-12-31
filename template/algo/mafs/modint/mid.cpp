@@ -17,24 +17,29 @@ using mi = mint<int(1e9 + 7)>;
 #undef fmo
 #undef mo
 
-vector<mi> fax;
+vector<mi> fax, ifax;
 
 void spit_fax(int N) {
 	fax = vector<mi>(N + 1);
+	ifax = vector<mi>(N + 1);
 	fax[0] = 1;
     for (int i = 1; i <= N; i++) {
         fax[i] = fax[i-1] * i;
     }
+	ifax[N] = 1 / fax[N];
+	for (int i = N - 1; i > -1; i--) {
+		ifax[i] = ifax[i + 1] * (i + 1);
+	}
+
 }
 
 mi choose(int n, int r) {
-    return n < r ? 0 : fax[n] / fax[r] / fax[n-r];
+    return n < r ? 0 : fax[n] * ifax[r] * ifax[n-r];
 }
 
 mi big_choose(int n, int r) {
 	if (n < r) { return 0; }
-	r = min(r, n - r);
-	mi res = 1 / fax[r];
+	mi res = ifax[r];
 	r = n - r;
 	while (n > r) { res *= n--; }
 	return res;

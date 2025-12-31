@@ -4,14 +4,12 @@ using namespace std;
 
 //welcome to incredibly slow (but correct) mathematics
 
-int fdiv(int n, int d) {
-    int q = n / d, r = n % d;
-    if (r != 0 && ((n < 0) ^ (d < 0))) { q--; }
-    return q;
+int fdiv(int a, int b) {
+    return a / b - ((a ^ b) < 0 && a % b);
 }
 
-int cdiv(int n, int d) {
-    return fdiv(n, d) + (n % d != 0);
+int cdiv(int a, int b) {
+    return a / b + ((a ^ b) > 0 && a % b);
 }
 
 long fdiv(long n, long d) {

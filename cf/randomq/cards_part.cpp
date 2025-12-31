@@ -9,17 +9,16 @@ const long INF = 4e18 + 1000;
 template<int z> using ii = array<int , z>;
 template<int z> using ll = array<long, z>;
 template<class T> using vt = vector<T>;
-template<class T, int D> struct mt : public vt<mt<T, D - 1>> {
-    template<class...A> mt(int n = 0, A... r) : vt<mt<T, D - 1>>(n, mt<T, D - 1>(r...)) {} };
-template<class T> struct mt<T, 1> : public vt<T> {
-    mt(int n = 0, const T &def = T()) : vt<T>(n, def) {} };
-
+#define rep(i,a,b) for (auto i=(a); i<(b); i++)
 void solve() {
-    int N, M; cin >> N >> M;
+    int N;cin >> N;
+    long K; cin >> K;
+    vt<long> A(N); rep(i,0,N) cin >> A[i];
+
     
 }
 
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
-    int T; cin >> T; while (T--) { solve(); }
+    int T; cin >> T; while (T --> 0) solve();
 }

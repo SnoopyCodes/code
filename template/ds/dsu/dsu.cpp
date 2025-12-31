@@ -10,14 +10,12 @@ struct DSU {
         return p[u];
     }
     bool unite(int u, int v) {
-        int ru = find(u);
-        int rv = find(v);
+        int ru = find(u), rv = find(v);
         if (ru == rv) { return false; }
         if (s[ru] < s[rv]) { swap(ru, rv); }
         s[ru] += s[rv];
         p[rv] = ru;
-        N--;
-        return true;
+        return N--;
     }
 };
 int main() {

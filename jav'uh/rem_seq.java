@@ -8,20 +8,26 @@ static class gg extends PrintWriter {
     gg() {
         super(System.out);
         int T = sc.nextInt();
-        println(T); flush();
         while (T --> 0)
         solve();
     }
-    boolean okay(int X, long Y, long V, long K) {
-        while (X --> 0) {
-            V -= V / Y;
+
+    boolean okay(long X, long Y, long V, long K) {
+        while (X > 0 && V >= Y) {
+            long rem = V / Y;
+            long diff = V - (rem * Y - 1);
+            long iter = min(X, (diff - 1) / rem + 1);
+
+            X -= iter;
+            V -= iter * rem;
+            
         }
         return V >= K;
     }
     void solve() {
-        int X = sc.nextInt();
+        flush();
+        long X = sc.nextInt();
         long Y = sc.nextLong(), K = sc.nextLong();
-        println(X + " " + Y + " " + K); flush();
         long s = 0, e = (long) 1e12 + 1;
         while (s + 1 < e) {
             long m = (s + e) / 2;

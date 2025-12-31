@@ -2,30 +2,127 @@
 
 using namespace std;
 
-#define long long long
-#define add push_back
-const int BIG = 1e9 + 1;
-const long INF = 4e18 + 1000;
-template<int z> using ii = array<int, z>;
-template<int z> using ll = array<long, z>;
+const int  MOD = 998244353;
+#define int long long
+template<int z> using ii = array<int , z>;
 template<class T> using vt = vector<T>;
-template<class T> using mt = vt<vt<T>>;
+#define add push_back
+#define rep(i,a,b) for(auto i=a; i<(b); i++)
 
 //FIND RIGHTMOST INDEX IN UNIMODAL MAXIMAL ARRAY == MAXIMUM
 
 // ----------------- First Implementation -----------------
 
+int exp(int x, int p = MOD - 2) {
+	int res = 1;
+	while (p > 0) {
+		if (p % 2 & 1) { (res *= x) %= MOD; }
+		(x *= x) %= MOD;
+		p /= 2;
+	}
+	return res;
+}
+
+vector<int> fac, ifac;
+
+int choose(int n, int r) {
+    return n < r ? 0 : fac[n] * ifac[r] % MOD * ifac[n - r] % MOD;
+}
+void prec(int n) {
+	fac.resize(n + 1);
+	ifac.resize(n + 1);
+	fac[0] = 1;
+    for (int i = 1; i <= n; i++) {
+		fac[i] = fac[i-1] * i % MOD;
+	}
+	ifac[n] = exp(fac[n]);
+	for (int i = n - 1; i > -1; i--) {
+		ifac[i] = ifac[i + 1] * (i + 1) % MOD;
+	}
+}
+
+vt<int> p2;
+
+
 void solve() {
-    int N; cin >> N;
-    vt<int> A(N);
-    for (int &u : A) { cin >> u; }
-    int s = 0, e = N - 1;
-    while (s < e) {
-        int m = (s + e) / 2;
-        if (A.at(m) <= A.at(m + 1)) { s = m + 1; }
-        else { e = m; }
+    //we only ever match a[i] to one particular group. find that group.
+    ii<61> a{};
+    int n; cin >> n;
+    int x; cin >> x;
+    int total = n;
+
+    rep(i, 0, n) {
+        int y; cin >> y;
+        a[y]++;
     }
-    cout << s << "\n";
+
+    int ans = 0;
+    int amt = 0; //bits already set
+    int seen_bits = 0;
+    int prev_bit = 61;
+    int prev_ways = 1;
+    
+    for (int i = 60; i > -1; i--) {
+        if (x >> i & 1) {
+            int cnt = 1;
+            for (int j = i - 1; j > -1; j--) {
+                if (x >> j & 1) {
+                    cnt++;
+                }   else {
+                    break;
+                }
+            }
+
+            //the given bit is i + amt
+            int b = i + amt;
+            //how many reindeer are in between b and prev_bit?
+            int sum = 0;
+            rep(j, b + 1, prev_bit) {
+                sum += a[j];
+            }
+            //ans += 2^(sum - 1) * 2^(N - sum - amt)
+            //surely?
+            if (sum > 0) {
+                (ans += prev_ways * (p2[sum] - 1) % MOD * p2[total - sum - seen_bits] % MOD) %= MOD;
+            }
+            //new ways := C(a[i], cnt) * prev_ways
+            if (a[b] < cnt) {
+                prev_ways = 0;
+                break;
+            }
+            int new_ways = choose(a[b], cnt) * prev_ways % MOD;
+            //now count overfill (choosing > cnt from this)
+            //at least one
+            //wait im selling it was hockey stick?
+            //C(a[b], cnt + 1), C(a[b], cnt + 2), ...
+            //
+            if (a[b] > cnt) {
+                int ways_to_not = 0;
+                rep(j, 0, cnt + 1) {
+                    (ways_to_not += choose(a[b], j) % MOD) %= MOD;
+                }
+                int ways_to_over = (p2[a[b]] - ways_to_not + MOD) % MOD;
+                //p2[a[b] - cnt] is # of ways to turn other stuff on?
+                (ans += prev_ways * ways_to_over % MOD * p2[total - sum - seen_bits - a[b]] % MOD) %= MOD;
+            }
+
+            amt += cnt;
+            seen_bits += a[b];
+            seen_bits += sum;
+            prev_bit = b;
+            prev_ways = new_ways;
+
+            i = i - cnt + 1;
+        }
+    }
+
+    int sum = 0;
+    rep(i, 0, prev_bit) {
+        sum += a[i];
+    }
+    (ans += p2[sum] * prev_ways % MOD) %= MOD;
+    cout << ans << "\n";
+
 }
 
 
@@ -33,52 +130,76 @@ void solve() {
 //brute force
 
 void solve2() {
-    int N; cin >> N;
-    vt<int> A(N);
-    for (int &u : A) { cin >> u; }
-    for (int i = N - 1; i > -1; i--) {
-        if (i == 0 || A[i - 1] < A[i]) { cout << i << "\n"; return; }
+    int n; cin >> n;
+    int x; cin >> x;
+
+    vt<int> a;
+    rep(i, 0, n) {
+        int y; cin >> y;
+        a.add(y);
     }
-}
+
+
+    vt<ii<62>> dp(n + 1, ii<62>{});
+    rep(i, 0, n + 1) rep(j, 0, 62) dp[i][j] = 0;
+    int numb = __builtin_popcountll(x);
+    vt<int> pos;
+    for (int i = 61; i > -1; i--) {
+        if (x >> i & 1) {
+            pos.add(i);
+            // cout << i << "\n";
+        }
+    }
+    dp[0][0] = 1;
+    rep(i, 0, n) {
+        
+        rep(j, 0, numb) {
+            int cur = a[i] - j;
  
+            (dp[i + 1][j] += dp[i][j]) %= MOD;
+            if (cur == pos[j]) {
+                (dp[i + 1][j + 1] += dp[i][j]) %= MOD;
+            }   else if (cur > pos[j]) {
+                //
+                (dp[i + 1][numb] += dp[i][j]) %= MOD;
+            }
+        }
+        (dp[i + 1][numb] += dp[i][numb] * 2) %= MOD; //we can always choose to include this one or not
+    }
+ 
+    cout << dp[n][numb] << "\n";
+}
+
 // ----------------- Test Case Generator -----------------
 string generateTestCase() {
     //write to oss
     //MODIFY
     ostringstream oss;
     // cout << "GENERATING" << endl;
-    int N = 10;
-    oss << N << "\n";
-    int pk = rand() % N;
-    int pkv = 10;
-    int curv = 0;
-    vt<int> a;
-    for (int i = 0; i < N; i++) {
-        //choose a random integer in [curv, pkv]
-        if (i < pk) {
-            int v = curv + rand() % (pkv - curv + 1);
-            curv = v;
-            a.add(v);
-            oss << v;
-        }   else if (i > pk) {
-            //[curv, 0]
-            int v = curv - rand() % (curv + 1);
-            curv = v;
-            a.add(v);
-            oss << v;
-        }   else {
-            a.add(pkv);
-            oss << pkv;
-        }
-        oss << " ";
-    }
-    for (int i = 0; i < N - 1; i++) {
-        if (i < pk) {
-            assert(a[i] <= a[i + 1]);
-        }   else {
-            assert(a[i] >= a[i + 1]);
+    //use maxbit 20
+    int x = 0;
+    for (int i = 5; i > -1; i--) {
+        if (rand() & 1) {
+            x += 1 << i;
         }
     }
+    ii<21> amt{};
+    int sum = 0;
+    for (int i = 5; i > 0; i--) {
+        //choose any number between 0 and 10 to have
+        amt[i] = rand() % 4;
+        sum += amt[i];
+    }
+    oss << sum << "\n";
+    oss << x << "\n";
+
+    for (int i = 20; i > 0; i--) {
+        rep(j, 0, amt[i]) {
+            oss << i << " ";
+        }
+    }
+
+
     oss << "\n";
     return oss.str();
 }
@@ -106,8 +227,14 @@ string runSolve(function<void()> solveFunc, const string &testInput) {
 }
  
 // ----------------- Main Stress-Testing Loop -----------------
-int main() {
+signed main() {
     srand(time(NULL));
+
+    ii<61> cnt{};
+    p2.resize(6e5);
+    prec(6e5);
+    p2[0] = 1;
+    rep(i, 1, 6e5) p2[i] = p2[i-1] * 2 % MOD;
     //MODIFY
     int stressTests = 10000;
     for (int i = 1; i <= stressTests; i++) {

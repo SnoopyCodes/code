@@ -7,30 +7,20 @@ long uld(long a, long b) { return uniform_int_distribution<long>(a, b)(rng); }
 
 const int MOD = 7;
 
-long exp(long x, int p = MOD - 2) {
-	long res = 1;
-	while (p > 0) {
-		if (p % 2 & 1) { (res *= x) %= MOD; }
-		(x *= x) %= MOD;
-		p /= 2;
-	}
-	return res;
-}
+int qp(int x, int p = MOD - 2) { return x ? 1ll*(x & 1 ? x : 1) * qp(1ll*x * x % MOD, p >> 1) % MOD : 1; }
 
 vector<long> fac, ifac;
 
-long choose(int n, int r) {
-    return fac[n] * ifac[r] % MOD * ifac[n - r] % MOD;
-}
+int choose(int n, int r) { return n < r ? 0 : fac[n] * ifac[r] % MOD * ifac[n - r] % MOD; }
+
 void prec(int n) {
-	fac.resize(n + 1);
-	ifac.resize(n + 1);
+	fac.resize(n + 1), ifac.resize(n + 1);
 	fac[0] = 1;
     for (int i = 1; i <= n; i++) {
 		fac[i] = fac[i-1] * i % MOD;
 	}
-	ifac[n] = exp(fac[n]);
-	for (int i = n - 1; i > 0; i--) {
+	ifac[n] = qp(fac[n]);
+	for (int i = n - 1; i > -1; i--) {
 		ifac[i] = ifac[i + 1] * (i + 1) % MOD;
 	}
 }
