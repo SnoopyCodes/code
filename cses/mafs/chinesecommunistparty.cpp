@@ -1,26 +1,36 @@
 #include <bits/stdc++.h>
 
 using namespace std;
+#define int long long
+#define add push_back
+const int  MOD = 1e9  +    7;
+#define rep(i, a, b) for (auto i=a; i<(b); i++)
+template<int z> using ii = array<int , z>;
+template<class T> using vt = vector<T>;
+signed main() {
+    cin.tie(0) -> sync_with_stdio(0);
 
-int main() {
-    ios_base::sync_with_stdio(false); cin.tie(nullptr);
     int N; cin >> N;
-    vector<int> v(N);
-    for (int i = 0; i < N; i++) {
-        cin >> v[i];
+    int M = 1e6 + 1;
+    vt<int> ct(M);
+    rep(i, 0, N) {
+        int x; cin >> x; ct[x]++;
     }
-    int most = 1e6+1;
-    vector<bool> sieve(most);
-    for (int p = 2; p < most; p++) {
-        if (sieve[p]) { continue; }
-        for (int i = 2 * p; i < most; i += p) {
-            sieve[i] = false;
+
+    vt<int> mults(M);
+    rep(i, 1, M) {
+        for (int j = i; j < M; j += i) {
+            mults[i] += ct[j];
         }
     }
-    //yeah we can sieve this
-    //but now what
-    //we can say for some primes that these numbers are divided by it
-    //and then?
-    //then what
-    // 
+
+    vt<int> val(M); //for how many pairs is this the gcd?
+    for (int i = M - 1; i > 0; i--) {
+        val[i] = mults[i] * (mults[i] - 1) / 2;
+        for (int j = 2 * i; j < M; j += i) {
+            val[i] -= val[j];
+        }
+    }
+    cout << val[1] << "\n";
+    
 }

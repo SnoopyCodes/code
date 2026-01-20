@@ -30,7 +30,6 @@ void spit_fax(int N) {
 	for (int i = N - 1; i > -1; i--) {
 		ifax[i] = ifax[i + 1] * (i + 1);
 	}
-
 }
 
 mi choose(int n, int r) {

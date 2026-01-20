@@ -1,9 +1,10 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-using ll = long long;
+// using ll = long long;
+#define int long long
 
-int main() {
+signed main() {
     cin.tie(0) -> sync_with_stdio(0);
     freopen("threesum.in", "r", stdin);
     freopen("threesum.out", "w", stdout);
@@ -20,7 +21,7 @@ int main() {
     //then we need to perform sums
     vector<int> alive(4e6 + 1);
     int boost = 2e6;
-    vector<vector<ll>> ep(N, vector<ll>(N));
+    vector<vector<int>> ep(N, vector<int>(N));
     for (int i = 0; i < N; i++) {
         int need = -A[i];
         for (int j = i + 2; j < N; j++) {

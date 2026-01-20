@@ -19,7 +19,7 @@ void alter(int p, long val) {
     }
 }
 
-template<class T, T def, T (*f)(T, T)> struct SegmentTree {
+template<class T, T def, auto f> struct SegmentTree {
     vector<T> t; int N;
     SegmentTree(int n):N(n),t(2 * n, def) {}
     void set(int i, T v) {
@@ -38,15 +38,13 @@ template<class T, T def, T (*f)(T, T)> struct SegmentTree {
     }
 };
 
-int f(int a, int b) { return a + b; }
-
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
     int Q; cin >> N >> Q;
     seg.resize(2 * N);
     vector<long> A(N);
 
-    SegmentTree<int, 0, f> sumsg(N);
+    SegmentTree<int, 0, [](int a, int b) { return a + b; }> sumsg(N);
 
     for (int i = 0; i < N; i++) {
         cin >> A[i];

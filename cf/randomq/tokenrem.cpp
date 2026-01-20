@@ -21,16 +21,7 @@ void solve() {
             //case 1: we didn't eat any balls
             //when did i start referring to this problem as eating balls?
             //that is pretty funny
-            //case 1: we didn't eat any balls
-            //then we = dp[i-1][j - 1] because now we have available
-            if (j > 0) { (dp[i][j] += dp[i-1][j - 1]) %= M; }
-            //case 2: we did eat a ball
-            //we had j available balls before directly then and we chose to eat one of (j + 1)
-            //i feel like this is wrong though like we need # of ways to have a range that allows for that
-            //do it per ball
-            //oh that is very intuitive
-            (dp[i][j] += ((long) dp[i-1][j] * (j + 1)) % M) %= M;
-            cout << dp[i][j] << " ";
+            
         }
         cout << "\n";
     }

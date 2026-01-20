@@ -23,6 +23,7 @@ static class gg extends PrintWriter {
         a[sz] = e;
         return a;
     }
+
 }
 
     public static void main(String[] args) { new gg().close(); }

@@ -2,7 +2,7 @@
 
 using namespace std;
 
-#define int long long
+#define int long long //iff necessary e.g. addition under modulus unneeded
 #define rep(i, a, b) for (auto i=a; i<(b); i++)
 #define add push_back
 const int MOD = 1e9 + 7;

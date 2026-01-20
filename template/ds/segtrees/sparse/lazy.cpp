@@ -2,7 +2,7 @@
 
 using namespace std;
 using i64 = long long;
-
+#define func(f) [](auto a, auto b) { return f; }
 struct update {
     bool add = true;
     i64 val = 0;
@@ -19,8 +19,12 @@ void* alloc(size_t s) {
     buf_offset += s;
     return ptr;
 }
-
-template<class V, class U, V defv, U defu, V (*comb)(V, V), U (*agg) (U, U), V (*act)(U, V, int l, int r)>
+/*
+comb_nodes(U a, U b) -> U
+agg_upd(U a, U b) -> U
+act(U u, V v, int l, int r) -> V
+*/
+template<class V, class U, V defv, U defu, auto comb_nodes, auto agg_upd, auto act>
 struct node {
     node *lc, *rc;
     int l, r;
@@ -74,7 +78,7 @@ i64 act(update u, i64 v, int l, int r) {
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
     int N, Q; cin >> N >> Q;
-    node<i64, update, 0, update(true, 0), comb, agg, act>seg(0, N);
+    node<i64, update, 0, update(true, 0), comb, agg, act> seg(0, N);
     for (int i = 0; i < N; i++) {
         int x; cin >> x;
         seg.upd(i, i + 1, update(false, x));
