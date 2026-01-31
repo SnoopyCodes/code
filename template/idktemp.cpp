@@ -16,15 +16,18 @@ template<class T> struct mt<T, 1> : public vt<T> { using vt<T>::vt; };
 
 
 
-// template<class... A> auto mv(int n, A&&... r) {
-//     if constexpr(sizeof...(r) == 1) return vt(n, r...);
-//     else return vt(n, mv(r...));
-// }
+template<class...A> auto mv(int n, A&&... r) {
+    if constexpr(sizeof...(r) == 1) return vt(n, r...);
+    else return vt(n, mv(r...));
+}
 
-// template<class T> T mvec(T v) { return v; }
-// template<class T, class...D> auto mvec(int n, D...r) {
-//     return vt (n, mvec<T>(r...));
-// }
+template<class T> T mvec(T v) { return v; }
+template<class T, class...D> auto mvec(int n, D...r) {
+    return vt (n, mvec<T>(r...));
+}
+
+int mv() { return 0; }
+template<class...D> auto mv(size_t n, D... r) { return vt(n, mv(r...)); }
 
 int main() {
     cin.tie(0) -> sync_with_stdio(false);

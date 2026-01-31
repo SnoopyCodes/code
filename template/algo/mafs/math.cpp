@@ -10,7 +10,7 @@ const int MOD = 7;
 
 int qp(int x, int p = MOD - 2) { return p ? (p & 1 ? x : 1) * qp(x * x % MOD, p / 2) % MOD : 1; }
 
-vector<long> fac, ifac;
+vector<int> fac, ifac;
 
 int choose(int n, int r) { return n < r ? 0 : fac[n] * ifac[r] % MOD * ifac[n - r] % MOD; }
 

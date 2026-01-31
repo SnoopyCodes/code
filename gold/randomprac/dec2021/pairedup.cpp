@@ -4,13 +4,12 @@ using namespace std;
 
 #define add push_back
 const int  MOD = 1e9  +    7;
-#define rep(i, a, b) for (auto i=a; i<(b); i++)
+#define rep(i, a, b) for (auto i=a; i<(b); i++) // i think ive decided i like this after looking at permutation again
 template<int z> using ii = array<int , z>;
 template<class T> using vt = vector<T>;
 
 signed main() {
     cin.tie(0) -> sync_with_stdio(0);
-    freopen("in.txt", "r", stdin);
     int T, N, K; cin >> T >> N >> K;
     vt<int> w(N), x(N);
     rep(i, 0, N) {
@@ -28,32 +27,21 @@ signed main() {
         //in a "connected component"
         //if even, all paired
         //if odd, choose 1 of the "odd indexed (1st, 3rd, 5th...)" to unpair
-        int i = 0;
-        int ans = 0;
-        while (i < N) {
-            int ct = 0;
-            int j = i + 1;
-            int cand = w[i];
-            while (j < N && x[j + 1] - x[j] <= K) {
-                if (ct & 1) {
-                    cand = min(cand, w[j]);
-                }
-                ct++;
-                j++;
-            }
-            if (ct & 1) {
-                ans += cand;
-            }
-            i = j + 1;
-        }
-        cout << ans << "\n";
+        //oh only if it needs to be unpaired :sob:
+        //alr i get it usaco im not doing it
     }   else {
         //now how do we do this?
         //N <= 5000, max <= 1e4, that looks like dp
         //solve per connected component
-        //think of points that would break apart cc so i : x[i+1] - x[i-1] > K
-        //best example is 1st sample
-        //
-        cout << 6 << "\n";
+        //obviously we have to iterate over i and see pairing/unpaired
+        //how do we do this?
+        //we have to see for i whether we want to leave it paired/unpaired.
+        //we have to do like
+        //0 or 1 unpaired that can be seen at this point.
+        //the rule is if there's an element we see that is unpaired, we have to pair with it?
+        //each element has 3 states: unpaired, pair left, pair right.
+        //we can obviously condense pair left pair right
+        //and thus the problem is solved?
+        
     }
 }

@@ -13,9 +13,6 @@ signed main() {
     cin.tie(0) -> sync_with_stdio(0);
     int N, D; cin >> N >> D;
     auto p2 = vt<int>(N + 1);
-    if (N > 5000) {
-        return 0;
-    }
     p2[0] = 1;
     rep(i, 1, N + 1) p2[i] = p2[i - 1] * 2 % MOD;
     /*
@@ -50,7 +47,6 @@ signed main() {
             }
         }
         (dp[i] += p2[ct]) %= MOD;
-        cout << dp[i] << "\n";
     }
     int ans = 0;
     rep(i, 0, N) {

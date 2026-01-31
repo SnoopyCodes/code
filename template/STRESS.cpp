@@ -2,7 +2,8 @@
 
 using namespace std;
 
-const int  MOD = 998244353;
+#define int long long
+const int  MOD = 1e9 + 7;
 template<int z> using ii = array<int , z>;
 template<class T> using vt = vector<T>;
 #define add push_back
@@ -11,102 +12,227 @@ template<class T> using vt = vector<T>;
 //FIND RIGHTMOST INDEX IN UNIMODAL MAXIMAL ARRAY == MAXIMUM
 
 // ----------------- First Implementation -----------------
-
-void solve() {
-    int N; cin >> N;
-    string s; cin >> s;
-
-    vt<int> suff(N + 1, 0), suffplus(N + 1, N);
-    for (int i = N - 1; i > -1; i--) {
-        suff[i] = suff[i + 1] + (s[i] == ')');
-        suffplus[i] = suffplus[i + 1];
-        if (s[i] == '(') suffplus[i] = i;
-    }
-
-    int ind = -1;
-    int ct = 0;
-    int ans = 0;
-    rep(i, 0, N) {
-        if (s[i] == ')') {
-            //try to break out
-            if (suff[suffplus[i]] >= ct + 1) {
-                //we break here
-                ind = i;
-                break;
-            }   else {
-                ct--;
-                ans++;
-            }
-        }   else {
-            ct++;
-            ans++;
+struct DSU {
+    int N;
+    vector<int> p, s;
+    vt<int> contrib;
+    vt<int> aug; //# of needed
+    DSU(int n):N(n), p(N), s(N, 1), aug(N), contrib(N) { while (n--) p[n] = n; }
+    int par(int u) { return p[u] != u ? p[u] = par(p[u]) : u; }
+    bool unite(int u, int v, int w) {
+        u = par(u), v = par(v);
+        if (u == v) { return false; }
+        if (s[u] < s[v] && !aug[u]) { swap(u, v); } //default mst speed
+        if (aug[u] && aug[v]) { //just merge u in
+            contrib[u] += aug[v] * w;
+            aug[u] += aug[v];
+            aug[v] = 0;
         }
+        s[u] += s[v];
+        p[v] = u;
+        return N--;
     }
+};
 
-    ind++;
-    if (suff[ind] < ct || ind == 0) {
-        cout << -1 << "\n";
+void dfs(int u, int p, int src, vt<vt<ii<2>>> &T, DSU &cc, int expense, vt<vt<int>> &cost) {
+    if (cc.aug[u] && u != src) {
+        cost[src][u] = expense;    
         return;
     }
+    for (auto [v, w] : T[u]) {
+        if (v == p) { continue; }
+        dfs(v, u, src, T, cc, max(expense, w), cost);
+    }
+}
 
-    rep(i, ind, N) {
-        if (s[i] == '(') {
-            if (suff[i] >= ct + 1) {
-                ans++;
-                ct++;
-            }
-        }   else {
-            assert(ct > 0);
-            ans++;
-            ct--;
+void solve() {
+    int N, M, K; cin >> N >> M >> K;
+    vt<int> need(K);
+    vt<vt<ii<2>>> T(N);
+    
+    rep(i, 0, K) {
+        cin >> need[i], need[i]--;
+    }
+    vt<ii<3>> E(M);
+    DSU mst(N);
+    /*
+    think kruskals
+        each server serves a certain amount of ppl
+        put a cost up with it
+        now, to remove a server, we have to select a server, examine where it goes to
+        we only ever look at edges in the mst
+        but anyways
+        consider only those that can see each other
+        initially just calculate it with dfs, and update it like prims!
+    */
+
+
+    rep(i, 0, M) {
+        int u, v, w; cin >> u >> v >> w; u--; v--;
+        E[i] = { u, v, w };
+    }
+    vt<vt<int>> cost(N, vt<int>(N, MOD * MOD));
+    DSU cc(N);
+    rep(i, 0, K) {
+        cc.aug[need[i]] = 1;
+    }
+    sort(begin(E), end(E), [](auto a, auto b) { return a[2] < b[2]; });
+    for (auto [u, v, w] : E) {
+        if (mst.unite(u, v, w)) {
+            T[u].add({ v, w });
+            T[v].add({ u, w });
         }
     }
+    
+    vt<int> best(N, -1);
 
+    for (int i = 0; i < N; i++) {
+        if (cc.aug[i]) {
+            dfs(i, -1, i, T, cc, 0, cost);
+            best[i] = ranges::min_element(cost[i]) - begin(cost[i]);
+        }
+    }
+    auto dir = cost; //direct costs so we can update
 
-    cout << ans << "\n";
-}
-// ----------------- Second Implementation -----------------
-//brute force
-
-void solve2() {
-    int N; cin >> N;
-    string s; cin >> s;
-    int ans = -1;
-    rep(mask, 1, 1 << N) {
-        string cmp = "";
-        rep(i, 0, N) {
-            if (mask >> i & 1) {
-                cmp += s[i];
+    vt<int> ans(N);
+    K--; while (K --> 0) {
+        int u = -1;
+        for (int i = 0; i < N; i++) {
+            if (cc.aug[i] && (u == -1 || cost[i][best[i]] < cost[u][best[u]])) {
+                u = i;
             }
         }
-        bool k = true;
-        int bal = 0;
-        rep(i, 0, size(cmp)) {
-            bal += cmp[i] == '(' ? 1 : -1;
-            if (bal < 0) {
-                k = false;
-                break;
-            }
-        }
-        if (!k || bal != 0) continue;
-        bool better = false;
-        rep(i, 0, size(cmp)) {
-            if (s[i] != cmp[i]) {
-                if (cmp[i] == '(') {
-                    better = true;
-                    break;
-                }   else {
-                    break;
+        int v = best[u];
+        //we merge u into v
+        ans[K] = ans[K + 1] + cost[u][v];
+        cc.unite(v, u, dir[u][v]);
+        for (int i = 0; i < N; i++) {
+            if (cc.aug[i] && i != v && i != u) {
+                if (dir[i][v] == MOD * MOD && dir[i][u] != MOD * MOD) { //can see u but not v
+                    //can now see v
+                    assert(dir[v][u] != MOD * MOD);
+                    dir[i][v] = dir[v][i] = max(dir[v][u], dir[i][u]);
+                }
+                cost[i][u] = dir[i][u] = cost[u][i] = dir[u][i] = MOD * MOD;
+                if (dir[i][v] != MOD * MOD) { //can see, recalculate edge weights for both.
+                    cost[i][v] = dir[i][v] * cc.aug[i] - cc.contrib[i];
+                    cost[v][i] = dir[i][v] * cc.aug[v] - cc.contrib[v];
+                }
+                if (best[i] == u || best[i] == v) {
+                    //at most N^2 amortized? pray
+                    best[i] = ranges::min_element(cost[i]) - begin(cost[i]); 
+                }   else if (cost[i][v] < cost[i][best[i]]) {
+                    best[i] = v;
                 }
             }
         }
-        // if (__builtin_popcount(mask) && better) {
-        //     cout << cmp << endl;
-        // }
-        if (better) ans = max(ans, __builtin_popcount(mask));
-        
+        dir[v][u] = dir[u][v] = cost[u][v] = cost[v][u] = MOD * MOD;
+        best[v] = ranges::min_element(cost[v]) - begin(cost[v]);
     }
-    cout << ans << "\n";
+    for (int i = 0; i < N; i++) {
+        cout << ans[i] << " ";
+    }
+    cout << "\n";
+}
+
+// ----------------- Second Implementation -----------------
+//brute force
+struct linexx{
+	int u;
+	int v;
+	long long w;
+	friend bool operator<(linexx a,linexx b){
+		return a.w<b.w;
+	}
+}lxx[200000];
+int fa[200000],sizd[200000],id[200000],c;
+long long cw[400000];
+vector<int>line[400000];
+void combine(int x,int y,long long w){
+	while(x!=fa[x])x=fa[x];
+	while(y!=fa[y])y=fa[y];
+	if(x==y)return;
+	if(sizd[x]>sizd[y])swap(x,y);
+	fa[x]=y;
+	sizd[y]+=sizd[x];
+	cw[c]=w;
+	line[c].push_back(id[x]);
+	line[c].push_back(id[y]);
+	id[y]=c;
+	c++;
+}
+int wvis[200000];
+long long siz[400000],val[400000];
+vector<long long>ansv;
+void dfs(int t){
+	vector<int>::iterator it;
+	if(line[t].empty())
+	{
+		if(wvis[t])siz[t]=1;
+		else siz[t]=0;
+		val[t]=0;
+		return;
+	}
+	siz[t]=0;
+	val[t]=-1;
+	for(it=line[t].begin();it!=line[t].end();it++)
+	{
+		dfs(*it);
+		siz[t]+=siz[*it];
+		val[*it]+=(cw[t]-cw[*it])*siz[*it];
+		if(val[t]==-1)val[t]=val[*it];
+		else
+		{
+			if(val[t]>=val[*it])ansv.push_back(val[*it]);
+			else
+			{
+				ansv.push_back(val[t]);
+				val[t]=val[*it];
+			}
+		}
+	}
+}
+long long ans[200000];
+
+void solve2() {
+    int T,n,m,p,i,ax;
+    long long s;
+		cin>>n>>m>>p;
+		for(i=0;i<n;i++)wvis[i]=0;
+		for(i=0;i<p;i++)
+		{
+			cin>>ax;
+			wvis[ax-1]=1;
+		}
+		for(i=0;i<m;i++)
+		{
+			cin>>lxx[i].u>>lxx[i].v>>lxx[i].w;
+			lxx[i].u--;
+			lxx[i].v--;
+		}
+		sort(lxx,lxx+m);
+		for(i=0;i<n;i++)
+		{
+			fa[i]=i;
+			sizd[i]=1;
+			id[i]=i;
+			cw[i]=0;
+		}
+		c=n;
+		for(i=0;i<m;i++)combine(lxx[i].u,lxx[i].v,lxx[i].w);
+		dfs(c-1);
+		ansv.push_back(val[c-1]);
+		sort(ansv.begin(),ansv.end());
+		s=0;
+		for(i=0;i<n;i++)
+		{
+			ans[n-i-1]=s;
+			s+=ansv[i];
+		}
+		ansv.clear();
+		for(i=0;i<c;i++)line[i].clear();
+		for(i=0;i<n;i++)cout<<ans[i]<<' ';
+		cout<<'\n';
 }
 
 //from https://github.com/eysbutno/use-a-cow/blob/main/Implementation/StresstestingFunctions.cpp
@@ -168,12 +294,14 @@ vector<array<int, 2>> gen_graph(int n, int m) {
  */
 vector<array<int, 2>> gen_con_graph(int n, int m) {
     assert(m >= n - 1);
+    assert(m <= n * (n - 1) / 2);
     auto res = gen_tree(n);
     set<array<int, 2>> added(begin(res), end(res));
-    for (int i = 0; i < m - (n - 1); i++) {
-        int u = random(n - 1), v = random(n - 1);
+    while (m > n - 1) {
+        int u = random(n - 1) % n, v = random(n - 1) % n;
         if (u > v) { swap(u, v); }
         if (u != v && !added.count({u, v})) {
+            m--;
             added.insert({u, v});
             res.push_back({u, v});
         }
@@ -181,10 +309,6 @@ vector<array<int, 2>> gen_con_graph(int n, int m) {
     return vector<array<int, 2>>(begin(res), end(res));
 }
 
-/**
- * Returns a completely random graph with the only restriction being
- * that the graph can't have edges only involving one node.
- */
 vector<array<int, 2>> gen_rand_graph(int n, int m) {
     vector<array<int, 2>> res(m);
     for (int i = 0; i < m; i++) {
@@ -194,6 +318,7 @@ vector<array<int, 2>> gen_rand_graph(int n, int m) {
     }
     return res;
 }
+
 
 /**
  * Returns a random array with values being on [low, high]
@@ -212,27 +337,19 @@ string generateTestCase() {
     //write to oss
     //MODIFY
     ostringstream oss;
-    int n = (rand() % 5) * 2;
-    oss << n << "\n";
-
-    int bal = 0;
-    int used = 0;
-    rep(i, 0, n) {
-        if (bal == 0) {
-            oss << '(';
-            bal++;
-            used++;
-        }   else {
-            if (used < n / 2 && rand() & 1) {
-                oss << '(';
-                bal++;
-                used++;
-            }   else {
-                oss << ')';
-                bal--;
-            }
-        }
+    int n = random(5, 5);
+    int m = random(n - 1, n - 1);
+    int k = 0;
+    vt<int> inc(n);
+    rep(i, 0, n) inc[i] = rand() & 1, k += inc[i];
+    auto res = gen_con_graph(n, m);
+    oss << n << " " << m << " " << k << "\n";
+    rep(i, 0, n) if (inc[i]) oss << i + 1 << " ";
+    oss << "\n";
+    for (auto [u, v] : res) {
+        oss << u+1 << " " << v+1 << " " << random(1, 10) << endl;
     }
+
     oss << "\n";
 
 
@@ -270,8 +387,11 @@ signed main() {
     //MODIFY
     int stressTests = 1000;
     for (int i = 1; i <= stressTests; i++) {
+        // cout << "making test" << endl;
         string test = generateTestCase();
+        // cout << "run s2" << endl;
         string out2 = runSolve(solve2, test);
+        // cout << "run s" << endl;
         string out1 = runSolve(solve, test);
         if (out1 != out2) {
             cout << "Mismatch found on test case #" << i << ":\n";

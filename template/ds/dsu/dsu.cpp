@@ -1,10 +1,10 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-struct DSU {
+struct dsu {
     int N;
     vector<int> p, s;
-    DSU(int n):N(n), p(N), s(N, 1) { while (n--) p[n] = n; }
+    dsu(int n):N(n), p(N), s(N, 1) { while (n--) p[n] = n; }
     int find(int u) {
         if (p[u] != u) { p[u] = find(p[u]); }
         return p[u];
@@ -21,7 +21,7 @@ struct DSU {
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
     int N, Q; cin >> N >> Q;
-    DSU cc(N);
+    dsu cc(N);
     for (int i = 0; i < Q; i++) {
         int t, u, v; cin >> t >> u >> v;
         if (t) {
