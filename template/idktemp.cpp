@@ -26,11 +26,14 @@ template<class T, class...D> auto mvec(int n, D...r) {
     return vt (n, mvec<T>(r...));
 }
 
-int mv() { return 0; }
-template<class...D> auto mv(size_t n, D... r) { return vt(n, mv(r...)); }
+auto mvv(auto a) { return a; }
+template<class...D> auto mvv(size_t n, D... r) { return vt(n, mv(r...)); }
 
-int main() {
+signed main() {
     cin.tie(0) -> sync_with_stdio(false);
+    int N = 5, M = 6, K = 3;
     mt<int, 2> test(5, 3);
-    
+    auto ttest = mv(N, vt<int>());
+    //vt<vt<int>> asdfg(N);
+    auto mvvtest = mvv(N, 2);
 }

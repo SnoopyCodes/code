@@ -11,7 +11,7 @@ struct update {
 static char buf[40 << 20];
 static size_t buf_offset = 0;
 
-void* alloc(size_t s) {
+void *alloc(size_t s) {
     const size_t align = alignof(std::max_align_t);
     buf_offset = (buf_offset + align - 1) & ~(align - 1);
     if (buf_offset + s > sizeof(buf)) throw std::bad_alloc();
@@ -20,20 +20,20 @@ void* alloc(size_t s) {
     return ptr;
 }
 /*
-comb_nodes(U a, U b) -> U
-agg_upd(U a, U b) -> U
+comb(U a, U b) -> U
+agg(U a, U b) -> U
 act(U u, V v, int l, int r) -> V
 */
-template<class V, class U, V defv, U defu, auto comb_nodes, auto agg_upd, auto act>
+template<class V, class U, V defv, U defu, auto comb, auto agg, auto act>
 struct node {
     node *lc, *rc;
-    int l, r;
+    int l, r, m;
     V val = defv;
     U lz = defu;
-    node(int l, int r):l(l),r(r) {
+    node(int l, int r):l(l),r(r),m((l+r)/2) {
         if (l + 1 == r) { return; }
-        lc = new (alloc(sizeof(node))) node(l, (l + r) / 2);
-        rc = new (alloc(sizeof(node))) node((l + r) / 2, r);
+        lc = new (alloc(sizeof(node))) node(l, m);
+        rc = new (alloc(sizeof(node))) node(m, r);
     }
     void apply(U u) {
         val = act(u, val, l, r);
@@ -54,8 +54,7 @@ struct node {
         if (qr <= l || r <= ql) { return; }
         if (ql <= l && r <= qr) { return apply(u); }
         push();
-        lc->upd(ql, qr, u);
-        rc->upd(ql, qr, u);
+        lc->upd(ql, qr, u), rc->upd(ql, qr, u);
         val = comb(lc->val, rc->val);
     }
 };

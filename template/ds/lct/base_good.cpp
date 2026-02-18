@@ -2,14 +2,8 @@
  
 using namespace std;
  
-#define long long long
 #define add push_back
-const int BIG = 1e9 + 1;
-const long INF = 4e18 + 1000;
-template<int z> using ii = array<int , z>;
-template<int z> using ll = array<long, z>;
 template<class T> using vt = vector<T>;
-template<class T> using mt = vt<vt<T>>;
 //is dir() unclean?
 //splitting into !is_root() improves perf by .02 s
 
@@ -82,8 +76,7 @@ int main() {
     int N, Q; cin >> N >> Q;
     vt<node> tree; tree.reserve(N);
     for (int i = 0; i < N; i++) {
-        tree.emplace_back(i);
-    }
+        tree.emplace_back(i); }
     while (Q--) {
 		string a;
 		cin >> a;

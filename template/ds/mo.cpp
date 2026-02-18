@@ -24,7 +24,13 @@ void addr(int ind) {
 
 }
 
-void answer() {
+void go() {  //qs is filled out
+    ans.resize(qs.size());
+    int sq = int(sqrt(qs.size()));
+    sort(qs.begin(), qs.end(), [&](Query a, Query b) {
+        int ba = a.l / sq, bb = b.l / sq;
+        return ba == bb ? a.r < b.r : ba < bb;
+    });
     for (int q = 0; q < qs.size(); q++) {
         int l = qs[q].l, r = qs[q].r;
         while (ml < l) { reml(ml++); }
@@ -33,17 +39,6 @@ void answer() {
         while (mr > r) { remr(mr--); }
         ans[qs[q].ind] = cur;
     }
-}
-void go() {  //qs is filled out
-    ans.resize(qs.size());
-    int sq = int(sqrt(qs.size()));
-    sort(qs.begin(), qs.end(), [&](Query a, Query b) {
-        int ba = a.l / sq;
-        int bb = b.l / sq;
-        if (ba == bb) { return a.r < b.r; }
-        return ba < bb;
-    });
-    answer();
 }
 
 int main() {

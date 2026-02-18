@@ -7,7 +7,9 @@ const int MOD = 1e9 + 7;
 #define rep(i, a, b) for (auto i=a; i<(b); i++)
 template<class T> using vt = vector<T>;
 template<int z> using ii = array<int, z>;
-
+/*
+enjoy the tweak
+*/
 signed main() {
     cin.tie(0) -> sync_with_stdio(0);
     //first figure out what makes a n-tuple possible

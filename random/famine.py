@@ -12,12 +12,5 @@ for _ in range(int(input())):
                 min_cost[d + b] = min(min_cost[d + b], min_cost[d] + a)
     stock.sort(reverse=1)
     """
-    clearly, we have to greedy to a certain point.
-    DP is infeasible
-    greedy by ratio
-    the days we survive per round call it x
-    ceil(R / (x - R)) we get an extra round
-    but there is a remainder to that
-    so its like legendres?
-    i guess, compute the dp that's fine
+    binary search on # of rounds we can survive
     """

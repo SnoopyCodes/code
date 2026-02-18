@@ -14,8 +14,8 @@ static class beep extends PrintWriter {
     };
     int sz, segtree[];
     void set(int i, int v) {
-        segtree[i + sz] = v;
-        for (i = (i + sz) / 2; i > 0; i /= 2) {
+        segtree[i += sz] = v;
+        while ((i /= 2) > 0) {
             segtree[i] = segtree[2 * i] + segtree[2 * i + 1];
         }
     }

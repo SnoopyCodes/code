@@ -9,18 +9,13 @@ static class gg extends PrintWriter {
     Scanner sc = new Scanner();
 
     long fen[];
-    int len;
-    void init(int l) {
-        fen = new long[l + 1];
-        len = l;
-    }
     void add(int i, long v) {
-        for (i++; i <= len; i += i & -i) fen[i] += v;
+        for (i++; i < fen.length; i += i & -i) fen[i] += v;
     }
     long q(int l, int r) { //[l, r)
         long res = 0;
-        for (;r > 0; r -= r & -r) res += fen[r];
-        for (;l > 0; l -= l & -l) res -= fen[l];
+        for (; r > 0; r -= r & -r) res += fen[r];
+        for (; l > 0; l -= l & -l) res -= fen[l];
         return res;
     }
 
@@ -31,7 +26,7 @@ static class gg extends PrintWriter {
     }
     void solve() {
         int N = sc.nextInt(), Q = sc.nextInt();
-        init(N);
+        fen = new long[N + 1];
         long A[] = new long[N];
         for (int i = 0; i < N; i++) {
             A[i] = sc.nextInt();

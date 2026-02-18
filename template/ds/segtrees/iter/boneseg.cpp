@@ -12,21 +12,17 @@ int query(int l, int r) {
     }
     return res;
 }
-void alter(int p, long val) {
-    seg[p + N] = val;
-    for (p = (p + N) / 2; p > 0; p /= 2) {
-        seg[p] = seg[2 * p] + seg[2 * p + 1];
-    }
+void update(int p, long val) {
+    seg[p += N] = val;
+    while (p >>= 1) { seg[p] = seg[2 * p] + seg[2 * p + 1]; }
 }
 
 template<class T, T def, auto f> struct SegmentTree {
     vector<T> t; int N;
     SegmentTree(int n):N(n),t(2 * n, def) {}
     void set(int i, T v) {
-        t[i + N] = v;
-        for (i = (i + N) / 2; i > 0; i >>= 1) {
-            t[i] = f(t[i << 1], t[i << 1 | 1]);
-        }
+        t[i += N] = v;
+        while (i >>= 1) { t[i] = f(t[i << 1], t[i << 1 | 1]); }
     }
     T query(int l, int r) {
         T resl = def, resr = def;
@@ -48,13 +44,13 @@ int main() {
 
     for (int i = 0; i < N; i++) {
         cin >> A[i];
-        alter(i, A[i]);
+        update(i, A[i]);
     }
     for (int q = 0; q < Q; q++) {
         int t; cin >> t;
         if (t & 1) {
             int k, x; cin >> k >> x; k--;
-            alter(k, x);
+            update(k, x);
         }   else {
             int l, r; cin >> l >> r; l--;
             cout << query(l, r) << "\n";

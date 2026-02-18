@@ -10,19 +10,13 @@ const int MOD = 1e9 + 7;
 template<int z> using ii = array<int , z>;
 template<class T> using vt = vector<T>;
 
-struct solver {
+void solve() {
 
-const int N = 5e5;
-
-solver() {
-    
 }
-
-};
 
 signed main() {
     cin.tie(0) -> sync_with_stdio(false);
-    int T; cin >> T; while (T --> 0) solver();
+    int T; cin >> T; while (T --> 0) solve();
     int N = 5;
     
     vt a(N, 0LL);
