@@ -2,11 +2,17 @@
 
 using namespace std;
 
-template<typename T> using vec = vector<T>;
+/*
+https://www.hackerearth.com/practice/notes/mos-algorithm/
+answer *any* offline range query aggregate in O((N + Q) sqrt(N))
+assuming a range query takes naively O(R - L) time to aggregate.
+*/
+
+template<typename T> using vt = vector<T>;
 
 struct Query { int l, r, ind; };
-vec<Query> qs;
-vec<int> ans;
+vt<Query> qs;
+vt<int> ans;
 
 int ml = -1, mr = -1;
 int cur = 0;

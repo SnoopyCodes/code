@@ -50,7 +50,7 @@ int main() {
                 //choose some to go first: (j - i + 1) / 2
                 mi between = ways[i+1][j-1];
                 mi after = ways[j+1][i+len-1];
-                ways[i][i + len - 1] += between * after * pre[len / 2][(j - i + 1) / 2];
+                ways[i][i + len - 1] += between * after * pre[len/2][(j-i+1)/2];
             }
         }
     }

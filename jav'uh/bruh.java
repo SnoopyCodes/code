@@ -1,5 +1,6 @@
 import java.util.*;
 import java.io.*;
+import java.lang.reflect.Field;
 
 public class bruh {
     static boolean[][] grid;
@@ -20,19 +21,10 @@ public class bruh {
         return false;
     }
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int N = sc.nextInt();
-        grid = new boolean[N][N];
-        visited = new boolean[N][N];
-        for (int i = 0; i < N; i++) {
-            String line = sc.next();
-            for (int j = 0; j < N; j++) {
-                if (line.charAt(j) == '#') { grid[i][j] = false; }
-                else { grid[i][j] = true; }
-            }
-        }
-        if (traverse(0, 0)) { System.out.println(true); }
-        else { System.out.println(false); }
+        okbruh b = new okbruh();
+        b.name = "hey";
+        b.d = 5;
+        System.out.println(b.toString());
     }
     class list {
         int[] d = new int[5];
@@ -41,5 +33,21 @@ public class bruh {
             if (len == d.length) { d = Arrays.copyOf(d, 2 * len); }
             d[len++] = e;
         }
+    }
+}
+class okbruh {
+    String name, name2;
+    double d;
+    int x;
+    @Override
+    public String toString() {
+        Field[] fields = this.getClass().getDeclaredFields();
+        StringBuffer sb = new StringBuffer();
+        for (var f : fields) {
+            try {
+                sb.append((f.get(this)) != null ? f.getName() + " = " + f.get(this).toString() + "\n" : "");
+            }   catch (Exception ignored) {}
+        }
+        return sb.toString().trim();
     }
 }

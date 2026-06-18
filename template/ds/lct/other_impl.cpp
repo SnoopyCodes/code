@@ -2,7 +2,9 @@
 
 using namespace std;
 //achieves similar performance without considering aggregates
-//
+#define lc T[x].ch[0]
+#define rc T[x].ch[1]
+#define par T[x].p
 struct SplayTree {
   struct Node {
     int ch[2] = {0, 0}, p = 0;
@@ -16,18 +18,16 @@ struct SplayTree {
   
   void push(int x) {
     if (!x || !T[x].flip) return;
-    int l = T[x].ch[0], r = T[x].ch[1];
  
-    T[l].flip ^= 1, T[r].flip ^= 1;
-    swap(T[x].ch[0], T[x].ch[1]);
+    T[lc].flip ^= 1, T[rc].flip ^= 1;
+    swap(lc, rc);
     T[x].flip = 0;
   }
   
   void pull(int x) {
-    int l = T[x].ch[0], r = T[x].ch[1]; push(l); push(r); 
- 
-    T[x].path = T[l].path + T[x].self + T[r].path;
-    T[x].sub = T[x].vir + T[l].sub + T[r].sub + T[x].self;
+    push(lc); push(rc);
+    T[x].path = T[lc].path + T[x].self + T[rc].path;
+    T[x].sub = T[x].vir + T[lc].sub + T[rc].sub + T[x].self;
   }
   
   void set(int x, int d, int y) {
@@ -36,18 +36,18 @@ struct SplayTree {
  
   void splay(int x) { 
     auto dir = [&](int x) {
-      int p = T[x].p; if (!p) return -1;
-      return T[p].ch[0] == x ? 0 : T[p].ch[1] == x ? 1 : -1;
+     if (!par) return -1;
+      return T[par].ch[0] == x ? 0 : T[par].ch[1] == x ? 1 : -1;
     };
     auto rotate = [&](int x) {
-      int y = T[x].p, z = T[y].p, dx = dir(x), dy = dir(y);
-      set(y, dx, T[x].ch[!dx]); 
+      int y = par, z = T[y].p, dx = dir(x), dy = dir(y);
+      set(y, dx, T[x].ch[!dx]);
       set(x, !dx, y);
       if (~dy) set(z, dy, x); 
       T[x].p = z;
     };
     for (push(x); ~dir(x); ) {
-      int y = T[x].p, z = T[y].p;
+      int y = par, z = T[y].p;
       push(z); push(y); push(x);
       int dx = dir(x), dy = dir(y);
       if (~dy) rotate(dx != dy ? x : y);
@@ -111,14 +111,14 @@ struct LinkCut : SplayTree {
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
     int N, Q; cin >> N >> Q;
-    LinkCut lc(N);
+    LinkCut lct(N);
     while (Q--) {
 		string a;
 		cin >> a;
 		int u, v; cin >> u >> v;
-        if (a == "add") { lc.Link(u, v); }
-        else if (a == "conn") { cout << (lc.LCA(u, v) ? "YES" : "NO") << "\n"; }
-        else { lc.Cut(u, v); }
+        if (a == "add") { lct.Link(u, v); }
+        else if (a == "conn") { cout << (lct.LCA(u, v) ? "YES" : "NO") << "\n"; }
+        else { lct.Cut(u, v); }
     }
 
 }

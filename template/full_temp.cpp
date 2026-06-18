@@ -26,3 +26,10 @@ signed main() {
     int n = 2, m = 3, k = 4;
     vt dp3d(n, vt(m, vt(k, 0)));
 }
+/*
+
+v.clear() doesn't actually free memory
+so
+v = {};
+to clear crap.
+*/

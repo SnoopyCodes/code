@@ -6,11 +6,9 @@ using namespace std;
 template<class T> using vt = vector<T>;
 //is dir() unclean?
 //splitting into !is_root() improves perf by .02 s
-
 struct node {
     int val, size = 1;
-    array<node*, 2> c{};
-    node *p = nullptr;
+    node *p, *c[2];
     bool flip = false;
  
     node(int v): val(v) {}
@@ -22,16 +20,16 @@ struct node {
         for (auto &x : c) if (x) { x->flip ^= 1; }
     }
     inline int dir() { return !p || (p->c[0] != this && p->c[1] != this) ? -1 : p->c[1] == this; }
-    friend void rel(node *u, node *v, int d) { //set the relationship b/w the two
-        if (~d) { u->c[d] = v; }
-        if (v) { v->p = u; }
+    void rel(node *v, int d) { //set the relationship b/w the two
+        if (~d) { c[d] = v; }
+        if (v) { v->p = this; }
     }
     void rot() { //needs p
         int d = dir();
         node *o = p;
-        rel(o->p, this, o->dir());
-        rel(o, c[d ^ 1], d);
-        rel(this, o, d ^ 1);
+        o->p->rel(this, o->dir());
+        o->rel(c[d ^ 1], d);
+        rel(o, d ^ 1);
     }
     void par_push() { if (~dir()) p->par_push(); push(); }
     void splay() { //cursed rot() location
@@ -43,7 +41,7 @@ struct node {
     void access() {
         for (node *v = this, *prev = nullptr; v; prev = v, v = v->p) {
             v->splay();
-            rel(v, prev, 1);
+            v->rel(prev, 1);
         }
         splay();
     }
@@ -58,23 +56,23 @@ struct node {
         res->access();
         return res;
     }
-    friend void link(node *u, node *v) {
-        u->reroot();
-        v->access();
-        rel(v, u, 1);
-    }
-    friend void cut(node *u, node *v) {
-        u->reroot();
-        v->access();
-        v->c[0] = u->p = nullptr;
-    }
-    friend bool con(node *u, node *v) { return u->find() == v->find(); }
 };
- 
+void link(node *u, node *v) {
+    u->reroot();
+    v->access();
+    v->rel(u, 1);
+}
+void cut(node *u, node *v) {
+    u->reroot();
+    v->access();
+    v->c[0] = u->p = nullptr;
+}
+bool con(node *u, node *v) { return u->find() == v->find(); }
 int main() {
     cin.tie(0) -> sync_with_stdio(0);
     int N, Q; cin >> N >> Q;
     vt<node> tree; tree.reserve(N);
+    vt<int> a(N);
     for (int i = 0; i < N; i++) {
         tree.emplace_back(i); }
     while (Q--) {

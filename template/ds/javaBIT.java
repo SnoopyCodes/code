@@ -13,9 +13,9 @@ static class gg extends PrintWriter {
         for (i++; i < fen.length; i += i & -i) fen[i] += v;
     }
     long q(int l, int r) { //[l, r)
-        long res = 0;
-        for (; r > 0; r -= r & -r) res += fen[r];
-        for (; l > 0; l -= l & -l) res -= fen[l];
+        long res = fen[r] - fen[l];
+        while ((r -= r & -r) > 0) res += fen[r];
+        while ((l -= l & -l) > 0) res -= fen[l];
         return res;
     }
 

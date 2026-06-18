@@ -18,21 +18,21 @@ struct node {
     }
     //-1 if root, 0 or 1 for child. the () condition is unneeded if not lct
     inline int dir() { return !p || (p->c[0] != this && p->c[1] != this) ? -1 : p->c[1] == this; }
-    friend void rel(node *u, node *v, int d) { //set the relationship b/w the two
-        if (~d) { u->c[d] = v; } //this if guard isnt needed if not lct
-        if (v) { v->p = u; }
-        u->size = (u->c[0] ? u->c[0]->size : 0) + 1 + (u->c[1] ? u->c[1]->size : 0);
+    void rel(node *v, int d) { //set the relationship b/w the two
+        if (~d) { c[d] = v; }
+        if (v) { v->p = this; }
+        size = (c[0] ? c[0]->size : 0) + 1 + (c[1] ? c[1]->size : 0);
     }
     void rot() { //needs p
         int d = dir();
         node *o = p;
-        rel(o->p, this, o->dir());
-        rel(o, c[d ^ 1], d);
-        rel(this, o, d ^ 1);
+        o->p->rel(this, o->dir());
+        o->rel(c[d ^ 1], d);
+        rel(o, d ^ 1);
     }
-    void par_push() { if (~dir()) p->par_push(); push(); } //yes, i like this
+    void par_push() { if (~dir()) p->par_push(); push(); }
     void splay() { //cursed rot() location
-        for (par_push(); ~dir(); rot()) { //this is like, bad because it's just not understandable in any way.
+        for (par_push(); ~dir(); rot()) {
             if (~p->dir()) { (dir() == p->dir() ? p : this)->rot(); }
         }
     }
@@ -53,7 +53,7 @@ array<node*, 2> split(node *root, int piv) { //split into [0, piv) and [piv, siz
 node *join(node *l, node *r) {
     if (!l || !r) { return l ? l : r; }
     l->find(l->size - 1);
-    rel(l, r, 1);
+    l->rel(r, 1);
     return l;
 }
 
@@ -64,10 +64,4 @@ maintain sizes, so we can find() an element
 do array<node*, 2> split(node* n) and node *merge(node *l, node *r)
 let's be fr what do we want to be able to do
 we can oset already probably
-
-then to extend to treap operations we are basically almost there.. 
-do i want to do this?
-basically just insert at position, delete at position?
-and with split we give it a value to split at so like x
-this isn't too bad, a good like 20 lines of code or so.
 */
