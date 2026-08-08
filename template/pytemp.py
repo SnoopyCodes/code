@@ -1,5 +1,5 @@
 import sys
-md, rd, rn = 10**9 + 7, lambda: list(map(str, sys.stdin.readline().split())), range
+md, rd, rn = 10**9 + 7, lambda: list(map(int, sys.stdin.readline().split())), range
 
 qp = lambda a, b = -1, c = md: pow(a, b, c)
 def comb(n):

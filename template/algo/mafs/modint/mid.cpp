@@ -8,14 +8,29 @@ using namespace std;
 template<int MOD> struct mint {
 	long v; mint(long _v = 0):v(_v % MOD) { v += (v < 0) * MOD; }
 	#define fmo(o, c, z) friend mint operator o (mint a, mint b) { return a.v z c.v; }
-	fmo(+, b, +) fmo(-, b, -) fmo(*, b, *) fmo(/, pow(b, MOD - 2), *)
-	friend mint pow(mint x, long p) { return p ? pow(x * x, p / 2) * (p & 1 ? x : 1) : 1; }
+	fmo(+, b, +) fmo(-, b, -) fmo(*, b, *) fmo(/, b.pow(MOD - 2), *)
+	mint pow(long p, mint c = 1) { return p ? mint(v * v).pow(p / 2, c * (p & 1 ? v : 1)) : c; }
 	#define mo(o, z) mint& operator o (mint x) { return (*this) = (*this) z x; }
 	mo(+=, +) mo(-=, -) mo(*=, *) mo(/=, /)
 };
 using mi = mint<int(1e9 + 7)>;
 #undef fmo
 #undef mo
+/*
+design a tail call recursive version for pow
+*/
+mi exp(mi a, int p, mi cur) {
+	if (!p) {
+		return cur;
+	}
+	if (p & 1) {
+		cur *= a;
+	}
+	return exp(a * a, p / 2, cur);
+}
+//while (p > 0) c *= (p & 1) ? a : 1, a *= a, p /= 2;
+// for (int i = 0; i < 64; i++, a *= 2) if (i & 1) c *= a;
+// mi exp(a, p, c=0) { return p ? exp(a * a, p / 2, c *(p & 1 ? a : 1)) : cur; }
 
 vector<mi> fax, ifax;
 
@@ -45,5 +60,6 @@ mi big_choose(int n, int r) {
 }
 
 int main() {
-	
+	mi a = 2;
+	cout << (1 / a).v << "\n";
 }
