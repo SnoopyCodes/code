@@ -90,5 +90,9 @@
         "valarray": "cpp",
         "variant": "cpp",
         "rope": "cpp"
+    },
+    "terminal.integrated.env.osx" : {
+        "bins" : "/Users/benjaminlin/Documents/code/bin/",
+        "exec" : "/Users/benjaminlin/Documents/code/script/cpp_compile_and_run.sh"
     }
 }
